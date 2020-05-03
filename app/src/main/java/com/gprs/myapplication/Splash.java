@@ -20,14 +20,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class Splash extends AppCompatActivity {
 
     static int splash=5000;
     Animation top,bottom;
-    ImageView icon;
-    TextView slogan,appaname;
+    TextView state,appaname,uniqueid,myname,version;
     private SharedPreferences pref;
 
     @Override
@@ -48,13 +46,18 @@ public class Splash extends AppCompatActivity {
         top= AnimationUtils.loadAnimation(this,R.anim.top_anim);
         bottom= AnimationUtils.loadAnimation(this,R.anim.bottom_anim);
 
-        icon=findViewById(R.id.icon);
-        slogan=findViewById(R.id.slogan);
+
+        myname=findViewById(R.id.myname);
+        version=findViewById(R.id.version);
+        state=findViewById(R.id.statename);
+        uniqueid=findViewById(R.id.uniqueId);
         appaname=findViewById(R.id.appname);
 
-        icon.setAnimation(top);
-        slogan.setAnimation(bottom);
+        version.setAnimation(bottom);
         appaname.setAnimation(bottom);
+        state.setAnimation(bottom);
+        myname.setAnimation(bottom);
+        uniqueid.setAnimation(bottom);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -62,7 +65,7 @@ public class Splash extends AppCompatActivity {
                 Intent intent=new Intent(Splash.this,login.class);
 
 
-                Pair[]pairs=new Pair[2];pairs[0]=new Pair<View, String>(icon,"logo_image");pairs[1]=new Pair<View, String>(appaname,"logo_text");
+                Pair[]pairs=new Pair[2];pairs[0]=new Pair<View, String>(appaname,"logo_image");pairs[1]=new Pair<View, String>(state,"logo_text");
                 //wrap the call in API level 21 or higher
                 if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.LOLLIPOP)
                 {

@@ -6,55 +6,79 @@
     android:layout_height="match_parent"
     tools:context=".Splash"
     android:orientation="vertical"
-    android:background="#3F51B5">
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="384dp"
-        android:layout_height="294dp"
-        android:layout_marginTop="72dp"
-        android:transitionName="logo_image"
-        android:src="@drawable/collective_intelligence_icon_use"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:background="@drawable/hackathonsplash">
 
     <TextView
-        android:id="@+id/slogan"
+        android:id="@+id/statename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="172dp"
         android:layout_marginEnd="180dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif-smallcaps"
         android:text="@string/stay_home_stay_safe"
         android:textAlignment="center"
-        android:textColor="#FFC107"
+        android:textColor="#860F08"
         android:textSize="20sp"
         android:transitionName="logo_text1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/uniqueId"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.433"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appname"
-        app:layout_constraintVertical_bias="0.148" />
+        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/appname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="206dp"
-        android:layout_marginTop="84dp"
         android:layout_marginEnd="234dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/bangers"
         android:gravity="center"
         android:text="@string/covid19_relief"
         android:textAlignment="center"
-        android:textColor="#D9FF00"
+        android:textColor="#860F08"
         android:textSize="50sp"
         android:transitionName="logo_text"
+        app:layout_constraintBottom_toTopOf="@+id/statename"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.46"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/icon" />
+        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/uniqueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="2020-04-10083"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/myname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/myname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="SHRIRAM G"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/version"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="VERSION 1.0"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

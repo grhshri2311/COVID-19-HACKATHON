@@ -65,12 +65,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         imageButton=findViewById(R.id.mapmenu);
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MapsActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-            return;
-        }
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,27 +247,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         finish();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MapsActivity.this,"Permission granted",Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(MapsActivity.this,MapsActivity.class));
-                    finish();
-                } else {
-                    Toast.makeText(MapsActivity.this,"Permission denied",Toast.LENGTH_LONG).show();
-                    finish();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
 
 }

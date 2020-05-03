@@ -21,7 +21,7 @@
     <string name="monitors">Monitors</string>
     <string name="volunteers">volunteers</string>
     <string name="covid19_relief">Covid19 Relief</string>
-    <string name="stay_home_stay_safe" tools:ignore="ExtraTranslation">Stay Home !  Stay Safe !</string>
+    <string name="stay_home_stay_safe" tools:ignore="ExtraTranslation" translatable="false">Haryana</string>
     <string name="my_status">My Status</string>
     <string name="dashboard">DASHBOARD</string>
     <string name="Dashboard">Dashboard</string>

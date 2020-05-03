@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -15,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -27,6 +30,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +56,7 @@ import java.util.Locale;
 
 public class home extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 111;
     RelativeLayout mystatus,selfassess,dashmap,updates,case_report,helpline,donate;
     Toolbar toolbar;
     TextView confirm,death;
@@ -61,6 +66,13 @@ public class home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(home.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE);
+            return;
+        }
 
         SharedPreferences pref;
         SharedPreferences.Editor editor;
@@ -74,7 +86,16 @@ public class home extends AppCompatActivity {
             finish();
         }
 
+        int flag=0;
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
+        for (StatusBarNotification notification : notifications) {
+            if (notification.getId() == 100) {
+                flag=1;
+            }
+        }
 
+        if(flag==0)
        new notificationHelper(this).createNotification("COVID19RELIEF","Stay Safe from COVID-19");
 
         donate=findViewById(R.id.donate);
@@ -158,6 +179,7 @@ public class home extends AppCompatActivity {
         int id=item.getItemId();
         if(id==R.id.logoutmenu){
             startAlarm(false);
+
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.cancel(101);
             Exit();
@@ -337,4 +359,25 @@ public class home extends AppCompatActivity {
         resources.updateConfiguration(config, dm);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(home.this,"Permission granted",Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(home.this,home.class));
+                                 } else {
+                    Toast.makeText(home.this,"Permission denied",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
 }
