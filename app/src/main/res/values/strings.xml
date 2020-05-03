@@ -1,0 +1,105 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">COVID19RELIEF</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="hello_there_nwelcome_back">Hello there, Welcome Back</string>
+    <string name="sign_in_to_continue">Sign in to continue</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forget_password_reset_password">Forget Password/Reset Password?</string>
+    <string name="go">GO</string>
+    <string name="new_user_sign_up">New User? SIGN UP</string>
+    <string name="welcome">Welcome</string>
+    <string name="sign_up_to_start_your_journey">Sign Up to start your journey</string>
+    <string name="mobile">Mobile</string>
+    <string name="full_name">Full Name</string>
+    <string name="select_your_role">Select your Role</string>
+    <string name="aldready_have_an_account_login">Aldready have an account? LogIn</string>
+    <string name="victims">Victims</string>
+    <string name="donor">Donor</string>
+    <string name="fundraiser">Fundraiser</string>
+    <string name="shgs_ngos">SHGs/NGOs</string>
+    <string name="monitors">Monitors</string>
+    <string name="volunteers">volunteers</string>
+    <string name="covid19_relief">Covid19 Relief</string>
+    <string name="stay_home_stay_safe" tools:ignore="ExtraTranslation">Stay Home !  Stay Safe !</string>
+    <string name="my_status">My Status</string>
+    <string name="dashboard">DASHBOARD</string>
+    <string name="Dashboard">Dashboard</string>
+    <string name="share">Share</string>
+    <string name="logout">Logout</string>
+    <string name="setting">Setting</string>
+
+    <string-array name="self_assessq">
+        <item>Please note that information from this chat will be used for monitoring and management of current healthcare crisis and research in the fight against COVID-19</item>
+        <item>Are you experiencing any of the following symptomps ?</item>
+        <item>Have you ever had any of the following :</item>
+        <item>Have you travelled internationally in the last 14 days ?</item>
+        <item>Which of the following applies to you?</item>
+    </string-array>
+
+    <string-array name="self_assessm0">
+
+    </string-array>
+
+
+    <string-array name="self_assessm1">
+        <item>Your Answer</item>
+        <item>Cough</item>
+        <item>Fever</item>
+        <item>Difficulty in breathin</item>
+        <item>None of the above</item>
+    </string-array>
+
+    <string-array name="self_assessm2">
+        <item>Your Answer</item>
+        <item>Diabetes</item>
+        <item>Hypertension</item>
+        <item>Lung Disease</item>
+        <item>Heart Disease</item>
+        <item>None of the above</item>
+    </string-array>
+    <string-array name="self_assessm3">
+        <item>Your Answer</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="self_assessm4">
+        <item>Your Answer</item>
+        <item>I had recently interacted or lived with someone who tested positive for covid-19</item>
+        <item>I am a healthcare worker and that I examined a COVID - 19 confirmed case without protective gear</item>
+        <item>None of the above</item>
+    </string-array>
+
+    <string name="title_activity_cases_report">cases_report</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="state">State</string>
+    <string name="district">District</string>
+    <string name="myplace">My place</string>
+    <string name="total">Total</string>
+    <string name="title_activity_cases">Cases</string>
+    <string name="current_status">Current Status</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="reset_your_password">Reset your password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="enter_mobile_no">Enter Mobile Number</string>
+    <string name="reset">Reset</string>
+    <string name="updates">Covid Updates</string>
+    <string name="self_assess">Self-Assess</string>
+    <string name="cases_report">Cases Report</string>
+    <string name="profile">Profile</string>
+    <string name="mapping">Mapping</string>
+    <string name="labour">Labour</string>
+    <string name="healthworker">Health worker</string>
+    <string name="workers">Sector Workers</string>
+    <string name="donate">Donate</string>
+    <string name="helpline">Helpline</string>
+    <string name="helpline_numbers">Helpline Numbers</string>
+    <string name="notification">Notification</string>
+    <string name="view_in_map">View in map</string>
+    <string name="to_do">TO DO</string>
+
+
+</resources>
