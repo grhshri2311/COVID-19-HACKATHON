@@ -9,5 +9,39 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+
+
+    <style name="Theme.SleepCycleAlarm.FloatingActionButton" parent="Widget.Design.FloatingActionButton">
+        <item name="android:layout_width">@dimen/fabWidth</item>
+        <item name="android:layout_height">@dimen/fabHeight</item>
+        <item name="android:background">@drawable/button_fab_extended</item>
+        <item name="android:drawableStart">@drawable/ic_add</item>
+        <item name="android:textColor">@color/colorIconsActiveFocusedNegative</item>
+    </style>
+
+    <style name="Theme.SleepCycleAlarm.FloatingActionButton.NoBackground" parent="Theme.SleepCycleAlarm.FloatingActionButton">
+        <item name="android:background">@drawable/button_fab_extended_no_background</item>
+        <item name="android:drawableStart">@null</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme.SleepCycleAlarm.Dialog" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:background">@color/colorDialogBackground</item>
+        <item name="android:buttonBarStyle">@style/MyButtonBar</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MyButtonBar">
+        <item name="android:background">@color/colorDialogBackground</item>
+    </style>
 
 </resources>

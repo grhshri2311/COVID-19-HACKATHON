@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
@@ -56,7 +57,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.core.Context;
 
+import java.security.Key;
 import java.util.concurrent.TimeUnit;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class register extends AppCompatActivity{
 
@@ -326,7 +331,7 @@ public class register extends AppCompatActivity{
         final FirebaseDatabase database=FirebaseDatabase.getInstance();
         final DatabaseReference reference=database.getReference("Users").child(phone1);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -444,14 +449,18 @@ public class register extends AppCompatActivity{
                 alert.hide();
                 progressDialog.hide();
                 setcount(role.getText().toString());
-                UserRegistrationHelper helper=new UserRegistrationHelper(name1,email1,location.getLatitude(),location.getLongitude(),phone1,role.getText().toString(),password1);
+                UserRegistrationHelper helper=new UserRegistrationHelper(name1,email1,location.getLatitude(),location.getLongitude(),phone1,role.getText().toString(),encrypt(password1));
                 database=FirebaseDatabase.getInstance();
+
 
                 reference=database.getReference("Users");
 
                 reference.child(phone1).setValue(helper);
+                if(role.getText().toString().equals("Victim"))
+                reference.child(phone1).child("status").setValue(1);
                 UserLocationHelper userLocationHelper=new UserLocationHelper(name1,location.getLatitude(),location.getLongitude(),role.getText().toString(),email1,phone1);
                 database.getReference("Location").child(phone1).setValue(userLocationHelper);
+
                 progressDialog.hide();
 
                 SharedPreferences pref;
@@ -463,7 +472,7 @@ public class register extends AppCompatActivity{
                 editor.putString("user",phone1);
                 editor.commit();
 
-                startActivity(new Intent(register.this,home.class));
+                startActivity(new Intent(register.this,test.class));
                 finish();
 
             }
@@ -519,4 +528,22 @@ public class register extends AppCompatActivity{
         alert.show();
     }
 
+    private static final String ALGORITHM = "AES";
+    private static final String KEY = "1Hbfh667adfDEJ78";
+
+    public static String encrypt(String value) throws Exception
+    {
+        Key key = generateKey();
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte [] encryptedByteValue = cipher.doFinal(value.getBytes("utf-8"));
+        String encryptedValue64 = Base64.encodeToString(encryptedByteValue, Base64.DEFAULT);
+        return encryptedValue64;
+
+    }
+    private static Key generateKey() throws Exception
+    {
+        Key key = new SecretKeySpec(KEY.getBytes(),ALGORITHM);
+        return key;
+    }
 }

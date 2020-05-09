@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:paddingVertical="10dp"
     android:paddingLeft="3dp"
+    android:id="@+id/their"
     android:paddingRight="120dp"
     android:clipToPadding="false">
 

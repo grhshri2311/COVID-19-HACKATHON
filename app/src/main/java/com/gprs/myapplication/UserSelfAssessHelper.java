@@ -1,7 +1,5 @@
 package com.gprs.myapplication;
 
-import android.util.Pair;
-
 import java.util.ArrayList;
 
 

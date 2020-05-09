@@ -9,38 +9,32 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.Key;
 import java.util.Locale;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class login extends AppCompatActivity {
 
@@ -88,7 +82,7 @@ public class login extends AppCompatActivity {
         icon=findViewById(R.id.icon2);
         signin=findViewById(R.id.signin);
         welcome=findViewById(R.id.welcome);
-        go=findViewById(R.id.go);
+        go=findViewById(R.id.post);
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
 
@@ -188,22 +182,26 @@ public class login extends AppCompatActivity {
 
                 UserRegistrationHelper helper = dataSnapshot.getValue(UserRegistrationHelper.class);
                 if (helper != null) {
-                    if(helper.getPass().equals(pass)){
-                        SharedPreferences pref;
-                        SharedPreferences.Editor editor;
+                    try {
+                        if(helper.getPass().equals(encrypt(pass))){
+                            SharedPreferences pref;
+                            SharedPreferences.Editor editor;
 
-                        pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
-                        editor = pref.edit();
+                            pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
+                            editor = pref.edit();
 
-                        editor.putString("user",phone1);
-                        editor.commit();
+                            editor.putString("user",phone1);
+                            editor.commit();
 
-                        startActivity(new Intent(login.this,home.class));
-                        finish();
-                    }
-                    else {
-                        progressDialog.hide();
-                        password.setError("Invalid Password");
+                            startActivity(new Intent(login.this,home.class));
+                            finish();
+                        }
+                        else {
+                            progressDialog.hide();
+                            password.setError("Invalid Password");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
 
@@ -258,6 +256,25 @@ public class login extends AppCompatActivity {
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private static final String ALGORITHM = "AES";
+    private static final String KEY = "1Hbfh667adfDEJ78";
+
+    public static String encrypt(String value) throws Exception
+    {
+        Key key = generateKey();
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte [] encryptedByteValue = cipher.doFinal(value.getBytes("utf-8"));
+        String encryptedValue64 = Base64.encodeToString(encryptedByteValue, Base64.DEFAULT);
+        return encryptedValue64;
+
+    }
+    private static Key generateKey() throws Exception
+    {
+        Key key = new SecretKeySpec(KEY.getBytes(),ALGORITHM);
+        return key;
     }
 
 

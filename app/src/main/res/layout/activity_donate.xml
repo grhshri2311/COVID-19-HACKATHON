@@ -46,7 +46,7 @@
         android:id="@+id/HaryanaUPI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pay using UPI"
+        android:text="@string/pay_using_upi"
         android:textSize="20dp"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

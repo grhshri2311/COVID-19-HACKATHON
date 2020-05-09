@@ -1,6 +1,7 @@
 package com.gprs.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -66,6 +67,17 @@ public class cases_report extends AppCompatActivity {
         death1 = new ArrayList();
         object=new ArrayList<>();
 
+        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                startActivity(new Intent(cases_report.this,cases_report.class));
+                swipeRefreshLayout.setRefreshing(false);
+                finish();
+            }
+        });
         spinner = findViewById(R.id.state_select);
         spinner2 = findViewById(R.id.state_district);
 
@@ -196,6 +208,7 @@ public class cases_report extends AppCompatActivity {
                     bufferedReader.close();
                     return stringBuilder.toString();
                 } finally {
+                    if (urlConnection!=null)
                     urlConnection.disconnect();
                 }
             } catch (Exception e) {
@@ -208,7 +221,6 @@ public class cases_report extends AppCompatActivity {
         protected void onPostExecute(String response) {
 
 
-            Log.i("INFO", response);
 
             try {
                 JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
@@ -272,8 +284,6 @@ public class cases_report extends AppCompatActivity {
 
         protected void onPostExecute(String response) {
 
-
-            Log.i("INFO", response);
 
 
 

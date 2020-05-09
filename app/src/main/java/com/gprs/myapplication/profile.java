@@ -2,6 +2,7 @@ package com.gprs.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -61,7 +62,17 @@ public class profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-
+        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe2);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                startActivity(new Intent(profile.this,profile.class));
+                swipeRefreshLayout.setRefreshing(false);
+                finish();
+            }
+        });
 
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
 
@@ -296,7 +307,7 @@ public class profile extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(profile.this,home.class));
+        startActivity(new Intent(profile.this,mystatus.class));
         finish();
     }
 

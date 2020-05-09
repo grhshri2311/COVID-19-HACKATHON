@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -64,6 +65,7 @@ class CustomAdapter extends ArrayAdapter {
             TextView nameTextField = (TextView) rowView.findViewById(R.id.name);
             TextView infoTextField = (TextView) rowView.findViewById(R.id.message_body);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.avatar);
+            final RelativeLayout their=rowView.findViewById(R.id.their);
 
             final Spinner spinner = rowView.findViewById(R.id.answer);
 
@@ -77,6 +79,7 @@ class CustomAdapter extends ArrayAdapter {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     n=n+2;
+                    their.removeView(spinner);
                     self_assess.answered((String) parent.getItemAtPosition(position), context);
 
                 }

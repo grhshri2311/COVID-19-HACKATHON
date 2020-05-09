@@ -7,17 +7,26 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <dist:module dist:instant="true" />
 
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -26,13 +35,59 @@
         android:roundIcon="@drawable/collective_intelligence_icon_use"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mystatus"></activity>
+        <activity android:name=".work"></activity>
+        <activity android:name=".workAssign" />
+        <activity android:name=".your_work" />
+        <activity android:name=".assign_work">
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+
+                <data android:scheme="mailto" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".alarmremember" />
+        <activity android:name=".Alarm" />
+        <activity android:name=".notification" />
+        <activity android:name=".test" />
+        <activity
+            android:name=".quora"
+            android:label="@string/title_activity_quora"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity android:name=".hospital" />
+        <activity android:name=".advice" />
+        <activity android:name=".youtubevedio" />
+        <activity android:name=".stepstofollow" />
+        <activity android:name=".epass" />
+        <activity android:name=".Medstore" />
+        <activity android:name=".intro" />
+        <activity android:name=".internetalert" />
+
+        <service
+            android:name=".ForegroundService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".Detailed" />
+        <activity android:name=".news" />
+        <activity android:name=".foundvictim" />
+        <activity android:name=".victimalert" />
+        <activity android:name=".mystatus" />
         <activity android:name=".helpline" />
         <activity android:name=".donate" />
         <activity android:name=".forgotpassword" />
         <activity android:name=".visualize" />
         <activity android:name=".cases_report" />
 
+        <receiver
+            android:name=".MyBroadcastReciever"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
@@ -44,6 +99,8 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".AlarmNotificationReceiver" />
+        <receiver android:name=".alarmnotification" />
+        <receiver android:name=".mynotification" />
 
         <service
             android:name=".MyService"

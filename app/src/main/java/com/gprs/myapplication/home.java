@@ -1,53 +1,50 @@
 package com.gprs.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.google.android.gms.internal.location.zzas;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -57,33 +54,76 @@ import java.util.Locale;
 public class home extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 111;
-    RelativeLayout mystatus,selfassess,dashmap,updates,case_report,helpline,donate;
+    RelativeLayout mystatus,selfassess,dashmap,updates,case_report,helpline,donate,scan,medstore,epass,admission,quora;
     Toolbar toolbar;
     TextView confirm,death;
+
     private FusedLocationProviderClient fusedLocationClient;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(home.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_CALL_PHONE);
-            return;
-        }
+
+
+        BroadcastReceiver br = new MyBroadcastReciever();
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                Intent i=new Intent(home.this,stepstofollow.class);
+                startActivity(i);
+            }
+        }, 10000);
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        getApplicationContext().registerReceiver(br, filter);
+        sendBroadcast(getIntent());
+
 
         SharedPreferences pref;
         SharedPreferences.Editor editor;
 
-        startAlarm(false);
-        startAlarm(true);
+        getdetails();
+
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            startAlarm(false);
+            startAlarm(true);
+        }
+
+
+
+
+        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                startActivity(new Intent(home.this,home.class));
+                swipeRefreshLayout.setRefreshing(false);
+                finish();
+            }
+        });
+
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
 
         if(pref.getString("user","").equals("")){
             startActivity(new Intent(home.this,login.class));
             finish();
+        }
+
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(home.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE);
+            return;
         }
 
         int flag=0;
@@ -96,20 +136,32 @@ public class home extends AppCompatActivity {
         }
 
         if(flag==0)
-       new notificationHelper(this).createNotification("COVID19RELIEF","Stay Safe from COVID-19");
+       new notificationHelper(this).createOngoingNotification("COVID19RELIEF","Stay Safe from COVID-19");
 
+
+
+
+
+        quora=findViewById(R.id.quora);
         donate=findViewById(R.id.donate);
         helpline=findViewById(R.id.helpline);
         mystatus=findViewById(R.id.mystatus);
+        scan=findViewById(R.id.scan);;
         dashmap=findViewById(R.id.dashmap);
+        epass=findViewById(R.id.epass);
 
         selfassess=findViewById(R.id.selfassess);
         confirm=findViewById(R.id.confirm);
         death=findViewById(R.id.death);
         updates=findViewById(R.id.updates);
+        medstore=findViewById(R.id.medstore);
+        admission=findViewById(R.id.admission);
 
-        APIextract apIextract=new APIextract(this,confirm,death);
-        location();
+
+            APIextract apIextract = new APIextract(this, confirm, death);
+
+
+
         case_report=findViewById(R.id.case_report);
         setToolBar();
 
@@ -117,7 +169,40 @@ public class home extends AppCompatActivity {
 
 
 
+        quora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(home.this,quora.class));
+            }
+        });
+        epass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(home.this,epass.class));
+            }
+        });
 
+        admission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(home.this,hospital.class));
+            }
+        });
+
+        medstore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(home.this,Medstore.class));
+            }
+        });
+
+
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(home.this,victimalert.class));
+            }
+        });
 
         dashmap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +221,7 @@ public class home extends AppCompatActivity {
         updates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,website.class));
+                startActivity(new Intent(home.this,news.class));
             }
         });
 
@@ -160,17 +245,45 @@ public class home extends AppCompatActivity {
                 startActivity(new Intent(home.this,donate.class));
             }
         });
-        mystatus.setOnClickListener(new View.OnClickListener() {
+      mystatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(home.this,mystatus.class));
             }
         });
+
     }
 
+
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
+        final SharedPreferences pref;
+        final SharedPreferences.Editor editor;
+
+        pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
+        editor = pref.edit();
+
+        FirebaseDatabase.getInstance().getReference().child("Notification").child(pref.getString("user","")).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null){
+                    Long count1=dataSnapshot.getChildrenCount();
+                       if(count1>=1) {
+                           menu.getItem(0).setIcon(R.drawable.ic_notifications_red_24dp);
+                           mystatus.setBackground(getDrawable(R.drawable.customborder));
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         return true;
     }
 
@@ -200,6 +313,10 @@ public class home extends AppCompatActivity {
             }
             startActivity(new Intent(home.this,home.class));
             finish();
+        }
+        if (id==R.id.notify){
+            item.setIcon(R.drawable.ic_notifications_black_24dp);
+            startActivity(new Intent(home.this,notification.class));
         }
         if(id==R.id.share){
             Intent sendIntent = new Intent();
@@ -232,8 +349,8 @@ public class home extends AppCompatActivity {
                 pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
                 editor = pref.edit();
 
-                editor.putString("user","");
-                editor.commit();
+                editor.clear();
+                editor.apply();
                 startActivity(new Intent(home.this,login.class));
                 finish();
 
@@ -278,14 +395,35 @@ public class home extends AppCompatActivity {
 
     void startAlarm(boolean set) {
 
-        notificationHelper notice = new notificationHelper(home.this);
-
         AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent myIntent;
-        PendingIntent pendingIntent = null;
+        PendingIntent pendingIntent0 = null;
 
         // SET TIME HERE
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        myIntent = new Intent(this,alarmnotification.class);
+        pendingIntent0 = PendingIntent.getBroadcast(this,0,myIntent,0);
+
+        if(set){
+
+            manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() +
+                            1 * 1000, pendingIntent0);
+
+        }
+        else
+        if (manager!= null) {
+            manager.cancel(pendingIntent0);
+        }
+
+
+        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = null;
+
+        // SET TIME HERE
+        calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         myIntent = new Intent(home.this,AlarmNotificationReceiver.class);
@@ -302,6 +440,24 @@ public class home extends AppCompatActivity {
         else
         if (manager!= null) {
             manager.cancel(pendingIntent);
+        }
+
+        myIntent = new Intent(home.this,mynotification.class);
+        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
+
+
+        if(set){
+
+            manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() +
+                            1 * 1000, pendingIntent1);
+
+        }
+        else {
+            if (manager != null) {
+                manager.cancel((pendingIntent1));
+            }
+
         }
 
     }
@@ -379,5 +535,62 @@ public class home extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    void  getdetails(){
+        final SharedPreferences pref;
+        final SharedPreferences.Editor editor;
+
+        pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
+        editor = pref.edit();
+
+
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).child("status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Integer status=dataSnapshot.getValue(Integer.class);
+                if(status!=null && status==1) {
+                    editor.putString("status", "victim");
+                    editor.commit();
+                }
+                else {
+                    editor.putString("status", "normal");
+                    editor.commit();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserRegistrationHelper userRegistrationHelper=dataSnapshot.getValue(UserRegistrationHelper.class);
+                if(userRegistrationHelper!=null) {
+                    editor.putString("role", userRegistrationHelper.getRole());
+                    editor.commit();
+                }
+                else {
+                    editor.putString("role", "not defined");
+                    editor.commit();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    public void alarm(View view) {
+        startActivity(new Intent(this,Alarm.class));
     }
 }

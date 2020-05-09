@@ -14,14 +14,14 @@
     <string name="full_name">Full Name</string>
     <string name="select_your_role">Select your Role</string>
     <string name="aldready_have_an_account_login">Aldready have an account? LogIn</string>
-    <string name="victims">Victims</string>
+    <string name="victims">Victim</string>
     <string name="donor">Donor</string>
     <string name="fundraiser">Fundraiser</string>
     <string name="shgs_ngos">SHGs/NGOs</string>
     <string name="monitors">Monitors</string>
     <string name="volunteers">volunteers</string>
     <string name="covid19_relief">Covid19 Relief</string>
-    <string name="stay_home_stay_safe" tools:ignore="ExtraTranslation" translatable="false">Haryana</string>
+    <string name="stay_home_stay_safe" translatable="false" tools:ignore="ExtraTranslation">Haryana</string>
     <string name="my_status">My Status</string>
     <string name="dashboard">DASHBOARD</string>
     <string name="Dashboard">Dashboard</string>
@@ -100,6 +100,51 @@
     <string name="notification">Notification</string>
     <string name="view_in_map">View in map</string>
     <string name="to_do">TO DO</string>
+    <string name="scan">Scan</string>
+    <string name="intro1">Each one of us has the power to help prevent the spread of the corona virus pandemic in India \nWould you like to be kept informed if you crossed paths with someone who has tested COVID-19 positive ?</string>
+    <string name="intro2">COVID-19 RELIEF tracks through a blutooth and location generated social graph, your interaction with someone who could have found victim of COVID-19.\n </string>
+    <string name="intro3">Scan option in the app can be used  to get alerts if someone you have come in close proximity of,even unknowingly,found victim of COVID-19</string>
+    <string name="intro4">COVID-19-RELIEF  is a mobile application developed to connect and coordinate essential health and various services with the people of India to fight against COVID-19. The App is aimed at building a community to help and coordinate  various services and sectors, particularly the Department of Health, in proactively reaching out to and informing the users of the app regarding risks, best practices and relevant updates of COVID-19. </string>
+    <string name="medical_shops">Medical shops</string>
+    <string name="epass">ePass and Government service</string>
+    <string name="stranded_migrant">Stranded migrant</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pay_using_upi">Pay using UPI</string>
+    <string name="hospital_appointment">Hospital Appointment</string>
+    <string name="lab_test">Lab Test</string>
+    <string name="order_medicine">Order Medicine</string>
+    <string name="title_activity_quora">quora</string>
+    <string name="quora">Quora</string>
+    <string name="post_a_question">Post a question</string>
+    <string name="forum">Forum</string>
+    <string name="answered_question">Answered question</string>
+    <string name="your_questions">Your Questions</string>
+    <string name="notify">Notification</string>
+    <string name="select_catagory">Select catagory</string>
+    <string name="time_assigned">Time Assigned</string>
+    <string name="monitor_name">Monitor Name</string>
+    <string name="monitor_place">Monitor Place</string>
+    <string name="monitor_phone">Monitor Phone</string>
+    <string name="monitor_email">Monitor Email</string>
+    <string name="mark_as_done">Mark as done</string>
+    <string name="reject_request">Reject Request</string>
+    <string name="name">Name</string>
+    <string name="role">Role</string>
+    <string name="place">Place</string>
+    <string name="phone">Phone</string>
+    <string name="write_down_the_works">Write down the works</string>
+    <string name="assign">Assign</string>
+    <string name="please_turn_on_internet_to_stay_updated">Please turn on internet to stay updated</string>
+    <string name="go_back_and_pull_down_to_refresh">Go back and pull down to refresh</string>
+    <string name="close">Close</string>
+    <string name="turn_on">Turn ON</string>
+    <string name="alert">Alert !</string>
+    <string name="found_new_victim_in_your_surrounding">Found new victim in your surrounding</string>
+    <string name="stay_away_from_the_place">Stay away from the place !</string>
+    <string name="alarm_manager">Alarm Manager</string>
+    <string name="hospital_nlab_test_nmedicine">Hospital Lab Test Medicine</string>
+    <string name="continue_in_hindi">जारी रखें हिंदी में</string>
 
 </resources>

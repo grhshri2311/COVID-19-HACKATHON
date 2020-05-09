@@ -91,9 +91,6 @@ public class APIextract {
         protected void onPostExecute(String response) {
 
 
-
-                Log.i("INFO", response);
-
                 try {
                     JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
                     JSONArray jsonArray=object.getJSONArray("statewise");

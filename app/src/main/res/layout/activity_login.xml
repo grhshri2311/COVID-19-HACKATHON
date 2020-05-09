@@ -92,7 +92,7 @@
                     android:text="@string/forget_password_reset_password" />
 
                 <Button
-                    android:id="@+id/go"
+                    android:id="@+id/post"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/go"

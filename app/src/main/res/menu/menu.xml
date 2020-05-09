@@ -2,22 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <item
-        android:title="@string/share"
-        android:id="@+id/share"
+        android:title="@string/notify"
+        android:id="@+id/notify"
         app:showAsAction="always"
-        android:icon="@drawable/ic_share_black_24dp"
-        />
+        android:icon="@drawable/ic_notifications_black_24dp"/>
+
     <item
         android:title="@string/logout"
         android:id="@+id/translate"
         app:showAsAction="always"
         android:icon="@drawable/hindismall"/>
+
+    <item
+        android:title="@string/share"
+        android:id="@+id/share"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_share_black_24dp"
+        />
     <item
         android:title="@string/logout"
         android:id="@+id/logoutmenu"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_exit_to_app_black_24dp"/>
+
 
 
 </menu>

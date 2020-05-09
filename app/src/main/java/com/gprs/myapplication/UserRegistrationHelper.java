@@ -1,6 +1,6 @@
 package com.gprs.myapplication;
 
-import android.location.Location;
+
 
 
 public class UserRegistrationHelper {
@@ -11,6 +11,7 @@ public class UserRegistrationHelper {
     String phone;
     String role;
     String pass;
+
 
 
     public UserRegistrationHelper() {

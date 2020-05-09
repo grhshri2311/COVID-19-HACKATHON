@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class self_assess extends AppCompatActivity {
 
@@ -36,30 +37,70 @@ public class self_assess extends AppCompatActivity {
     static CustomAdapter customAdapter;
     static ArrayList<String> question=new ArrayList<>();
     static ArrayList<ArrayList<String>> menu=new ArrayList<>();
+    static HashMap<String,Integer> result;
     static int count=0,pos=0;
     static UserLocationHelper userLocationHelper;
 
     static DatabaseReference reference;
 
-    FirebaseDatabase database;
+    static int status=0;
+    static  String message;
+    static boolean isolate=false,noprob=false,covid=false,general=false;
+    static FirebaseDatabase database;
 
     void init(){
+        status=0;
         answer=new ArrayList<>();
+        result=new HashMap<String, Integer>();
         String[] ques = getResources().getStringArray(R.array.self_assessq);
         question= new ArrayList<>(Arrays.asList(ques));
         menu=new ArrayList<>();
         answer=new ArrayList<>();
-        String[] menus = getResources().getStringArray(R.array.self_assessm0);
+        isolate=false;
+        noprob=false;
+        covid=false;
+        general=false;
         message_view=findViewById(R.id.messages_view);
+
+        String[] menus = getResources().getStringArray(R.array.self_assessm0);
         menu.add(new ArrayList<>(Arrays.asList(menus)));
+
         menus = getResources().getStringArray(R.array.self_assessm1);
         menu.add(new ArrayList<>(Arrays.asList(menus)));
+
+
+        result.put(menu.get(1).get(1),3);
+        result.put(menu.get(1).get(2),3);
+        result.put(menu.get(1).get(3),3);
+        result.put(menu.get(1).get(4),0);
+
+
+
+
+
         menus = getResources().getStringArray(R.array.self_assessm2);
         menu.add(new ArrayList<>(Arrays.asList(menus)));
+        result.put(menu.get(2).get(1),2);
+        result.put(menu.get(2).get(2),2);
+        result.put(menu.get(2).get(3),2);
+        result.put(menu.get(2).get(4),0);
+
+
+
         menus = getResources().getStringArray(R.array.self_assessm3);
         menu.add(new ArrayList<>(Arrays.asList(menus)));
+        result.put(menu.get(3).get(1),1);
+        result.put(menu.get(3).get(2),0);
+
+
+
         menus = getResources().getStringArray(R.array.self_assessm4);
         menu.add(new ArrayList<>(Arrays.asList(menus)));
+
+        result.put(menu.get(4).get(1),1);
+        result.put(menu.get(4).get(2),1);
+        result.put(menu.get(4).get(3),0);
+
 
         question1=new ArrayList<>();
         answer1=new ArrayList<>();
@@ -92,6 +133,16 @@ public class self_assess extends AppCompatActivity {
         if(!itemAtPosition.equals("")) {
             question1.add("");
             menu1.add(null);
+            int r=result.get(itemAtPosition);
+            if(r==1)
+                isolate=true;
+            else if (r==3)
+                covid=true;
+            else if(r==2)
+                general=true;
+            else
+                noprob=true;
+
             answer.add(itemAtPosition);
             answer1.add(itemAtPosition);
             togle[count++] = 2;
@@ -112,6 +163,25 @@ public class self_assess extends AppCompatActivity {
 
     private static void next(Activity context) {
 
+        if(covid){
+            status=5;
+            message="You may have COVID-19 Symptomns ,So you are recommended to consult a doctor\n";
+
+        }
+        else if(isolate){
+            status=3;
+            message="You are recommended to isolate yourself and to have COVID-19 test\n";
+        }
+        else if(general){
+            status=1;
+            message="You are may consult doctor for health improvements\n";
+        }
+        else
+        {
+            status=0;
+            message="Your infection risk is low Stay Home and Stay Safe !";
+        }
+
 
         SharedPreferences pref;
         SharedPreferences.Editor editor;
@@ -130,7 +200,7 @@ public class self_assess extends AppCompatActivity {
             menu1.add(null);
             answer1.add("");
             togle[0]=11;
-            question1.add("Result");
+            question1.add(message);
             customAdapter.notifyDataSetChanged();
 
 
@@ -195,8 +265,10 @@ public class self_assess extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userLocationHelper = dataSnapshot.getValue(UserLocationHelper.class);
                 if(userLocationHelper!=null){
-                    UserSelfAssessHelper userSelfAssessHelper=new UserSelfAssessHelper(userLocationHelper.getLat(),userLocationHelper.getLon(), self_assess.answer,0);
+                    UserSelfAssessHelper userSelfAssessHelper=new UserSelfAssessHelper(userLocationHelper.getLat(),userLocationHelper.getLon(), self_assess.answer,status);
                     FirebaseDatabase.getInstance().getReference().child("Assess").child(pref.getString("user","")).setValue(userSelfAssessHelper);
+                    if(status>=3)
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).child("status").setValue(1);
                     answer.clear();
                     Toast.makeText(context,"Tested Successfully",Toast.LENGTH_LONG).show();
                 }
@@ -217,35 +289,3 @@ public class self_assess extends AppCompatActivity {
 
 
 }
-/*
-
-   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
-
-          <EditText
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:ems="10"
-                android:hint="Write a message"
-                android:inputType="text"
-                android:paddingHorizontal="10dp"
-                android:text="" />
-
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                android:padding="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/ic_send_black_24dp"/>
-        </LinearLayout>
-
- */

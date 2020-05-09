@@ -1,8 +1,5 @@
 package com.gprs.myapplication;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +18,8 @@ import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.net.URL;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class donate extends AppCompatActivity {
 
@@ -59,9 +57,7 @@ public class donate extends AppCompatActivity {
             public void onClick(View v) {
                 urlgo="https://www.onlinesbi.com/sbicollect/icollecthome.htm?corpID=1952558";
 
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(urlgo));
-                startActivity(i);
+               load();
             }
         });
         progressDialog=new ProgressDialog(this);
@@ -70,7 +66,7 @@ public class donate extends AppCompatActivity {
         progressDialog.setTitle("Please Wait !"); // Setting Title
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
 
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
 
 
         WebSettings wsetting=wview.getSettings();
@@ -78,6 +74,8 @@ public class donate extends AppCompatActivity {
         wsetting.setSupportZoom(true);
         wsetting.setDomStorageEnabled(true);
         wsetting.setAppCacheEnabled(true);
+        String newUA= "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1";
+        wview.getSettings().setUserAgentString(newUA);
 
 
 

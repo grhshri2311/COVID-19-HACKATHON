@@ -1,8 +1,5 @@
 package com.gprs.myapplication;
 
-import android.location.Location;
-
-
 public class UserLocationHelper {
 
     String fname;

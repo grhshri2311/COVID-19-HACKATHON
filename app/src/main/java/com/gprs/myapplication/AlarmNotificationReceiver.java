@@ -10,8 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
+
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -50,7 +49,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
-    public static final String NOTIFICATION_CHANNEL_ID = "10002";
+    public static final String NOTIFICATION_CHANNEL_ID = "10052";
     private SharedPreferences pref;
     SharedPreferences.Editor editor;
     String message;
@@ -107,9 +106,6 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 
         protected void onPostExecute(String response) {
 
-
-
-            Log.i("INFO", response);
             try{
                 SharedPreferences pref;
                 SharedPreferences.Editor editor;
@@ -169,7 +165,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
                     mNotificationManager.createNotificationChannel(notificationChannel);
                 }
                 assert mNotificationManager != null;
-                mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
+                mNotificationManager.notify(22 /* Request Code */, mBuilder.build());
                 pref = context.getSharedPreferences("user", 0);
                 if(!pref.getString("user","").equals("")) {
                     notificationHelper notice = new notificationHelper(context);
