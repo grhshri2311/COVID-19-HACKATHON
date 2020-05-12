@@ -40,7 +40,7 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
 
         ArrayList<QuoraHelper> arrayList;
         HashMap<Integer,byte[]> hashMapimage;
-    ArrayAdapter adapter;
+    CustomQuoraAdapter2 adapter;
     ProgressBar progressBar;
 
         private Activity context;
@@ -82,8 +82,8 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
 
                         progressBar=rowView.findViewById(R.id.quoraprogress);
                         progressBar.setVisibility(View.VISIBLE);
-                    if (FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getTime()) != null) {
-                        FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getTime()).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    if (FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getUri()) != null) {
+                        FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getUri()).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                             @Override
                             public void onSuccess(byte[] bytes) {
                                 hashMapimage.put(position,bytes);
@@ -192,12 +192,20 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
             linearLayout.removeView(videoView);
         }
 
+        ArrayList<String> name,answer;
+
+        name=new ArrayList<>();
+        answer=new ArrayList<>();
+
+        if(arrayList.get(position).getAnswer()!=null && arrayList.get(position).getUser()!=null){
+           name=arrayList.get(position).getUser();
+            answer=arrayList.get(position).getAnswer();
+        }
+
         ListView listView = rowView.findViewById(R.id.quoraanswers);
             if(arrayList.get(position).getAnswer()!=null) {
 
-                 adapter = new ArrayAdapter<String>(rowView.getContext(),
-                        android.R.layout.simple_list_item_1,
-                        arrayList.get(position).getAnswer());
+                 adapter = new CustomQuoraAdapter2(context,name,answer);
                 ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
                 layoutParams.height = 500;
                 listView.setLayoutParams(layoutParams);

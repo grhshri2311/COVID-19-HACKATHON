@@ -244,8 +244,11 @@ public class intro extends AppCompatActivity {
                 editor.putBoolean("set",false);
                     editor.putString("lang", "hi");
                     editor.commit();
-                startActivity(new Intent(intro.this,Splash.class));
+                setAppLocale("hi");
                 finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
             }
         });
 

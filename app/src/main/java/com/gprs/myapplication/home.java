@@ -1,6 +1,7 @@
 package com.gprs.myapplication;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,9 +24,12 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.service.notification.StatusBarNotification;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +51,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,14 +78,8 @@ public class home extends AppCompatActivity {
         BroadcastReceiver br = new MyBroadcastReciever();
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
 
-                Intent i=new Intent(home.this,stepstofollow.class);
-                startActivity(i);
-            }
-        }, 10000);
+
 
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
@@ -87,8 +87,8 @@ public class home extends AppCompatActivity {
         sendBroadcast(getIntent());
 
 
-        SharedPreferences pref;
-        SharedPreferences.Editor editor;
+        final SharedPreferences pref;
+        final SharedPreferences.Editor editor;
 
         getdetails();
 
@@ -106,16 +106,19 @@ public class home extends AppCompatActivity {
             @Override
             public void onRefresh()
             {
-                startActivity(new Intent(home.this,home.class));
-                swipeRefreshLayout.setRefreshing(false);
                 finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
+        editor=pref.edit();
 
         if(pref.getString("user","").equals("")){
-            startActivity(new Intent(home.this,login.class));
+            startActivity(new Intent(home.this,login.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             finish();
         }
 
@@ -128,7 +131,7 @@ public class home extends AppCompatActivity {
 
         int flag=0;
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
+        final StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
         for (StatusBarNotification notification : notifications) {
             if (notification.getId() == 100) {
                 flag=1;
@@ -139,8 +142,22 @@ public class home extends AppCompatActivity {
        new notificationHelper(this).createOngoingNotification("COVID19RELIEF","Stay Safe from COVID-19");
 
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final String currentDateTime = dateFormat.format(new Date()); // Find todays date
 
+        if(!pref.getString("today","").equals(currentDateTime)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
+                    editor.putString("today",currentDateTime);
+                    editor.commit();
+                    Intent i = new Intent(home.this, stepstofollow.class);
+                    startActivity(i);
+                }
+            }, 10000);
+
+        }
 
         quora=findViewById(R.id.quora);
         donate=findViewById(R.id.donate);
@@ -172,27 +189,27 @@ public class home extends AppCompatActivity {
         quora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,quora.class));
+                startActivity(new Intent(home.this,quora.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
         epass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,epass.class));
+                startActivity(new Intent(home.this,epass.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
         admission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,hospital.class));
+                startActivity(new Intent(home.this,hospital.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
         medstore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,Medstore.class));
+                startActivity(new Intent(home.this,Medstore.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
@@ -200,35 +217,35 @@ public class home extends AppCompatActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,victimalert.class));
+                startActivity(new Intent(home.this,victimalert.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
         dashmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,MapsActivity.class));
+                startActivity(new Intent(home.this,MapsActivity.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
         case_report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,cases_report.class));
+                startActivity(new Intent(home.this,cases_report.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
         updates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,news.class));
+                startActivity(new Intent(home.this,news.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
         selfassess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,self_assess.class));
+                startActivity(new Intent(home.this,self_assess.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
 
@@ -236,20 +253,47 @@ public class home extends AppCompatActivity {
         helpline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,helpline.class));
+                startActivity(new Intent(home.this,helpline.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,donate.class));
+                startActivity(new Intent(home.this,donate.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             }
         });
       mystatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(home.this,mystatus.class));
-            }
+
+                TextView cur=findViewById(R.id.textView);
+                TextView confirm=findViewById(R.id.confirm);
+                TextView death=findViewById(R.id.death);
+                ImageView icon=findViewById(R.id.imageView);
+                LinearLayout l1=findViewById(R.id.linearLayout0);
+                LinearLayout l2=findViewById(R.id.linearLayout);
+                LinearLayout l3=findViewById(R.id.linearLayout2);
+
+                mystatus.setBackground(getDrawable(R.drawable.customborder_home));
+
+                Intent intent=new Intent(home.this,mystatus.class);
+                Pair[]pairs=new Pair[7];
+                pairs[0]=new Pair<View, String>(icon,"icon");
+                pairs[1]=new Pair<View, String>(cur,"currrentstatus");
+                pairs[2]=new Pair<View, String>(confirm,"active");
+                pairs[3]=new Pair<View, String>(death,"death");
+                pairs[4]=new Pair<View, String>(l1,"linear1");
+                pairs[5]=new Pair<View, String>(l2,"linear2");
+                pairs[6]=new Pair<View, String>(l3,"linear3");
+
+                //wrap the call in API level 21 or higher
+                if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.LOLLIPOP)
+                {
+                    ActivityOptions options=ActivityOptions.makeSceneTransitionAnimation(home.this,pairs);
+                    startActivity(intent,options.toBundle());
+                }
+                    }
+
         });
 
     }
@@ -311,8 +355,10 @@ public class home extends AppCompatActivity {
                 editor.commit();
                 setAppLocale("en");
             }
-            startActivity(new Intent(home.this,home.class));
             finish();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
         }
         if (id==R.id.notify){
             item.setIcon(R.drawable.ic_notifications_black_24dp);
@@ -457,6 +503,23 @@ public class home extends AppCompatActivity {
             if (manager != null) {
                 manager.cancel((pendingIntent1));
             }
+        }
+
+            myIntent = new Intent(home.this,helpneeded.class);
+            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
+
+
+            if(set){
+
+                manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() +
+                                1 * 1000, pendingIntent2);
+
+            }
+            else {
+                if (manager != null) {
+                    manager.cancel((pendingIntent2));
+                }
 
         }
 
@@ -592,5 +655,9 @@ public class home extends AppCompatActivity {
 
     public void alarm(View view) {
         startActivity(new Intent(this,Alarm.class));
+    }
+
+    public void firstresponder(View view) {
+        startActivity(new Intent(home.this,firstresponder.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
     }
 }

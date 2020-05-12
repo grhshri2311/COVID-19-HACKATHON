@@ -102,8 +102,10 @@ public class login extends AppCompatActivity {
                     editor.commit();
                     setAppLocale("en");
                 }
-                startActivity(new Intent(login.this,login.class));
                 finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
             }
         });
 
@@ -123,11 +125,11 @@ public class login extends AppCompatActivity {
                 Pair[]pairs=new Pair[7];
                 pairs[0]=new Pair<View, String>(icon,"logo_image");
                 pairs[1]=new Pair<View, String>(welcome,"logo_text");
-                pairs[2]=new Pair<View, String>(signin,"signin");
+                pairs[2]=new Pair<View, String>(signin,"logo_text1");
                 pairs[3]=new Pair<View, String>(email,"email");
                 pairs[4]=new Pair<View, String>(password,"pass");
                 pairs[5]=new Pair<View, String>(go,"go");
-                pairs[6]=new Pair<View, String>(register,"reg");
+                pairs[6]=new Pair<View, String>(register,"switch");
 
                 //wrap the call in API level 21 or higher
                 if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.LOLLIPOP)
@@ -193,7 +195,7 @@ public class login extends AppCompatActivity {
                             editor.putString("user",phone1);
                             editor.commit();
 
-                            startActivity(new Intent(login.this,home.class));
+                            startActivity(new Intent(login.this,home.class),ActivityOptions.makeSceneTransitionAnimation(login.this).toBundle());
                             finish();
                         }
                         else {

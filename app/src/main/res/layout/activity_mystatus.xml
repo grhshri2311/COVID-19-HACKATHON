@@ -32,6 +32,7 @@
                 android:id="@+id/textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:transitionName="currrentstatus"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:text="@string/current_status"
@@ -49,6 +50,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:text="Covid-19 Relief"
+                android:transitionName="active"
                 android:textColor="#4F0D5E"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +63,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
                 android:text="Covid-19 Relief"
+                android:transitionName="death"
                 android:textColor="#4F0D5E"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -68,6 +71,37 @@
                 app:layout_constraintTop_toBottomOf="@+id/confirm" />
 
 
+            <LinearLayout
+                android:id="@+id/linearLayout0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:transitionName="linear1"
+
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+                <RelativeLayout
+                    android:background="@drawable/customborder_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:clipToPadding="false"
+                        android:foregroundGravity="center"
+                        android:overScrollMode="never"></androidx.viewpager.widget.ViewPager>
+                </RelativeLayout>
+
+            </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -77,6 +111,7 @@
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
+            android:transitionName="linear1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView">
 
@@ -88,7 +123,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:gravity="center">
 
@@ -137,6 +172,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp"
+            android:transitionName="linear2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -202,7 +238,7 @@
                         android:layout_height="75dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
-                        app:srcCompat="@drawable/ic_notifications_active_black_24dp" />
+                        app:srcCompat="@drawable/notification" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
@@ -213,6 +249,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp"
+            android:transitionName="linear3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -278,9 +315,10 @@
                         android:id="@+id/airplane"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
+                        android:transitionName="profile"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
-                        app:srcCompat="@drawable/profileicon" />
+                        app:srcCompat="@drawable/statusicon" />
                 </RelativeLayout>
 
 
@@ -291,6 +329,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
+                android:transitionName="icon"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toEndOf="parent"

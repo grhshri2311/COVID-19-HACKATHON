@@ -57,17 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         imageButton=findViewById(R.id.mapmenu);
-        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
-            @Override
-            public void onRefresh()
-            {
-                startActivity(new Intent(MapsActivity.this,MapsActivity.class));
-                swipeRefreshLayout.setRefreshing(false);
-                finish();
-            }
-        });
+
+
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +85,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                         .snippet(userLocationHelper.fname + '\n' + userLocationHelper.role)
                                                         .icon(bitmapDescriptorFromVector(MapsActivity.this, R.drawable.ic_place_black_24dp)));
                                                 marker.showInfoWindow();
-                                                CustomInfoWindow customInfoWindow = new CustomInfoWindow(MapsActivity.this);
+                                                helperHashMap.put(marker.getSnippet(),userLocationHelper);                                                CustomInfoWindow customInfoWindow = new CustomInfoWindow(MapsActivity.this);
                                                 mMap.setInfoWindowAdapter(customInfoWindow);
                                                 marker.showInfoWindow();
 

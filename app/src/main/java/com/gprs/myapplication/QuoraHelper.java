@@ -8,6 +8,7 @@ public class QuoraHelper {
    String title,desc,message,role,phone,name,time;
    boolean nil,image,vedio;
    ArrayList<String> answer;
+   ArrayList<String> user;
     String uri;
 
 
@@ -15,7 +16,7 @@ public class QuoraHelper {
     public QuoraHelper() {
     }
 
-    public QuoraHelper(String title, String desc, String message, String role, String phone, String name, String time, boolean nil, boolean image, boolean vedio, ArrayList<String> arrayList, String url) {
+    public QuoraHelper(String title, String desc, String message, String role, String phone, String name, String time, boolean nil, boolean image, boolean vedio, ArrayList<String> arrayList, String url,ArrayList<String> user) {
         this.title = title;
         this.desc = desc;
         this.message = message;
@@ -28,6 +29,15 @@ public class QuoraHelper {
         this.vedio=vedio;
         this.answer=arrayList;
         this.uri=url;
+        this.user=user;
+    }
+
+    public ArrayList<String> getUser() {
+        return user;
+    }
+
+    public void setUser(ArrayList<String> user) {
+        this.user = user;
     }
 
     public ArrayList<String> getAnswer() {

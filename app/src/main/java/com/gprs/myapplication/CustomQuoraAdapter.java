@@ -2,6 +2,7 @@ package com.gprs.myapplication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -85,38 +86,39 @@ public class CustomQuoraAdapter extends ArrayAdapter {
             qmessage.setText(arrayList.get(position).getMessage());
 
 
-                if (arrayList.get(position).isImage()) {
-                    progressBar=rowView.findViewById(R.id.quoraprogress);
-                    progressBar.setVisibility(View.VISIBLE);
-                    final ImageView imageView = rowView.findViewById(R.id.quoraimage);
-                    if(hashMapimage.get(position)==null) {
+        if (arrayList.get(position).isImage()) {
+            final ImageView imageView = rowView.findViewById(R.id.quoraimage);
+            if(hashMapimage.get(position)==null) {
 
-                    if (FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getTime()) != null) {
-                        FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getTime()).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                            @Override
-                            public void onSuccess(byte[] bytes) {
-                                hashMapimage.put(position,bytes);
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                progressBar.setVisibility(View.INVISIBLE);
-                                imageView.setImageBitmap(bitmap);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle any errors
-                            }
-                        });
-                    }
-
+                progressBar=rowView.findViewById(R.id.quoraprogress);
+                progressBar.setVisibility(View.VISIBLE);
+                if (FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getUri()) != null) {
+                    FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getUri()).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            hashMapimage.put(position,bytes);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            imageView.setImageBitmap(bitmap);
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                        }
+                    });
                 }
-                    else {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(hashMapimage.get(position), 0, hashMapimage.get(position).length);
-                        imageView.setImageBitmap(bitmap);
-                    }
-            }
 
-            if(arrayList.get(position).isVedio()) {
+            }
+            else {
+                progressBar.setVisibility(View.INVISIBLE);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(hashMapimage.get(position), 0, hashMapimage.get(position).length);
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+
+
+        if(arrayList.get(position).isVedio()) {
                 final VideoView videoView = (VideoView) rowView.findViewById(R.id.quoravideo);
                 final String extStorageDirectory = Environment.getExternalStorageDirectory()
                         .toString();
@@ -231,6 +233,7 @@ public class CustomQuoraAdapter extends ArrayAdapter {
             }
         });
 
+        final SharedPreferences   pref = context.getSharedPreferences("user", 0); // 0 - for private mode
 
         final EditText youranswer=rowView.findViewById(R.id.youranswer);
         ImageButton imageButton=rowView.findViewById(R.id.answer_send);
@@ -241,11 +244,14 @@ public class CustomQuoraAdapter extends ArrayAdapter {
                 if(!youranswer.getText().toString().isEmpty()){
                     if(arrayList.get(position).getAnswer()==null){
                         arrayList.get(position).setAnswer(new ArrayList<String>());
+                        arrayList.get(position).setUser(new ArrayList<String>());
                         arrayList.get(position).getAnswer().add(youranswer.getText().toString());
+                        arrayList.get(position).getUser().add(pref.getString("user",""));
 
                     }
                     else {
                         arrayList.get(position).getAnswer().add(youranswer.getText().toString());
+                        arrayList.get(position).getUser().add(pref.getString("user",""));
                     }
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     final String currentDateTime = dateFormat.format(new Date()); // Find todays date

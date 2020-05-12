@@ -150,6 +150,14 @@
     <string name="alarm_manager">अलार्म मैनेजर</string>
     <string name="hospital_nlab_test_nmedicine">हॉस्पिटल लैब टेस्ट मेडिसिन</string>
     <string name="continue_in_hindi">जारी रखें हिंदी में</string>
-
+    <string name="first_responder">पहला प्रतिसादकर्ता</string>
+    <string name="be_ready_to_contribute">तुरंत मदद लें</string>
+    <string name="be_the_first_responder">फर्स्ट रिस्पॉन्डर बनें</string>
+    <string name="alert_nearby">Alert Nearby</string>
+    <string name="dial_108">डायल 108</string>
+    <string name="dial_100">डायल 100</string>
+    <string name="dial_101">डायल 101</string>
+    <string name="nearby_hospitals">आसपास के अस्पताल</string>
+    <string name="first_aid_guidance">फर्स्ट एड गाइडेंस</string>
 
 </resources>

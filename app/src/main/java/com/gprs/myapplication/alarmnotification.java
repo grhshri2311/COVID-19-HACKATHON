@@ -10,12 +10,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.media.VolumeProviderCompat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,13 +40,16 @@ public class alarmnotification extends BroadcastReceiver {
     String message;
     Context context;
     Intent resultIntent;
+    int timer=0;
     String extStorageDirectory = Environment.getExternalStorageDirectory()
             .toString();
     File f = new File(extStorageDirectory + "/COVI19RELIEF/alarm/obj.dat");
     private MediaPlayer player;
+    VolumeProviderCompat myVolumeProvider;
+
 
     ArrayList<String> name, desc, time;
-  //  private MediaSessionCompat mediaSession;
+    private MediaSessionCompat mediaSession;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -59,28 +66,25 @@ public class alarmnotification extends BroadcastReceiver {
 
         loadMap();
 
-  //        mediaSession = new MediaSessionCompat(context, "PlayerService");
-  //          mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-    //                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-      //      mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-        //            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0) //you simulate a player which plays something.
-          //          .build());
-//
-  //          VolumeProviderCompat myVolumeProvider =
-    //                new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, /*max volume*/100, /*initial volume level*/50) {
-      //                  @Override
-        //                public void onAdjustVolume(int direction) {
-          //                  player.pause();
-//
-  //                      }
-    //                };
-//
-  //          mediaSession.setPlaybackToRemote(myVolumeProvider);
-    //        mediaSession.setActive(true);
+        mediaSession = new MediaSessionCompat(context, "PlayerService");
+            mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                   MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+            mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
+                    .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0) //you simulate a player which plays something.
+                    .build());
 
 
 
-        if(f.exists())
+
+
+        new CountDownTimer(3000, 3000)
+        {
+            public void onTick(long l) {}
+            public void onFinish()
+            {
+                if(timer==0) {
+
+                    if(f.exists())
 
                     {
                         loadMap();
@@ -89,21 +93,40 @@ public class alarmnotification extends BroadcastReceiver {
                         final String currentDateTime = dateFormat.format(new Date());
                         for (int i = 0; i < name.size(); i++) {
                             if (currentDateTime.equals(time.get(i))) {
+                               myVolumeProvider =
+                                        new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, /*max volume*/100, /*initial volume level*/100) {
+                                            @Override
+                                            public void onAdjustVolume(int direction) {
+                                                player.pause();
+                                                mediaSession.setActive(false);
+
+                                            }
+                                        };
+
+                                mediaSession.setPlaybackToRemote(myVolumeProvider);
+                                mediaSession.setActive(true);
+
                                 player.start();
                                 notifyalarm(name.get(i));
+                                timer=20;
                                 Intent intent1 = new Intent(context, alarmremember.class);
                                 intent1.putExtra("name", name.get(i));
                                 intent1.putExtra("desc", desc.get(i));
                                 context.startActivity(intent1);
-                                reset(true, 60);
-
-                            } else
-                                reset(true, 3);
+                            }
                         }
 
                     }
-        else
-            reset(true,3);
+                }
+                else
+                    timer=timer-1;
+
+
+                start();
+            }
+        }.start();
+
+
 
     }
 
@@ -158,7 +181,7 @@ public class alarmnotification extends BroadcastReceiver {
 
         void reset ( boolean set, int sec){
 
-            Log.println(Log.INFO, "Reset", String.valueOf(sec));
+
 
             AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent myIntent;

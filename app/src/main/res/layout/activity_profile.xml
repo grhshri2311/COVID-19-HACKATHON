@@ -31,6 +31,7 @@
                     android:id="@+id/proimg"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:transitionName="profile"
                     android:layout_centerVertical="true"
                     android:src="@drawable/profileicon" />
 

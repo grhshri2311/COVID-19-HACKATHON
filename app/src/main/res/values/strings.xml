@@ -146,5 +146,14 @@
     <string name="alarm_manager">Alarm Manager</string>
     <string name="hospital_nlab_test_nmedicine">Hospital Lab Test Medicine</string>
     <string name="continue_in_hindi">जारी रखें हिंदी में</string>
+    <string name="first_responder">First Responder</string>
+    <string name="be_ready_to_contribute">Get help instantly</string>
+    <string name="be_the_first_responder">Be the First Responder</string>
+    <string name="alert_nearby">Alert Nearby</string>
+    <string name="dial_108">Dial 108</string>
+    <string name="dial_100">Dial 100</string>
+    <string name="dial_101">Dial 101</string>
+    <string name="nearby_hospitals">Nearby Hospitals</string>
+    <string name="first_aid_guidance">First Aid Guidance</string>
 
 </resources>

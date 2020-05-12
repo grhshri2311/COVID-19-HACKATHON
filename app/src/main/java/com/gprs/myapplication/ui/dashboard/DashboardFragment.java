@@ -106,7 +106,7 @@ public class DashboardFragment extends Fragment {
                                 if(status!=null){
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     String currentDateTime = dateFormat.format(new Date()); // Find todays date
-                                    QuoraHelper quoraHelper=new QuoraHelper(title.getText().toString(),desc.getText().toString(),message.getText().toString(),status.getRole(),status.getPhone(),status.getFname(),currentDateTime,nil,img,vid,null,null);
+                                    QuoraHelper quoraHelper=new QuoraHelper(title.getText().toString(),desc.getText().toString(),message.getText().toString(),status.getRole(),status.getPhone(),status.getFname(),currentDateTime,nil,img,vid,null,null,null);
                                     FirebaseDatabase.getInstance().getReference().child("Quora").child(currentDateTime).setValue(quoraHelper);
                                 }
                             }
@@ -195,7 +195,7 @@ public class DashboardFragment extends Fragment {
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                     imageUri=data.getData();
-                    Toast.makeText(root.getContext(),String.valueOf(imageUri),Toast.LENGTH_LONG).show();
+                    Toast.makeText(root.getContext(),"Image Selected",Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
 
                 // user cancelled Image capture
@@ -214,7 +214,7 @@ public class DashboardFragment extends Fragment {
             if (resultCode == RESULT_OK) {
 
                 vedioUri=data.getData();
-                Toast.makeText(root.getContext(),String.valueOf(vedioUri),Toast.LENGTH_LONG).show();
+                Toast.makeText(root.getContext(),"Vedio Selected",Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
 
                 // user cancelled recording
@@ -265,7 +265,7 @@ done=false;                }
                                             UserRegistrationHelper status=dataSnapshot.getValue(UserRegistrationHelper.class);
                                             if(status!=null){
 
-                                                QuoraHelper quoraHelper=new QuoraHelper(title.getText().toString(),desc.getText().toString(),message.getText().toString(),status.getRole(),status.getPhone(),status.getFname(),currentDateTime,nil,img,vid,null,url);
+                                                QuoraHelper quoraHelper=new QuoraHelper(title.getText().toString(),desc.getText().toString(),message.getText().toString(),status.getRole(),status.getPhone(),status.getFname(),currentDateTime,nil,img,vid,null,url,null);
                                                 FirebaseDatabase.getInstance().getReference().child("Quora").child(currentDateTime).setValue(quoraHelper);
                                             }
                                         }

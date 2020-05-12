@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
@@ -58,7 +59,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     private RequestQueue queue;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
 
         this.context=context;
         pref = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
@@ -66,7 +67,25 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         resultIntent = new Intent(context , Splash.class);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         queue = Volley.newRequestQueue(context);
-        new AlarmNotificationReceiver.RetrieveFeedTask1().execute();
+
+        new CountDownTimer(120000, 120000)
+        {
+            public void onTick(long l) {}
+            public void onFinish()
+            {
+                pref = context.getSharedPreferences("user", 0);
+                if(!pref.getString("user","").equals("")) {
+                    new AlarmNotificationReceiver.RetrieveFeedTask1().execute();
+                }
+
+               start();
+            }
+        }.start();
+
+
+
+
+
 
     }
 
@@ -166,27 +185,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
                 }
                 assert mNotificationManager != null;
                 mNotificationManager.notify(22 /* Request Code */, mBuilder.build());
-                pref = context.getSharedPreferences("user", 0);
-                if(!pref.getString("user","").equals("")) {
-                    notificationHelper notice = new notificationHelper(context);
 
-                    AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    Intent myIntent;
-                    PendingIntent pendingIntent = null;
-
-                    // SET TIME HERE
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(System.currentTimeMillis());
-
-                    myIntent = new Intent(context, AlarmNotificationReceiver.class);
-                    pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, 0);
-
-
-                    manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                            SystemClock.elapsedRealtime() +
-                                    60*2 * 1000, pendingIntent);
-
-                }
 
             } catch (Exception e) {
                 e.printStackTrace();

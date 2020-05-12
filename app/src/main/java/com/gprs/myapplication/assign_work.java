@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -33,11 +34,12 @@ import java.util.Locale;
 public class assign_work extends AppCompatActivity {
 
 
-    Button role;
+    Button role,filter;
     ArrayList<String> namelist, rolelist, placelist;
     ArrayList<UserLocationHelper> volunteer;
     ListView listView;
     VolunteerAdapter adapter;
+    EditText place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class assign_work extends AppCompatActivity {
         rolelist = new ArrayList<>();
         placelist = new ArrayList<>();
         listView = findViewById(R.id.volunteers);
+        place=findViewById(R.id.place);
+        filter=findViewById(R.id.filter);
         role = findViewById(R.id.role);
 
         volunteer = new ArrayList<>();
@@ -61,6 +65,65 @@ public class assign_work extends AppCompatActivity {
             }
         });
 
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    namelist.clear();
+                    rolelist.clear();
+                    placelist.clear();
+                    volunteer.clear();
+                    adapter.notifyDataSetChanged();
+                    if (role.getText().toString().equals("Select catagory")) {
+                        FirebaseDatabase.getInstance().getReference().child("Location")
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                            final UserLocationHelper userLocationHelper = snapshot.getValue(UserLocationHelper.class);
+                                            if (location(userLocationHelper.getLat(), userLocationHelper.getLon()).toLowerCase().contains(place.getText().toString().toLowerCase())) {
+                                                volunteer.add(userLocationHelper);
+                                                namelist.add(userLocationHelper.getFname());
+                                                rolelist.add(userLocationHelper.getRole());
+                                                placelist.add(location(userLocationHelper.getLat(), userLocationHelper.getLon()));
+                                                adapter.notifyDataSetChanged();
+                                                place.setText("");
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                    }
+                    else {
+                        FirebaseDatabase.getInstance().getReference().child("Location")
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                            final UserLocationHelper userLocationHelper = snapshot.getValue(UserLocationHelper.class);
+                                            if (userLocationHelper.getRole().equals(role.getText().toString()) &&location(userLocationHelper.getLat(), userLocationHelper.getLon()).toLowerCase().contains(place.getText().toString().toLowerCase())) {
+                                                volunteer.add(userLocationHelper);
+                                                namelist.add(userLocationHelper.getFname());
+                                                rolelist.add(userLocationHelper.getRole());
+                                                placelist.add(location(userLocationHelper.getLat(), userLocationHelper.getLon()));
+                                                adapter.notifyDataSetChanged();
+                                                place.setText("");
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                    }
+                }
+
+        });
         role.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +150,7 @@ public class assign_work extends AppCompatActivity {
                                                 rolelist.add(userLocationHelper.getRole());
                                                 placelist.add(location(userLocationHelper.getLat(), userLocationHelper.getLon()));
                                                 adapter.notifyDataSetChanged();
+                                                place.setText("");
                                             }
                                         }
 

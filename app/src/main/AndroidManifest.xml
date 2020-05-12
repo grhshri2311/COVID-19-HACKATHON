@@ -35,7 +35,12 @@
         android:roundIcon="@drawable/collective_intelligence_icon_use"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".work"></activity>
+        <activity android:name=".help"></activity>
+        <activity android:name=".firstreply" />
+        <activity android:name=".firstaidguidance" />
+        <activity android:name=".Medicalshops" />
+        <activity android:name=".firstresponder" />
+        <activity android:name=".work" />
         <activity android:name=".workAssign" />
         <activity android:name=".your_work" />
         <activity android:name=".assign_work">
@@ -101,6 +106,7 @@
         <receiver android:name=".AlarmNotificationReceiver" />
         <receiver android:name=".alarmnotification" />
         <receiver android:name=".mynotification" />
+        <receiver android:name=".helpneeded" />
 
         <service
             android:name=".MyService"

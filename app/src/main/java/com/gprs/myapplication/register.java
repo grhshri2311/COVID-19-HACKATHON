@@ -122,11 +122,11 @@ public class register extends AppCompatActivity{
                 Pair[] pairs = new Pair[7];
                 pairs[0] = new Pair<View, String>(icon, "logo_image");
                 pairs[1] = new Pair<View, String>(welcome, "logo_text");
-                pairs[2] = new Pair<View, String>(signin, "signin");
+                pairs[2] = new Pair<View, String>(signin, "logo_text1");
                 pairs[3] = new Pair<View, String>(email, "email");
                 pairs[4] = new Pair<View, String>(password, "pass");
                 pairs[5] = new Pair<View, String>(go, "go");
-                pairs[6] = new Pair<View, String>(login, "reg");
+                pairs[6] = new Pair<View, String>(login, "switch");
 
                 //wrap the call in API level 21 or higher
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -472,7 +472,7 @@ public class register extends AppCompatActivity{
                 editor.putString("user",phone1);
                 editor.commit();
 
-                startActivity(new Intent(register.this,test.class));
+                startActivity(new Intent(register.this,test.class),ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 finish();
 
             }
@@ -494,8 +494,10 @@ public class register extends AppCompatActivity{
                         Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    startActivity(new Intent(register.this,login.class));
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(register.this,login.class));
+                    finish();
+
                 }
                 return;
             }

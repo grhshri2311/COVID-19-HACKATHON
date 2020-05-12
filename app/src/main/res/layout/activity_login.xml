@@ -116,8 +116,8 @@
 
                 <ImageButton
                     android:id="@+id/language"
-                    android:layout_width="155px"
-                    android:layout_height="155px"
+                    android:layout_width="160px"
+                    android:layout_height="160px"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:background="#00000000"

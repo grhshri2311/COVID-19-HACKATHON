@@ -3,8 +3,10 @@ package com.gprs.myapplication;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +24,14 @@ public class notification extends AppCompatActivity {
     ArrayList<String> arrayList=new ArrayList<>();
     ListView notices;
     ArrayAdapter adapter;
+    TextView notice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
+        notice=findViewById(R.id.notice);
         notices=findViewById(R.id.notices);
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
         adapter = new ArrayAdapter<String>(notification.this,R.layout.notice,R.id.notice1,arrayList);
@@ -44,6 +48,7 @@ public class notification extends AppCompatActivity {
                 {
                     String str = "0";
                     for (DataSnapshot data:dataSnapshot.getChildren()) {
+                        notice.setVisibility(View.INVISIBLE);
                         for(DataSnapshot dat:data.getChildren())
                         arrayList.add(dat.getValue(String.class)+'\n'+dat.getKey());
                     }

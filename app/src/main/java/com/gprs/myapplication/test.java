@@ -1,6 +1,7 @@
 package com.gprs.myapplication;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -70,14 +71,14 @@ public class test extends AppCompatActivity {
             case MULTIPLE_PERMISSIONS: {
                 boolean flag=true;
                 for(int i=0;i<grantResults.length;i++){
-                    if(grantResults[0]!=PackageManager.PERMISSION_GRANTED){
+                    if(grantResults[i]!=PackageManager.PERMISSION_GRANTED){
                         flag=false;
                     }
                 }
                 if (flag) {
                     textView.setText("All permissions are Granted.");
                     textView.setTextColor(getResources().getColor(R.color.GREEN));
-                    startActivity(new Intent(test.this,login.class));
+                    startActivity(new Intent(test.this,login.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                     finish();
                 } else {
                     textView.setText("All permissions are required for the app to work normally.");
@@ -90,7 +91,7 @@ public class test extends AppCompatActivity {
                             startActivity(i);
                             finish();
                         }
-                    }, 5000);
+                    }, 3000);
 
                 }
                 return;
