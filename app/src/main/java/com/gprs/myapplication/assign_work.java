@@ -270,7 +270,11 @@ public class assign_work extends AppCompatActivity {
                             return  city+','+state;
 
 
-                        } catch (IOException e) {
+                        }
+                        catch (IllegalArgumentException e){
+                            e.printStackTrace();
+                        }
+                        catch (IOException e) {
                             e.printStackTrace();
                         }
 

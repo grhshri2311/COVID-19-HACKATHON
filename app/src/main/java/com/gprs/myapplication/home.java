@@ -63,7 +63,7 @@ public class home extends AppCompatActivity {
     RelativeLayout mystatus,selfassess,dashmap,updates,case_report,helpline,donate,scan,medstore,epass,admission,quora;
     Toolbar toolbar;
     TextView confirm,death;
-
+    BroadcastReceiver br;
     private FusedLocationProviderClient fusedLocationClient;
 
 
@@ -75,7 +75,7 @@ public class home extends AppCompatActivity {
 
 
 
-        BroadcastReceiver br = new MyBroadcastReciever();
+         br = new MyBroadcastReciever();
 
 
 
@@ -83,7 +83,7 @@ public class home extends AppCompatActivity {
 
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-        getApplicationContext().registerReceiver(br, filter);
+        this.registerReceiver(br, filter);
         sendBroadcast(getIntent());
 
 
@@ -412,10 +412,26 @@ public class home extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
-        Exit1();
+
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     public void Exit1() {
@@ -659,5 +675,16 @@ public class home extends AppCompatActivity {
 
     public void firstresponder(View view) {
         startActivity(new Intent(home.this,firstresponder.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try{
+            unregisterReceiver(br);
+        }
+        catch (Exception e){
+
+        }
     }
 }

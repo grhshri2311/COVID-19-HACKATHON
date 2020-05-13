@@ -255,35 +255,39 @@ public class self_assess extends AppCompatActivity {
         alert.show();
     }
      static void save(final Context context){
-        final SharedPreferences pref;
-        SharedPreferences.Editor editor;
-        pref =context.getSharedPreferences("user", 0); // 0 - for private mode
-        FirebaseDatabase database=FirebaseDatabase.getInstance();
 
-        FirebaseDatabase.getInstance().getReference().child("Location").child(pref.getString("user","")).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userLocationHelper = dataSnapshot.getValue(UserLocationHelper.class);
-                if(userLocationHelper!=null){
-                    UserSelfAssessHelper userSelfAssessHelper=new UserSelfAssessHelper(userLocationHelper.getLat(),userLocationHelper.getLon(), self_assess.answer,status);
-                    FirebaseDatabase.getInstance().getReference().child("Assess").child(pref.getString("user","")).setValue(userSelfAssessHelper);
-                    if(status>=3)
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).child("status").setValue(1);
-                    answer.clear();
-                    Toast.makeText(context,"Tested Successfully",Toast.LENGTH_LONG).show();
+        try {
+            final SharedPreferences pref;
+            SharedPreferences.Editor editor;
+            pref = context.getSharedPreferences("user", 0); // 0 - for private mode
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            FirebaseDatabase.getInstance().getReference().child("Location").child(pref.getString("user", "")).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    userLocationHelper = dataSnapshot.getValue(UserLocationHelper.class);
+                    if (userLocationHelper != null) {
+                        UserSelfAssessHelper userSelfAssessHelper = new UserSelfAssessHelper(userLocationHelper.getLat(), userLocationHelper.getLon(), self_assess.answer, status);
+                        FirebaseDatabase.getInstance().getReference().child("Assess").child(pref.getString("user", "")).setValue(userSelfAssessHelper);
+                        if (status >= 3)
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user", "")).child("status").setValue(1);
+                        answer.clear();
+                        Toast.makeText(context, "Tested Successfully", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, "Tested locally \nCheck your internet connection ", Toast.LENGTH_LONG).show();
+                    }
                 }
-                else {
-                    Toast.makeText(context,"Tested locally \nCheck your internet connection ",Toast.LENGTH_LONG).show();
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
-            }
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+        catch (Exception e){
 
-            }
-        });
-
-
+        }
 
     }
 

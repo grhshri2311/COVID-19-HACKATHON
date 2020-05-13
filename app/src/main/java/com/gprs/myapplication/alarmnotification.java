@@ -9,7 +9,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -40,11 +42,11 @@ public class alarmnotification extends BroadcastReceiver {
     String message;
     Context context;
     Intent resultIntent;
+    Ringtone ringtoneAlarm;
     int timer=0;
     String extStorageDirectory = Environment.getExternalStorageDirectory()
             .toString();
     File f = new File(extStorageDirectory + "/COVI19RELIEF/alarm/obj.dat");
-    private MediaPlayer player;
     VolumeProviderCompat myVolumeProvider;
 
 
@@ -58,7 +60,9 @@ public class alarmnotification extends BroadcastReceiver {
         this.context = context;
         resultIntent = new Intent(context, notification.class);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        player = MediaPlayer.create(context, Settings.System.DEFAULT_RINGTONE_URI);
+        Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        ringtoneAlarm = RingtoneManager.getRingtone(context, alarmTone);
+
 
         name = new ArrayList<>();
         desc = new ArrayList<>();
@@ -73,7 +77,18 @@ public class alarmnotification extends BroadcastReceiver {
                     .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0) //you simulate a player which plays something.
                     .build());
 
+        myVolumeProvider =
+                new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, /*max volume*/100, /*initial volume level*/100) {
+                    @Override
+                    public void onAdjustVolume(int direction) {
+                        if(ringtoneAlarm.isPlaying())
+                        ringtoneAlarm.stop();
 
+                        mediaSession.setActive(false);
+
+                    }
+                };
+        mediaSession.setPlaybackToRemote(myVolumeProvider);
 
 
 
@@ -82,31 +97,27 @@ public class alarmnotification extends BroadcastReceiver {
             public void onTick(long l) {}
             public void onFinish()
             {
+                Log.println(Log.INFO,"Timer",String.valueOf(timer));
                 if(timer==0) {
 
                     if(f.exists())
 
                     {
+                        Log.println(Log.INFO,"Timer","enter");
                         loadMap();
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
                         final String currentDateTime = dateFormat.format(new Date());
                         for (int i = 0; i < name.size(); i++) {
+                            Log.println(Log.INFO,"array",time.get(i));
+                            Log.println(Log.INFO,"cur",currentDateTime);
                             if (currentDateTime.equals(time.get(i))) {
-                               myVolumeProvider =
-                                        new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, /*max volume*/100, /*initial volume level*/100) {
-                                            @Override
-                                            public void onAdjustVolume(int direction) {
-                                                player.pause();
-                                                mediaSession.setActive(false);
 
-                                            }
-                                        };
+                                Log.println(Log.INFO,"Timer","Matched");
 
-                                mediaSession.setPlaybackToRemote(myVolumeProvider);
                                 mediaSession.setActive(true);
 
-                                player.start();
+                                ringtoneAlarm.play();
                                 notifyalarm(name.get(i));
                                 timer=20;
                                 Intent intent1 = new Intent(context, alarmremember.class);
@@ -115,14 +126,15 @@ public class alarmnotification extends BroadcastReceiver {
                                 context.startActivity(intent1);
                             }
                         }
-
+                        start();
                     }
+                    else
+                        start();
                 }
-                else
-                    timer=timer-1;
-
-
-                start();
+                else {
+                    timer = timer - 1;
+                    start();
+                }
             }
         }.start();
 

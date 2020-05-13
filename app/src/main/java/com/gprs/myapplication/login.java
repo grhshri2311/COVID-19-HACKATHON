@@ -215,6 +215,7 @@ public class login extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError error) {
+                progressDialog.hide();
                 Toast.makeText(login.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });

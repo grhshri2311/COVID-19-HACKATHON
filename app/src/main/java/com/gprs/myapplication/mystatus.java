@@ -175,7 +175,7 @@ public class mystatus extends AppCompatActivity {
                     ActivityOptions options=ActivityOptions.makeSceneTransitionAnimation(mystatus.this,pairs);
                     startActivity(intent,options.toBundle());
                 }
-                startActivity(new Intent(mystatus.this,profile.class));
+
             }
         });
         viewmap.setOnClickListener(new View.OnClickListener() {

@@ -307,7 +307,6 @@ public class profile extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(profile.this,mystatus.class));
         finish();
     }
 

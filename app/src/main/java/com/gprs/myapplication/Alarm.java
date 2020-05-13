@@ -145,8 +145,16 @@ public class Alarm extends AppCompatActivity {
             }
             else
                 stringAlarmHours=alarmHours.toString();
+
             stringAlarmTime = stringAlarmHours.concat(":").concat(stringAlarmMinutes).concat(" PM");
-        }else{
+        }
+        else if(alarmHours==12)
+        {
+            String stringAlarmHours="";
+            stringAlarmHours=alarmHours.toString();
+            stringAlarmTime = stringAlarmHours.concat(":").concat(stringAlarmMinutes).concat(" PM");
+        }
+        else{
             String stringAlarmHours="";
             if (alarmHours<10){
                 stringAlarmHours= "0";

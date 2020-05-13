@@ -170,6 +170,10 @@ public class register extends AppCompatActivity{
     }
     private void validatemobile() {
 
+        ph=false;
+
+        verifyemail();
+      /*
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 "+91 "+phone1,        // Phone number to verify
                 60,                 // Timeout duration
@@ -179,6 +183,8 @@ public class register extends AppCompatActivity{
 
 
         verifymobile();
+
+       */
     }
 
     private void verifymobile() {
@@ -347,6 +353,7 @@ public class register extends AppCompatActivity{
             }
             @Override
             public void onCancelled(DatabaseError error) {
+                progressDialog.hide();
                 Toast.makeText(register.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
@@ -376,6 +383,7 @@ public class register extends AppCompatActivity{
             }
             @Override
             public void onCancelled(DatabaseError error) {
+                progressDialog.hide();
                 Toast.makeText(register.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
@@ -399,6 +407,7 @@ public class register extends AppCompatActivity{
             }
             @Override
             public void onCancelled(DatabaseError error) {
+                progressDialog.hide();
                 Toast.makeText(register.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
@@ -446,7 +455,6 @@ public class register extends AppCompatActivity{
 
         else {
             try {
-                alert.hide();
                 progressDialog.hide();
                 setcount(role.getText().toString());
                 UserRegistrationHelper helper=new UserRegistrationHelper(name1,email1,location.getLatitude(),location.getLongitude(),phone1,role.getText().toString(),encrypt(password1));
