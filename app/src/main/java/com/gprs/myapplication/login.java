@@ -52,8 +52,7 @@ public class login extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences pref;
-        SharedPreferences.Editor editor;
+
 
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
 
@@ -93,6 +92,10 @@ public class login extends AppCompatActivity {
         language.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences pref;
+                SharedPreferences.Editor editor;
+                pref = getApplicationContext().getSharedPreferences("language", 0); // 0 - for private mode
+                editor = pref.edit();
                 if (pref.getString("lang", "").equals("")) {
                     editor.putString("lang", "hi");
                     editor.commit();

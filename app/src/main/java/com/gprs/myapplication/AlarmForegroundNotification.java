@@ -1,26 +1,30 @@
 package com.gprs.myapplication;
 
 
-import android.app.AlarmManager;
+import android.app.ActivityManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Environment;
-import android.os.SystemClock;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.media.VolumeProviderCompat;
 
 import java.io.File;
@@ -30,11 +34,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
+import static com.gprs.myapplication.VictimAlertForegroundNotification.CHANNEL_ID;
 
-public class alarmnotification extends BroadcastReceiver {
+
+public class AlarmForegroundNotification extends Service {
 
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
@@ -54,11 +59,54 @@ public class alarmnotification extends BroadcastReceiver {
     private MediaSessionCompat mediaSession;
 
     @Override
-    public void onReceive(final Context context, Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.println(Log.INFO,"Alarm","Alarm started");
+        String input = intent.getStringExtra("inputExtra");
+        createNotificationChannel();
+
+        Intent notificationIntent = new Intent(this, Splash.class);
 
 
-        this.context = context;
-        resultIntent = new Intent(context, notification.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("COVID19RELIEF")
+                .setContentText("Stay Safe from COVID-19")
+                .setSmallIcon(R.drawable.collective_intelligence_icon_use)
+                .setContentIntent(pendingIntent)
+                .build();
+        startForeground(101, notification);
+        //do heavy work on a background thread
+        //stopSelf();
+        return START_NOT_STICKY;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Foreground Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
+    }
+    public void startService(Class<?> serviceClass) {
+        Intent serviceIntent = new Intent(this, serviceClass);
+        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android");
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+    @Override
+    public void onCreate() {
+        this.context = this;
+        Log.println(Log.INFO,"Alarm","Alarm started running");
+               resultIntent = new Intent(context, Alarm.class);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         ringtoneAlarm = RingtoneManager.getRingtone(context, alarmTone);
@@ -71,18 +119,18 @@ public class alarmnotification extends BroadcastReceiver {
         loadMap();
 
         mediaSession = new MediaSessionCompat(context, "PlayerService");
-            mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                   MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-            mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-                    .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0) //you simulate a player which plays something.
-                    .build());
+        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0) //you simulate a player which plays something.
+                .build());
 
         myVolumeProvider =
                 new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, /*max volume*/100, /*initial volume level*/100) {
                     @Override
                     public void onAdjustVolume(int direction) {
                         if(ringtoneAlarm.isPlaying())
-                        ringtoneAlarm.stop();
+                            ringtoneAlarm.stop();
 
                         mediaSession.setActive(false);
 
@@ -137,8 +185,21 @@ public class alarmnotification extends BroadcastReceiver {
                 }
             }
         }.start();
+    }
 
+    @Override
+    public void onDestroy() {
 
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        sendBroadcast(new Intent(this, Restarter.class).setAction("Alarm"));
+    }
+
+    @Override
+    public void onStart(Intent intent, int startid) {
 
     }
 
@@ -169,7 +230,10 @@ public class alarmnotification extends BroadcastReceiver {
             mBuilder.setContentTitle("Alarm")
                     .setOnlyAlertOnce(true)
                     .setContentText(s)
-                    .setAutoCancel(false)
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_CALL)
+                    .setFullScreenIntent(resultPendingIntent, true)
                     .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                     .setContentIntent(resultPendingIntent);
 
@@ -191,32 +255,16 @@ public class alarmnotification extends BroadcastReceiver {
             mNotificationManager.notify(11/* Request Code */, mBuilder.build());
         }
 
-        void reset ( boolean set, int sec){
 
-
-
-            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Intent myIntent;
-            PendingIntent pendingIntent0 = null;
-
-            // SET TIME HERE
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-
-            myIntent = new Intent(context, alarmnotification.class);
-            pendingIntent0 = PendingIntent.getBroadcast(context, 0, myIntent, 0);
-
-            if (set) {
-
-                manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        SystemClock.elapsedRealtime() +
-                                sec * 1000, pendingIntent0);
-
-            } else if (manager != null) {
-                manager.cancel(pendingIntent0);
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
             }
-
         }
-
-
+        return false;
     }
+    }
+
+

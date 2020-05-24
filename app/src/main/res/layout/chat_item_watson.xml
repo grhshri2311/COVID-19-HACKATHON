@@ -13,8 +13,8 @@
         android:layout_alignParentLeft="true"
         android:scaleType="centerInside"
         android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:src="@drawable/collective_intelligence_icon_use"/>
+        android:src="@drawable/collective_intelligence_icon_use"
+        android:layout_height="34dp" />
 
     <TextView
         android:id="@+id/name"
@@ -24,12 +24,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
-        android:text="Rose"/>
+        android:text="COVID-19 RELIEF"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/message_body"
+        android:id="@+id/message"
         android:layout_below="@+id/name"
         android:layout_alignLeft="@+id/name"
         android:background="@drawable/their_message"
@@ -48,13 +48,14 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:background="@drawable/their_message2"
-        android:id="@+id/answer"
+        android:id="@+id/option"
         android:gravity="center"
+        android:visibility="invisible"
         android:textAlignment="center"
         android:layout_alignLeft="@+id/name"
         android:layout_marginTop="10dp"
         android:textColor="#000000"
-        android:layout_below="@id/message_body"
+        android:layout_below="@id/message"
         android:elevation="2dp"
         android:textSize="18dp"/>
 </RelativeLayout>

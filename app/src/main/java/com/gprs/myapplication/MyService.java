@@ -40,7 +40,7 @@ public class MyService extends Service {
         calendar.set(Calendar.HOUR_OF_DAY,18);
         calendar.set(Calendar.MINUTE,45);
 
-        myIntent = new Intent(this,AlarmNotificationReceiver.class);
+        myIntent = new Intent(this, YourLocationBroadcastReciever.class);
         pendingIntent = PendingIntent.getBroadcast(this,0,myIntent,0);
 
 

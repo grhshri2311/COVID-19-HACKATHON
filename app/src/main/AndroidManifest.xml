@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.gprs.myapplication">
+
+    <!-- Include required permissions for Google Mobile Ads to run. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -9,9 +13,8 @@
     -->
     <dist:module dist:instant="true" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -27,6 +30,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:allowBackup="true"
@@ -35,7 +39,10 @@
         android:roundIcon="@drawable/collective_intelligence_icon_use"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".help"></activity>
+
+
+        <activity android:name=".Chatbot" /> <!-- Include the AdActivity configChanges and theme. -->
+        <activity android:name=".help" />
         <activity android:name=".firstreply" />
         <activity android:name=".firstaidguidance" />
         <activity android:name=".Medicalshops" />
@@ -52,11 +59,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
+
+        <receiver android:name="androidx.media.session.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
         <activity android:name=".alarmremember" />
         <activity android:name=".Alarm" />
         <activity android:name=".notification" />
@@ -75,9 +84,10 @@
         <activity android:name=".internetalert" />
 
         <service
-            android:name=".ForegroundService"
+            android:name=".VictimAlertForegroundNotification"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":geoFencing" />
 
         <activity android:name=".Detailed" />
         <activity android:name=".news" />
@@ -91,27 +101,34 @@
         <activity android:name=".cases_report" />
 
         <receiver
-            android:name=".MyBroadcastReciever"
+            android:name=".Restarter"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="VictimAlert" />
+                <action android:name="Alarm" />
+                <action android:name="Help" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".HelpneededBroadcastReceiver" />
+        <receiver
+            android:name=".InternetBroadcastReciever"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".BootReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <receiver android:name=".YourLocationBroadcastReciever" />
 
-                <category android:name="android.intent.category.HOME" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".AlarmNotificationReceiver" />
-        <receiver android:name=".alarmnotification" />
-        <receiver android:name=".mynotification" />
-        <receiver android:name=".helpneeded" />
+        <service
+            android:name=".AlarmForegroundNotification"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":Alarm" />
+
+        <receiver android:name=".MyNotificationBroadcastReceiver" />
 
         <service
             android:name=".MyService"

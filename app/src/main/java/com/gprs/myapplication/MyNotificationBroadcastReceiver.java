@@ -2,7 +2,6 @@ package com.gprs.myapplication;
 
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,37 +10,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Calendar;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
-
-public class mynotification extends BroadcastReceiver {
+public class MyNotificationBroadcastReceiver extends BroadcastReceiver {
 
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
@@ -84,7 +67,7 @@ public class mynotification extends BroadcastReceiver {
                     mBuilder.setSmallIcon(R.drawable.report);
                     mBuilder.setContentTitle("You got  new notification")
                             .setOnlyAlertOnce(true)
-                            .setAutoCancel(false)
+                            .setAutoCancel(true)
                             .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                             .setContentIntent(resultPendingIntent);
 
@@ -98,7 +81,6 @@ public class mynotification extends BroadcastReceiver {
                         notificationChannel.enableLights(true);
                         notificationChannel.setLightColor(Color.RED);
                         notificationChannel.enableVibration(true);
-                        notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                         assert mNotificationManager != null;
                         mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                         mNotificationManager.createNotificationChannel(notificationChannel);
@@ -125,12 +107,12 @@ public class mynotification extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        myIntent = new Intent(context,mynotification.class);
+        myIntent = new Intent(context, MyNotificationBroadcastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context,0,myIntent,0);
 
         manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() +
-                            3 * 1000, pendingIntent);
+                SystemClock.elapsedRealtime() +
+                        10 * 1000, pendingIntent);
 
 
     }

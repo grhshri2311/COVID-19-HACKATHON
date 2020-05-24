@@ -1,7 +1,6 @@
 package com.gprs.myapplication;
 
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,43 +9,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
-
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 
-public class AlarmNotificationReceiver extends BroadcastReceiver {
+public class YourLocationBroadcastReciever extends BroadcastReceiver {
 
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
@@ -57,6 +40,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     Context context;
     Intent resultIntent;
     private RequestQueue queue;
+    String newactive = null,newrecover=null,newdeath=null;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -68,14 +52,16 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         queue = Volley.newRequestQueue(context);
 
+        Log.println(Log.INFO,"your location","entered");
         new CountDownTimer(120000, 120000)
         {
             public void onTick(long l) {}
             public void onFinish()
             {
+
                 pref = context.getSharedPreferences("user", 0);
                 if(!pref.getString("user","").equals("")) {
-                    new AlarmNotificationReceiver.RetrieveFeedTask1().execute();
+                    new YourLocationBroadcastReciever.RetrieveFeedTask1().execute();
                 }
 
                start();
@@ -90,6 +76,71 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     }
 
     class RetrieveFeedTask1 extends AsyncTask<Void, Void, String> {
+
+        private Exception exception;
+
+        protected void onPreExecute() {
+
+
+        }
+
+        protected String doInBackground(Void... urls) {
+
+            // Do some validation here
+            try {
+                URL url = new URL("https://api.covidindiatracker.com/state_data.json");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                } finally {
+                    urlConnection.disconnect();
+                }
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String response) {
+
+            try{
+
+
+                JSONArray jsonArray = (JSONArray) new JSONTokener(response).nextValue();
+
+                for(int a=0;a<jsonArray.length();a++){
+                    JSONObject object=jsonArray.getJSONObject(a);
+                    if(object.optString("state").equals("Haryana")){
+                        newactive=object.optString("cChanges");
+                        newrecover=object.optString("rChanges");
+                        newdeath=object.optString("dChanges");
+                        break;
+                    }
+
+                    new YourLocationBroadcastReciever.RetrieveFeedTask2().execute();
+                }
+
+
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+
+            }
+
+        }
+    }
+
+    class RetrieveFeedTask2 extends AsyncTask<Void, Void, String> {
 
         private Exception exception;
 
@@ -126,36 +177,14 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         protected void onPostExecute(String response) {
 
             try{
-                SharedPreferences pref;
-                SharedPreferences.Editor editor;
 
-                pref = context.getSharedPreferences("update", 0); // 0 - for private mode
-                editor = pref.edit();
-                editor.putBoolean("alarm",true);
-                editor.commit();
-                final FirebaseDatabase database=FirebaseDatabase.getInstance();
-                final DatabaseReference reference=database.getReference("Users").child(pref.getString("user",""));
-            JSONObject jsonObject = null;
+                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
+                JSONArray jsonArray=object.getJSONArray("statewise");
+                JSONObject jsonObject=jsonArray.getJSONObject(0);
 
-            JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-            JSONArray jsonArray=object.getJSONArray("statewise");
-            for(int i=0;i<jsonArray.length();i++){
-                jsonObject=jsonArray.getJSONObject(i);
-                if(jsonObject.getString("state").equals("Haryana"))
-                break;
 
-            }
-
-            int newactive=Integer.valueOf(jsonObject.getString("confirmed"))-pref.getInt("last",0);
-                int newdeath=Integer.valueOf(jsonObject.getString("deaths"))-pref.getInt("last1",0);
-                int newrecover=Integer.valueOf(jsonObject.getString("recovered"))-pref.getInt("last2",0);
-
-                editor.putInt("last",Integer.valueOf(jsonObject.getString("confirmed")));
-                editor.putInt("last1",Integer.valueOf(jsonObject.getString("deaths")));
-                editor.putInt("last2",Integer.valueOf(jsonObject.getString("recovered")));
-                editor.commit();
-            message="India\n Total cases : "+jsonArray.getJSONObject(0).getString("confirmed")+"\n Total recovered : "+jsonArray.getJSONObject(0).getString("recovered")+"\n Total death : "+jsonArray.getJSONObject(0).getString("deaths");
-            message=message+"\nHaryana \n New cases : "+newactive+"\n New Recovered "+newrecover+"\n New Death : "+newdeath;
+                message="India\n Total cases : "+jsonObject.optString("confirmed")+"\n Total recovered : "+jsonObject.optString("recovered")+"\n Total death : "+jsonObject.optString("deaths");
+                message=message+"\nHaryana \n Today new cases : "+newactive+"\n Today Recovered "+newrecover+"\n Today Death : "+newdeath;
                 PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
                         0 /* Request code */, resultIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
@@ -163,8 +192,9 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
                 mBuilder = new NotificationCompat.Builder(context);
                 mBuilder.setSmallIcon(R.drawable.report);
                 mBuilder.setContentTitle("In your location")
-                        .setContentText("Updates of past  6 hours")
-                        .setAutoCancel(false)
+                        .setContentText("Updates for Today")
+                        .setAutoCancel(true)
+                        .setOnlyAlertOnce(true)
                         .setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle("Latest Updates ").bigText(message))
                         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setContentIntent(resultPendingIntent);
@@ -178,15 +208,12 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
                     notificationChannel.enableLights(true);
                     notificationChannel.setLightColor(Color.RED);
                     notificationChannel.enableVibration(true);
-                    notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                     assert mNotificationManager != null;
                     mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
                     mNotificationManager.createNotificationChannel(notificationChannel);
                 }
                 assert mNotificationManager != null;
                 mNotificationManager.notify(22 /* Request Code */, mBuilder.build());
-
-
             } catch (Exception e) {
                 e.printStackTrace();
 

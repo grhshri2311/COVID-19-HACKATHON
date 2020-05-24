@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bungee"
-                android:text="Join in our Communtiy"
+                android:text="@string/join_in_our_communtiy"
                 android:textColor="#000"
                 android:textSize="20dp"
                 android:transitionName="logo_text" />

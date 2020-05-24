@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:transitionName="linear1"
-
+                android:visibility="invisible"
                 android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

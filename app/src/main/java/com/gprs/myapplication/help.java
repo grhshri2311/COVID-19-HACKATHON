@@ -47,6 +47,7 @@ public class help extends AppCompatActivity {
     float res[]=new float[1];
     TextView name1,phone1,email1,role1,distancce1;
     UserLocationHelper mylocation;
+    TextView t;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +59,14 @@ public class help extends AppCompatActivity {
         email1=findViewById(R.id.email);
         role1=findViewById(R.id.role);
         distancce1=findViewById(R.id.distance);
+        t=findViewById(R.id.textView32);
+        wview=(WebView)findViewById(R.id.webv);
+
 
         FirebaseDatabase.getInstance().getReference().child("Respond").child("Help").child(pref.getString("user","")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                           if(dataSnapshot!=null){
+                           if(dataSnapshot!=null && dataSnapshot.getValue()!=null){
                                 u=dataSnapshot.getValue(UserLocationHelper.class);
 
                                name=u.getFname();
@@ -78,6 +82,216 @@ public class help extends AppCompatActivity {
                                phone1.setText("Phone : "+phone+" (Click to call)");
                                email1.setText("Email : "+email+ " (Click to mail)");
                                role1.setText("Role : "+role);
+
+                               respond.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       if(mylocation!=null){
+                                           FirebaseDatabase.getInstance().getReference().child("Respond").child("Help").child(mylocation.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                               @Override
+                                               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                   if (dataSnapshot.getValue() != null) {
+                                                       FirebaseDatabase.getInstance().getReference().child("Respond").child("reply").child(phone).setValue(mylocation).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                           @Override
+                                                           public void onComplete(@NonNull Task<Void> task) {
+                                                               if(task.isComplete()){
+                                                                   FirebaseDatabase.getInstance().getReference().child("Respond").child("reply").child(phone).addValueEventListener(new ValueEventListener() {
+                                                                       @Override
+                                                                       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                           if(dataSnapshot.getValue()==null)
+                                                                               alert1();
+                                                                       }
+
+                                                                       @Override
+                                                                       public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                       }
+                                                                   });
+                                                               }
+                                                           }
+                                                       });
+                                                       respond.setText("Responding");
+
+                                                       t.setText("Stay Connected !");
+                                                       t.setTextColor(getResources().getColor(R.color.GREEN));
+                                                       respond.setBackgroundColor(getResources().getColor(R.color.GREEN));
+
+                                                   }
+                                                   else{
+                                                       t.setText("Aldready got responder ,Thank you for your contribution !");
+                                                       t.setTextColor(getResources().getColor(R.color.GREEN));
+                                                       finish();
+                                                   }
+                                               }
+
+                                               @Override
+                                               public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                               }
+                                           });
+
+                                       }
+                                   }
+                               });
+                               phone1.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       Intent intent1 = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+                                       Toast.makeText(help.this, "Connecting to victim ...", Toast.LENGTH_LONG).show();
+                                       if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                           // TODO: Consider calling
+                                           //    Activity#requestPermissions
+                                           // here to request the missing permissions, and then overriding
+                                           //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           //                                          int[] grantResults)
+                                           // to handle the case where the user grants the permission. See the documentation
+                                           // for Activity#requestPermissions for more details.
+                                           return;
+                                       }
+                                       startActivity(intent1);
+
+                                   }
+                               });
+
+                               email1.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                               "mailto",email, null));
+                                       emailIntent.putExtra(Intent.EXTRA_SUBJECT, "First Responder");
+                                       startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                                   }
+                               });
+
+
+                               FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).addValueEventListener(new ValueEventListener() {
+                                   @Override
+                                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                       if (dataSnapshot != null) {
+                                           mylocation=dataSnapshot.getValue(UserLocationHelper.class);
+                                           Location.distanceBetween(mylocation.getLat(), mylocation.getLon(),
+                                                   lat,lon, res);
+                                           distancce1.setText(String.valueOf(res[0]/1000)+" KM");
+                                           String url="https://maps.google.com/?q="+lat+","+lon;
+                                           wview.loadUrl(url);
+
+                                       }
+                                   }
+
+                                   @Override
+                                   public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                   }
+                               });
+
+
+                               wview.setOnTouchListener(new ListView.OnTouchListener() {
+                                   @Override
+                                   public boolean onTouch(View v, MotionEvent event) {
+                                       int action = event.getAction();
+                                       switch (action) {
+                                           case MotionEvent.ACTION_DOWN:
+                                               // Disallow ScrollView to intercept touch events.
+                                               v.getParent().requestDisallowInterceptTouchEvent(true);
+                                               break;
+
+                                           case MotionEvent.ACTION_UP:
+                                               // Allow ScrollView to intercept touch events.
+                                               v.getParent().requestDisallowInterceptTouchEvent(false);
+                                               break;
+                                       }
+
+                                       // Handle ListView touch events.
+                                       v.onTouchEvent(event);
+                                       return true;
+                                   }
+                               });
+
+                               progressDialog=new ProgressDialog(help.this);
+
+                               progressDialog.setMessage("Loading..."); // Setting Message
+                               progressDialog.setTitle("Please Wait !"); // Setting Title
+                               progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+
+                               progressDialog.setCancelable(true);
+                               progressDialog.show();
+
+                               WebSettings wsetting=wview.getSettings();
+                               wsetting.setJavaScriptEnabled(true);
+                               wsetting.setAllowContentAccess(false);
+                               wsetting.setSupportZoom(true);
+
+
+                               wview.setWebViewClient(new WebViewClient() {
+
+                                   @Override
+                                   public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                       super.onPageStarted(view, url, favicon);
+                                       progressDialog.show(); // Display Progress Dialog
+
+                                   }
+
+                                   @Override
+                                   public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                                       progressDialog.show(); // Display Progress Dialog
+                                       view.loadUrl(url);
+
+                                       return true;
+
+                                   }
+
+                                   @Override
+                                   public void onPageFinished(WebView view, String url) {
+
+                                       super.onPageFinished(view, url);
+                                       progressDialog.hide();
+                                   }
+
+                                   @Override
+                                   public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                                       progressDialog.hide();
+                                       handler.proceed(); // Ignore SSL certificate errors
+                                   }
+
+                                   public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
+                                       progressDialog.hide();
+                                       try {
+                                           webView.stopLoading();
+                                       } catch (Exception e) {
+                                       }
+
+
+                                       webView.loadUrl("about:blank");
+                                       AlertDialog alertDialog = new AlertDialog.Builder(help.this).create();
+                                       alertDialog.setTitle("Error");
+                                       alertDialog.setMessage("Server not Available ! \nCheck your internet connection and try again.");
+                                       alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
+                                           public void onClick(DialogInterface dialog, int which) {
+                                               finish();
+                                           }
+                                       });
+
+                                       alertDialog.show();
+                                       super.onReceivedError(webView, errorCode, description, failingUrl);
+                                   }
+
+
+
+
+                               });
+
+
+                           }
+                           else {
+                               t.setText("Already Got help !");
+                               t.setTextColor(getResources().getColor(R.color.GREEN));
+                               respond.setVisibility(View.INVISIBLE);
+                               name1.setVisibility(View.INVISIBLE);
+                               phone1.setVisibility(View.INVISIBLE);
+                               email1.setVisibility(View.INVISIBLE);
+                               role1.setVisibility(View.INVISIBLE);
+                               distancce1.setVisibility(View.INVISIBLE);
+                               wview.setVisibility(View.INVISIBLE);
                            }
             }
 
@@ -90,201 +304,7 @@ public class help extends AppCompatActivity {
 
 
 
-        respond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mylocation!=null){
-                    FirebaseDatabase.getInstance().getReference().child("Respond").child("Help").child(mylocation.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getValue() != null) {
-                                FirebaseDatabase.getInstance().getReference().child("Respond").child("reply").child(phone).setValue(mylocation).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isComplete()){
-                                            FirebaseDatabase.getInstance().getReference().child("Respond").child("reply").child(phone).addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                    if(dataSnapshot.getValue()==null)
-                                                        alert1();
-                                                }
 
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                                respond.setText("Responding");
-                                TextView t=findViewById(R.id.textView32);
-                                t.setText("Stay Connected !");
-                                t.setTextColor(getResources().getColor(R.color.GREEN));
-                                respond.setBackgroundColor(getResources().getColor(R.color.GREEN));
-
-                            }
-                            else{
-                                Toast.makeText(help.this,"Aldready got responder ,Thank you for your contribution !",Toast.LENGTH_LONG).show();
-                                finish();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
-            }
-        });
-        phone1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
-                Toast.makeText(help.this, "Connecting to victim ...", Toast.LENGTH_LONG).show();
-                if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    Activity#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for Activity#requestPermissions for more details.
-                    return;
-                }
-                startActivity(intent1);
-
-            }
-        });
-
-        email1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto",email, null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "First Responder");
-                startActivity(Intent.createChooser(emailIntent, "Send email..."));
-            }
-        });
-
-
-        FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    mylocation=dataSnapshot.getValue(UserLocationHelper.class);
-                    Location.distanceBetween(mylocation.getLat(), mylocation.getLon(),
-                            lat,lon, res);
-                    distancce1.setText(String.valueOf(res[0]/1000)+" KM");
-                    String url="https://maps.google.com/?q="+lat+","+lon;
-                    wview.loadUrl(url);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        wview=(WebView)findViewById(R.id.webv);
-
-        wview.setOnTouchListener(new ListView.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
-                }
-
-                // Handle ListView touch events.
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        progressDialog=new ProgressDialog(this);
-
-        progressDialog.setMessage("Loading..."); // Setting Message
-        progressDialog.setTitle("Please Wait !"); // Setting Title
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
-
-        progressDialog.setCancelable(true);
-        progressDialog.show();
-
-        WebSettings wsetting=wview.getSettings();
-        wsetting.setJavaScriptEnabled(true);
-        wsetting.setAllowContentAccess(false);
-        wsetting.setSupportZoom(true);
-
-
-        wview.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                progressDialog.show(); // Display Progress Dialog
-
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                progressDialog.show(); // Display Progress Dialog
-                view.loadUrl(url);
-
-                return true;
-
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-
-                super.onPageFinished(view, url);
-                progressDialog.hide();
-            }
-
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                progressDialog.hide();
-                handler.proceed(); // Ignore SSL certificate errors
-            }
-
-            public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
-                progressDialog.hide();
-                try {
-                    webView.stopLoading();
-                } catch (Exception e) {
-                }
-
-
-                webView.loadUrl("about:blank");
-                AlertDialog alertDialog = new AlertDialog.Builder(help.this).create();
-                alertDialog.setTitle("Error");
-                alertDialog.setMessage("Server not Available ! \nCheck your internet connection and try again.");
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-
-                alertDialog.show();
-                super.onReceivedError(webView, errorCode, description, failingUrl);
-            }
-
-
-
-
-        });
 
     }
     @Override
@@ -295,6 +315,7 @@ alert();
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(phone!=null)
         FirebaseDatabase.getInstance().getReference().child("Respond").child("reply").child(phone).removeValue();
     }
     void alert(){
@@ -304,6 +325,7 @@ alert();
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if(phone!=null)
                 FirebaseDatabase.getInstance().getReference().child("Respond").child("reply").child(phone).removeValue();
                 finish();
             }

@@ -155,5 +155,40 @@
     <string name="dial_101">Dial 101</string>
     <string name="nearby_hospitals">Nearby Hospitals</string>
     <string name="first_aid_guidance">First Aid Guidance</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="interstitial_ad_sample">Interstitial Ad Sample</string>
+    <string name="start_level">Level 1</string>
+    <string name="next_level">Next Level</string>
+    <!-- -
+        This is an ad unit ID for an interstitial test ad. Replace with your own interstitial ad unit id.
+        For more information, see https://support.google.com/admob/answer/3052638
+    <!- -->
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="invitation_title">Invite members</string>
+    <string name="invitation_message">Build a community by inviting more people to COVID-19 RELIEF</string>
+    <string name="share_with">Share with</string>
+    <string name="title_activity_navhome">navhome</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="title_activity_nav">nav</string>
+    <string name="translate">Translate</string>
+    <string name="assistant">Assistant</string>
+    <string name="support">Support Assistant</string>
+    <string name="chatbot">Voice Assistant</string>
+    <string name="chatbotintro">Support assistant  simulates human conversation through voice commands or text chats or both.It helps you by navigation and by answering your queries</string>
+    <string name="whatsapp_queries">Whatsapp Queries</string>
+    <string name="join_in_our_communtiy">Join in our Communtiy</string>
 
 </resources>

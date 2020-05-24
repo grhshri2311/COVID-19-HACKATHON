@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-public class MyBroadcastReciever extends BroadcastReceiver {
+public class InternetBroadcastReciever extends BroadcastReceiver {
     private static final String TAG = "MyBroadcastReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {

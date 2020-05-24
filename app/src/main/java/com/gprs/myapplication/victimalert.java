@@ -46,7 +46,7 @@ public class victimalert extends AppCompatActivity {
 
         stop=findViewById(R.id.stop);
 
-        if(!isMyServiceRunning(ForegroundService.class)) {
+        if(!isMyServiceRunning(VictimAlertForegroundNotification.class)) {
             stop.setText("Start Scanning");
         }
         else {
@@ -56,7 +56,7 @@ public class victimalert extends AppCompatActivity {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isMyServiceRunning(ForegroundService.class)) {
+                if(isMyServiceRunning(VictimAlertForegroundNotification.class)) {
                   stopService();
                     stop.setText("Start Scanning");
                 }
@@ -103,12 +103,12 @@ public class victimalert extends AppCompatActivity {
 
 
     public void startService() {
-        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        Intent serviceIntent = new Intent(this, VictimAlertForegroundNotification.class);
         serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android");
         ContextCompat.startForegroundService(this, serviceIntent);
            }
     public void stopService() {
-        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        Intent serviceIntent = new Intent(this, VictimAlertForegroundNotification.class);
         stopService(serviceIntent);
 
     }

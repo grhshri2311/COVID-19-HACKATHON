@@ -35,9 +35,9 @@ public class cases_report extends AppCompatActivity {
     ArrayList<String> arrayList,district;
     ArrayList<String> arrayList1,district1;
     ArrayList<String> active;
-    ArrayList<String> confirm;
-    ArrayList<String> death;
-    ArrayList<String> recover;
+    ArrayList<String> confirm,cconfirm;
+    ArrayList<String> death,cdeath;
+    ArrayList<String> recover,crecover;
     ArrayList<String> active1;
     ArrayList<String> confirm1;
     ArrayList<String> death1;
@@ -60,6 +60,9 @@ public class cases_report extends AppCompatActivity {
         confirm = new ArrayList();
         recover = new ArrayList();
         death = new ArrayList();
+        cconfirm = new ArrayList();
+        crecover = new ArrayList();
+        cdeath = new ArrayList();
         active1 = new ArrayList();
         confirm1 = new ArrayList();
         recover1 = new ArrayList();
@@ -155,12 +158,19 @@ public class cases_report extends AppCompatActivity {
         TextView textView1 = findViewById(R.id.textView6);
         TextView textView2 = findViewById(R.id.textView7);
         TextView textView3 = findViewById(R.id.textview8);
+        TextView textView4 = findViewById(R.id.textView61);
+        TextView textView5 = findViewById(R.id.textView71);
+        TextView textView6 = findViewById(R.id.textview81);
 
         head.setText(district1.get(i));
         textView.setText(active1.get(i));
         textView1.setText(confirm1.get(i));
         textView2.setText(death1.get(i));
-        textView3.setText(recover1.get(i));
+
+        textView4.setText("");
+        textView5.setText("");
+        textView6.setText("");
+
     }
 
     private void set(int i) {
@@ -169,13 +179,19 @@ public class cases_report extends AppCompatActivity {
         TextView textView1 = findViewById(R.id.textView6);
         TextView textView2 = findViewById(R.id.textView7);
         TextView textView3 = findViewById(R.id.textview8);
+        TextView textView4 = findViewById(R.id.textView61);
+        TextView textView5 = findViewById(R.id.textView71);
+        TextView textView6 = findViewById(R.id.textview81);
+
 
         head.setText(arrayList1.get(i));
         textView.setText(active.get(i));
         textView1.setText(confirm.get(i));
         textView2.setText(death.get(i));
         textView3.setText(recover.get(i));
-
+        textView4.setText('('+cconfirm.get(i)+')');
+        textView5.setText('('+cdeath.get(i)+')');
+        textView6.setText('('+crecover.get(i)+')');
 
     }
 
@@ -195,8 +211,9 @@ public class cases_report extends AppCompatActivity {
         protected String doInBackground(Void... urls) {
 
             // Do some validation here
+            // NO NEW CASES DAILY https://api.covid19india.org/data.json
             try {
-                URL url = new URL("https://api.covid19india.org/data.json");
+                URL url = new URL("https://api.covidindiatracker.com/state_data.json");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -223,17 +240,23 @@ public class cases_report extends AppCompatActivity {
 
 
             try {
-                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-                JSONArray jsonArray = object.getJSONArray("statewise");
+                JSONArray jsonArray = (JSONArray) new JSONTokener(response).nextValue();
 
-                for (int i = 1; i < jsonArray.length(); i++) {
-                    arrayList.add(jsonArray.getJSONObject(i).optString("state").toString());
-                    arrayList1.add(jsonArray.getJSONObject(i).optString("state").toString());
-                    active.add(jsonArray.getJSONObject(i).optString("active").toString());
-                    confirm.add(jsonArray.getJSONObject(i).optString("confirmed").toString());
-                    death.add(jsonArray.getJSONObject(i).optString("deaths").toString());
-                    recover.add(jsonArray.getJSONObject(i).optString("recovered").toString());
+                for(int a=0;a<jsonArray.length();a++){
+                    JSONObject object=jsonArray.getJSONObject(a);
+                    arrayList.add(object.optString("state").toString());
+                    arrayList1.add(object.optString("state").toString());
+                    active.add(object.optString("active").toString());
+                    confirm.add(object.optString("confirmed").toString());
+                    death.add(object.optString("deaths").toString());
+                    recover.add(object.optString("recovered").toString());
+                    cconfirm.add(object.optString("cChanges").toString());
+                    cdeath.add(object.optString("dChanges").toString());
+                    crecover.add(object.optString("rChanges").toString());
+
                 }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -289,6 +312,11 @@ public class cases_report extends AppCompatActivity {
 
             try {
                 if(state!=null) {
+
+
+
+
+
                     JSONObject object1 = (JSONObject) new JSONTokener(response).nextValue();
                     object1=object1.getJSONObject(state).getJSONObject("districtData");
 

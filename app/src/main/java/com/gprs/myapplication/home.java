@@ -1,11 +1,16 @@
 package com.gprs.myapplication;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -22,12 +28,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,6 +48,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -57,15 +68,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.gprs.myapplication.YourLocationBroadcastReciever.NOTIFICATION_CHANNEL_ID;
+
 public class home extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 111;
+    private static final int REQUEST_INVITE = 10115;
     RelativeLayout mystatus,selfassess,dashmap,updates,case_report,helpline,donate,scan,medstore,epass,admission,quora;
     Toolbar toolbar;
     TextView confirm,death;
     BroadcastReceiver br;
     private FusedLocationProviderClient fusedLocationClient;
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
 
     @Override
@@ -73,22 +88,14 @@ public class home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
-
-         br = new MyBroadcastReciever();
-
-
-
-
-
+         br = new InternetBroadcastReciever();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         this.registerReceiver(br, filter);
-        sendBroadcast(getIntent());
+        pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
+        editor=pref.edit();
 
 
-        final SharedPreferences pref;
-        final SharedPreferences.Editor editor;
 
         getdetails();
 
@@ -114,8 +121,7 @@ public class home extends AppCompatActivity {
             }
         });
 
-        pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
-        editor=pref.edit();
+
 
         if(pref.getString("user","").equals("")){
             startActivity(new Intent(home.this,login.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
@@ -128,18 +134,7 @@ public class home extends AppCompatActivity {
                     MY_PERMISSIONS_REQUEST_CALL_PHONE);
             return;
         }
-
-        int flag=0;
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        final StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
-        for (StatusBarNotification notification : notifications) {
-            if (notification.getId() == 100) {
-                flag=1;
-            }
-        }
-
-        if(flag==0)
-       new notificationHelper(this).createOngoingNotification("COVID19RELIEF","Stay Safe from COVID-19");
+        new notificationHelper(this).createOngoingNotification("COVID19RELIEF","Stay Safe from COVID-19");
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -155,15 +150,23 @@ public class home extends AppCompatActivity {
                     Intent i = new Intent(home.this, stepstofollow.class);
                     startActivity(i);
                 }
-            }, 10000);
+            }, 20000);
 
         }
+
+        if(!pref.getString("todaychatintro","").equals(currentDateTime)) {
+          chatbotintro();
+            editor.putString("todaychatintro",currentDateTime);
+            editor.commit();
+        }
+
+
 
         quora=findViewById(R.id.quora);
         donate=findViewById(R.id.donate);
         helpline=findViewById(R.id.helpline);
         mystatus=findViewById(R.id.mystatus);
-        scan=findViewById(R.id.scan);;
+        scan=findViewById(R.id.scan);
         dashmap=findViewById(R.id.dashmap);
         epass=findViewById(R.id.epass);
 
@@ -173,6 +176,10 @@ public class home extends AppCompatActivity {
         updates=findViewById(R.id.updates);
         medstore=findViewById(R.id.medstore);
         admission=findViewById(R.id.admission);
+
+
+
+
 
 
             APIextract apIextract = new APIextract(this, confirm, death);
@@ -217,7 +224,11 @@ public class home extends AppCompatActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!pref.getString("status","").equals("victim"))
                 startActivity(new Intent(home.this,victimalert.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+                else {
+                    Toast.makeText(home.this,"You are found victim \nYou can't use this festure!",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -296,6 +307,55 @@ public class home extends AppCompatActivity {
 
         });
 
+        FirebaseDatabase.getInstance().getReference().child("Location").child(pref.getString("user","")).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null) {
+                    UserLocationHelper u = dataSnapshot.getValue(UserLocationHelper.class);
+
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    geocoder = new Geocoder(home.this, Locale.getDefault());
+
+                    try {
+                        addresses = geocoder.getFromLocation(u.getLat(), u.getLon(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+
+
+                        String city = addresses.get(0).getLocality();
+                        String state=addresses.get(0).getAdminArea();
+
+                        editor.putString("city",city);
+                        editor.putString("state",state);
+                        editor.commit();
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        if(!isMyServiceRunning(AlarmForegroundNotification.class)) {
+            startService(AlarmForegroundNotification.class);
+        }
+
+        if(!isMyServiceRunning(HelpneededBroadcastReceiver.class)) {
+            startService(HelpneededBroadcastReceiver.class);
+        }
+
+        sendBroadcast(new Intent(this, Restarter.class).setAction("Help"));
+
+
     }
 
 
@@ -315,7 +375,7 @@ public class home extends AppCompatActivity {
                 if(dataSnapshot!=null){
                     Long count1=dataSnapshot.getChildrenCount();
                        if(count1>=1) {
-                           menu.getItem(0).setIcon(R.drawable.ic_notifications_red_24dp);
+                           menu.getItem(1).setIcon(R.drawable.ic_notifications_red_24dp);
                            mystatus.setBackground(getDrawable(R.drawable.customborder));
                     }
                 }
@@ -339,7 +399,13 @@ public class home extends AppCompatActivity {
 
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.cancel(101);
+            mNotificationManager.cancel(33);
             Exit();
+        }
+
+        if(id==R.id.chatbot){
+            startActivity(new Intent(home.this,Chatbot.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+
         }
         if(id==R.id.translate){
            SharedPreferences pref;
@@ -365,13 +431,16 @@ public class home extends AppCompatActivity {
             startActivity(new Intent(home.this,notification.class));
         }
         if(id==R.id.share){
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "I recommend Covid-19Relief app to fight against Covid-19.Please download and share it using this link Android:'%LINK%'");
-            sendIntent.setType("text/plain");
-
-            Intent shareIntent = Intent.createChooser(sendIntent, null);
-            startActivity(shareIntent);
+            final String appPackageName = BuildConfig.APPLICATION_ID;
+            final String appName = getString(R.string.app_name);
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            String shareBodyText = "https://play.google.com/store/apps/details?id=" +
+                    appPackageName;
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, appName);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
+            startActivity(Intent.createChooser(shareIntent, getString(R.string
+                    .share_with)));
         }
         return true;
     }
@@ -392,11 +461,14 @@ public class home extends AppCompatActivity {
                 SharedPreferences pref;
                 SharedPreferences.Editor editor;
 
+
                 pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
                 editor = pref.edit();
 
                 editor.clear();
                 editor.apply();
+                if(isMyServiceRunning(VictimAlertForegroundNotification.class))
+                stopService(VictimAlertForegroundNotification.class);
                 startActivity(new Intent(home.this,login.class));
                 finish();
 
@@ -459,26 +531,13 @@ public class home extends AppCompatActivity {
 
         AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent myIntent;
-        PendingIntent pendingIntent0 = null;
+
 
         // SET TIME HERE
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        myIntent = new Intent(this,alarmnotification.class);
-        pendingIntent0 = PendingIntent.getBroadcast(this,0,myIntent,0);
 
-        if(set){
-
-            manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() +
-                            1 * 1000, pendingIntent0);
-
-        }
-        else
-        if (manager!= null) {
-            manager.cancel(pendingIntent0);
-        }
 
 
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
@@ -488,7 +547,7 @@ public class home extends AppCompatActivity {
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        myIntent = new Intent(home.this,AlarmNotificationReceiver.class);
+        myIntent = new Intent(home.this, YourLocationBroadcastReciever.class);
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
 
 
@@ -496,7 +555,7 @@ public class home extends AppCompatActivity {
 
             manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() +
-                            30 * 1000, pendingIntent);
+                            1 * 1000, pendingIntent);
 
         }
         else
@@ -504,7 +563,7 @@ public class home extends AppCompatActivity {
             manager.cancel(pendingIntent);
         }
 
-        myIntent = new Intent(home.this,mynotification.class);
+        myIntent = new Intent(home.this, MyNotificationBroadcastReceiver.class);
         PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
 
 
@@ -520,22 +579,21 @@ public class home extends AppCompatActivity {
                 manager.cancel((pendingIntent1));
             }
         }
+        myIntent = new Intent(home.this, HelpneededBroadcastReceiver.class);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
 
-            myIntent = new Intent(home.this,helpneeded.class);
-            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
 
+        if(set){
 
-            if(set){
+            manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() +
+                            1 * 1000, pendingIntent2);
 
-                manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        SystemClock.elapsedRealtime() +
-                                1 * 1000, pendingIntent2);
-
+        }
+        else {
+            if (manager != null) {
+                manager.cancel((pendingIntent2));
             }
-            else {
-                if (manager != null) {
-                    manager.cancel((pendingIntent2));
-                }
 
         }
 
@@ -623,8 +681,6 @@ public class home extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
         editor = pref.edit();
 
-
-
         FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).child("status").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -632,6 +688,9 @@ public class home extends AppCompatActivity {
                 if(status!=null && status==1) {
                     editor.putString("status", "victim");
                     editor.commit();
+                    if(!isMyServiceRunning(VictimAlertForegroundNotification.class)) {
+                        startService(VictimAlertForegroundNotification.class);
+                    }
                 }
                 else {
                     editor.putString("status", "normal");
@@ -686,5 +745,83 @@ public class home extends AppCompatActivity {
         catch (Exception e){
 
         }
+    }
+
+    public void chatbot(View view) {
+        startActivity(new Intent(home.this,Chatbot.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+    }
+
+    public void whatsapp(View view) {
+        try {
+            whatsapp(this, "919013151515");
+        }
+        catch (IllegalStateException e){
+            Toast.makeText(this,"You have no whatsapp",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static void whatsapp(Activity activity, String phone) {
+        String formattedNumber = (phone);
+        try{
+            Intent sendIntent =new Intent("android.intent.action.MAIN");
+            sendIntent.setComponent(new ComponentName("com.whatsapp", "com.whatsapp.Conversation"));
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT,"Press 1 for latest updates");
+            sendIntent.putExtra("jid", formattedNumber +"@s.whatsapp.net");
+            sendIntent.setPackage("com.whatsapp");
+            activity.startActivity(sendIntent);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(activity,"You don't have Whatsapp"+ e.toString(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void chatbotintro() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        final AlertDialog alert = builder.create();
+
+
+        LayoutInflater inflater=getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_chatbotintro, null, true);
+
+
+        Button button = (Button) view.findViewById(R.id.btn_get_started);
+       button.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               alert.hide();
+
+           }
+       });
+
+        alert.setView(view);
+        alert.show();
+
+    }
+
+    public void startService(Class<?> serviceClass) {
+        Intent serviceIntent = new Intent(this, serviceClass);
+        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android");
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void stopService(Class<?> serviceClass) {
+        Intent serviceIntent = new Intent(this, serviceClass);
+        stopService(serviceIntent);
+
     }
 }

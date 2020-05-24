@@ -4,13 +4,19 @@
 
 
     <item
+        android:title="@string/assistant"
+        android:id="@+id/chatbot"
+        app:showAsAction="always"
+        android:icon="@drawable/chatbot"/>
+    <item
         android:title="@string/notify"
         android:id="@+id/notify"
         app:showAsAction="always"
         android:icon="@drawable/ic_notifications_black_24dp"/>
 
+
     <item
-        android:title="@string/logout"
+        android:title="@string/translate"
         android:id="@+id/translate"
         app:showAsAction="always"
         android:icon="@drawable/hindismall"/>
