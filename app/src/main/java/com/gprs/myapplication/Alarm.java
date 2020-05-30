@@ -1,6 +1,7 @@
 package com.gprs.myapplication;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -23,7 +25,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import static java.lang.Math.abs;
 
 
 public class Alarm extends AppCompatActivity {
@@ -31,9 +38,14 @@ public class Alarm extends AppCompatActivity {
 
     FloatingActionButton floatingActionButton;
     ArrayList<String>name,desc,time;
+    ArrayList<Boolean>onoff;
     String extStorageDirectory = Environment.getExternalStorageDirectory()
             .toString();
+    long mills = 0;
+    int hours = 0,mins=0;
 
+    SimpleDateFormat dateFormat= new SimpleDateFormat("hh:mm a");
+    String currentDateTime = dateFormat.format(new Date());
     alarmAdapter alarmAdapter;
     File f=new File(extStorageDirectory + "/COVI19RELIEF/alarm/obj.dat");
 
@@ -61,22 +73,14 @@ public class Alarm extends AppCompatActivity {
         name=new ArrayList<>();
         desc=new ArrayList<>();
         time=new ArrayList<>();
+        onoff=new ArrayList<>();
 
             loadMap();
         ListView listView =findViewById(R.id.alarmlist);
 
-            alarmAdapter=new alarmAdapter(name,desc,time,this);
+            alarmAdapter=new alarmAdapter(name,desc,time,onoff,this);
             listView.setAdapter(alarmAdapter);
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    delete(position);
-                    return true;
-                }
-
-
-            });
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -89,38 +93,6 @@ public class Alarm extends AppCompatActivity {
     }
 
 
-    void delete(final int pos){
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle("Delete Alarm");
-        builder.setMessage("Do you want to delete alarm : "+name.get(pos)+" ?");
-
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                name.remove(pos);
-                desc.remove(pos);
-                time.remove(pos);
-                saveMap();
-                alarmAdapter.notifyDataSetChanged();
-                    Toast.makeText(Alarm.this,"Alarm deleted",Toast.LENGTH_LONG).show();
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-
-
-
-    }
     public String AlarmTime(TimePicker timePicker){
 
         Integer alarmHours = timePicker.getCurrentHour();
@@ -174,6 +146,7 @@ public class Alarm extends AppCompatActivity {
             objectOutputStream.writeObject(name);
             objectOutputStream.writeObject(desc);
             objectOutputStream.writeObject(time);
+            objectOutputStream.writeObject(onoff);
             objectOutputStream.flush();
             objectOutputStream.close();
             fileOutputStream.close();
@@ -192,6 +165,7 @@ public class Alarm extends AppCompatActivity {
             name=(ArrayList<String>)objectInputStream.readObject();
             desc=(ArrayList<String>)objectInputStream.readObject();
             time=(ArrayList<String>)objectInputStream.readObject();
+            onoff=(ArrayList<Boolean>)objectInputStream.readObject();
             objectInputStream.close();
             fileInputStream.close();
         } catch (FileNotFoundException e) {
@@ -205,7 +179,7 @@ public class Alarm extends AppCompatActivity {
     }
 
     private void addalarm() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
         builder.setCancelable(true);
         builder.setTitle("Set Alarm");
 
@@ -227,9 +201,55 @@ public class Alarm extends AppCompatActivity {
                    name.add(name1.getText().toString());
                    desc.add(desc1.getText().toString());
                    time.add(AlarmTime(timePicker));
+                   onoff.add(true);
                     saveMap();
                     alarmAdapter.notifyDataSetChanged();
-                    Toast.makeText(Alarm.this,"Alarm added",Toast.LENGTH_LONG).show();
+
+                    long finalHrs=0,finalSeconds=0;
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd h:mm a");
+
+                    String curtime=df.format(new Date());
+
+
+                    Date date1 = null,date2;
+                    try {
+
+                        date1 = df.parse(curtime);
+
+
+                        date2 = df.parse(curtime.substring(0,11)+time.get(time.size()-1));
+
+                        long minutes = 0;
+
+                        if(date1.after(date2)) {
+
+                            long ltime=date2.getTime()+24*60*60*1000;
+                            String newdate=df.format(new Date(ltime));
+                            date2=df.parse(newdate);
+                            minutes = abs(((date1.getTime() / 1000) - (date2.getTime() /1000))/60) ;
+
+                        } else {
+
+                            minutes = abs(((date2.getTime() / 1000) - (date1.getTime() /1000))/60) ;
+
+                        }
+
+                        finalHrs = (minutes / 60);
+
+                        finalSeconds = minutes % 60;
+
+
+
+
+                    } catch (ParseException e) {
+
+                        // TODO Auto-generated catch block
+
+                        e.printStackTrace();
+
+                    }
+
+                    Toast.makeText(Alarm.this, "Alarm will go off in " + finalHrs + " hours and " + finalSeconds + " minutes.",Toast.LENGTH_LONG).show();
 
                 }
                 else {
@@ -264,4 +284,6 @@ public class Alarm extends AppCompatActivity {
         super.onDestroy();
         saveMap();
     }
+
+
 }

@@ -25,7 +25,7 @@ public class epass extends AppCompatActivity implements AdvancedWebView.Listener
         startActivity(i);
         finish();
 
-        mWebView = (AdvancedWebView) findViewById(R.id.webv2);
+        mWebView = findViewById(R.id.webv2);
         mWebView.setListener(this,this);
    //     mWebView.loadUrl("https://saralharyana.gov.in/");
         mWebView.getSettings().setUserAgentString("Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.117 Mobile Safari/537.36");

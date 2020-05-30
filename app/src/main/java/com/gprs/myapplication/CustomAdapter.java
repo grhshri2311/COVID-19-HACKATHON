@@ -44,9 +44,9 @@ class CustomAdapter extends ArrayAdapter {
         else if(toggle[position]==11 ){
             rowView = inflater.inflate(R.layout.their_message, null, true);
             //this code gets references to objects in the listview_row.xml file
-            TextView nameTextField = (TextView) rowView.findViewById(R.id.name);
-            TextView infoTextField = (TextView) rowView.findViewById(R.id.message_body);
-            ImageView imageView = (ImageView) rowView.findViewById(R.id.avatar);
+            TextView nameTextField = rowView.findViewById(R.id.name);
+            TextView infoTextField = rowView.findViewById(R.id.message_body);
+            ImageView imageView = rowView.findViewById(R.id.avatar);
 
             final Spinner spinner = rowView.findViewById(R.id.answer);
 
@@ -62,9 +62,9 @@ class CustomAdapter extends ArrayAdapter {
             rowView = inflater.inflate(R.layout.their_message, null, true);
 
             //this code gets references to objects in the listview_row.xml file
-            TextView nameTextField = (TextView) rowView.findViewById(R.id.name);
-            TextView infoTextField = (TextView) rowView.findViewById(R.id.message_body);
-            ImageView imageView = (ImageView) rowView.findViewById(R.id.avatar);
+            TextView nameTextField = rowView.findViewById(R.id.name);
+            TextView infoTextField = rowView.findViewById(R.id.message_body);
+            ImageView imageView = rowView.findViewById(R.id.avatar);
             final RelativeLayout their=rowView.findViewById(R.id.their);
 
             final Spinner spinner = rowView.findViewById(R.id.answer);
@@ -103,18 +103,15 @@ class CustomAdapter extends ArrayAdapter {
             rowView = inflater.inflate(R.layout.my_message, null, true);
 
             //this code gets references to objects in the listview_row.xml file
-            TextView nameTextField = (TextView) rowView.findViewById(R.id.message_body1);
+            TextView nameTextField = rowView.findViewById(R.id.message_body1);
             nameTextField.setText(answer.get(position));
         }
         return rowView;
 
-    };
+    }
 
     @Override
     public boolean isEnabled(int position) {
-        if(position<n)
-        return false;
-        else
-            return true;
+        return position >= n;
     }
 }

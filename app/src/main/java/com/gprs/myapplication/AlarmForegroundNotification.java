@@ -56,6 +56,7 @@ public class AlarmForegroundNotification extends Service {
 
 
     ArrayList<String> name, desc, time;
+    ArrayList<Boolean> onoff;
     private MediaSessionCompat mediaSession;
 
     @Override
@@ -115,6 +116,7 @@ public class AlarmForegroundNotification extends Service {
         name = new ArrayList<>();
         desc = new ArrayList<>();
         time = new ArrayList<>();
+        onoff=new ArrayList<>();
 
         loadMap();
 
@@ -151,7 +153,7 @@ public class AlarmForegroundNotification extends Service {
                     if(f.exists())
 
                     {
-                        Log.println(Log.INFO,"Timer","enter");
+
                         loadMap();
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
@@ -159,9 +161,7 @@ public class AlarmForegroundNotification extends Service {
                         for (int i = 0; i < name.size(); i++) {
                             Log.println(Log.INFO,"array",time.get(i));
                             Log.println(Log.INFO,"cur",currentDateTime);
-                            if (currentDateTime.equals(time.get(i))) {
-
-                                Log.println(Log.INFO,"Timer","Matched");
+                            if (currentDateTime.equals(time.get(i)) && onoff.get(i)) {
 
                                 mediaSession.setActive(true);
 
@@ -210,6 +210,7 @@ public class AlarmForegroundNotification extends Service {
                 name = (ArrayList<String>) objectInputStream.readObject();
                 desc = (ArrayList<String>) objectInputStream.readObject();
                 time = (ArrayList<String>) objectInputStream.readObject();
+                onoff = (ArrayList<Boolean>) objectInputStream.readObject();
                 objectInputStream.close();
                 fileInputStream.close();
             } catch (FileNotFoundException e) {

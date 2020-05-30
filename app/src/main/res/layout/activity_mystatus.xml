@@ -38,7 +38,7 @@
                 android:text="@string/current_status"
                 android:textColor="#B475CE"
                 android:textSize="20dp"
-                app:fontFamily="@font/baloo"
+                app:fontFamily="@font/roboto_bold"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/hometoolbar" />
@@ -98,7 +98,7 @@
                         android:layout_marginTop="10dp"
                         android:clipToPadding="false"
                         android:foregroundGravity="center"
-                        android:overScrollMode="never"></androidx.viewpager.widget.ViewPager>
+                        android:overScrollMode="never" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -135,7 +135,7 @@
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
                         android:textSize="30dp"
-                        app:fontFamily="@font/aclonica" />
+                        app:fontFamily="@font/roboto_medium" />
 
                     <TextView
                         android:id="@+id/mystatus1"
@@ -147,7 +147,7 @@
                         android:gravity="center"
                         android:textColor="#000000"
                         android:textSize="15dp"
-                        app:fontFamily="@font/bungee" />
+                        app:fontFamily="@font/roboto_bold" />
 
                     <TextView
                         android:id="@+id/mystatus2"
@@ -159,7 +159,7 @@
                         android:gravity="center"
                         android:textColor="#000000"
                         android:textSize="15dp"
-                        app:fontFamily="@font/bungee" />
+                        app:fontFamily="@font/roboto_medium" />
 
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
@@ -198,7 +198,7 @@
                         android:layout_marginTop="10dp"
                         android:text="@string/view_in_map"
                         android:textSize="15dp"
-                        app:fontFamily="@font/aclonica" />
+                        app:fontFamily="@font/roboto_medium" />
 
                     <ImageView
                         android:id="@+id/bus1"
@@ -230,7 +230,7 @@
                         android:layout_marginTop="10dp"
                         android:text="@string/notification"
                         android:textSize="15dp"
-                        app:fontFamily="@font/aclonica" />
+                        app:fontFamily="@font/roboto_medium" />
 
                     <ImageView
                         android:id="@+id/train"
@@ -277,7 +277,7 @@
                         android:layout_marginTop="10dp"
                         android:text="@string/to_do"
                         android:textSize="15dp"
-                        app:fontFamily="@font/aclonica" />
+                        app:fontFamily="@font/roboto_medium" />
 
                     <ImageView
                         android:id="@+id/todoimage"
@@ -309,7 +309,7 @@
                         android:layout_marginTop="10dp"
                         android:text="@string/profile"
                         android:textSize="15dp"
-                        app:fontFamily="@font/aclonica" />
+                        app:fontFamily="@font/roboto_medium" />
 
                     <ImageView
                         android:id="@+id/airplane"

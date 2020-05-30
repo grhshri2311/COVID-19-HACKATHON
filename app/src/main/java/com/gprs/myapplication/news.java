@@ -29,7 +29,7 @@ public class news extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     Button btnAboutUs;
     Dialog dialog;
-    final String API_KEY = "81e919346ed94b8491dc88809d40d4eb";
+    final String API_KEY = "YOUR KEY";
     Adapter adapter;
     List<Articles>  articles = new ArrayList<>();
     @Override

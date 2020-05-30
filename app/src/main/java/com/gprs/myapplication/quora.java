@@ -67,9 +67,6 @@ public class quora extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        final String extStorageDirectory = Environment.getExternalStorageDirectory()
-                .toString();
-        File folder1 = new File(extStorageDirectory, "COVI19RELIEF");
-        folder1.delete();
+
     }
 }

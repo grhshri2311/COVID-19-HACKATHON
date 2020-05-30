@@ -66,10 +66,10 @@ public class CustomQuoraAdapter2 extends ArrayAdapter {
 
             rowView = inflater.inflate(R.layout.quoraanswer, null, true);
             //this code gets references to objects in the listview_row.xml file
-            final TextView name1 = (TextView) rowView.findViewById(R.id.textView22);
-            final TextView role1 = (TextView) rowView.findViewById(R.id.textView24);
-            final TextView place1 = (TextView) rowView.findViewById(R.id.textView26);
-            final TextView answer1 = (TextView) rowView.findViewById(R.id.textView27);
+            final TextView name1 = rowView.findViewById(R.id.textView22);
+            final TextView role1 = rowView.findViewById(R.id.textView24);
+            final TextView place1 = rowView.findViewById(R.id.textView26);
+            final TextView answer1 = rowView.findViewById(R.id.textView27);
 
             FirebaseDatabase.getInstance().getReference().child("Users").child(name.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

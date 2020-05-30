@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.gprs.myapplication">
-
     <!-- Include required permissions for Google Mobile Ads to run. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -39,8 +38,13 @@
         android:roundIcon="@drawable/collective_intelligence_icon_use"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
+        <activity android:name=".publichealthcare"/>
+        <activity android:name=".unorganizedsectors"/>
+        <activity android:name=".course" />
+        <activity android:name=".logouthome" />
+        <activity android:name=".MSME" />
+        <activity android:name=".labsfortest" />
+        <activity android:name=".pdfViewer" />
         <activity android:name=".Chatbot" /> <!-- Include the AdActivity configChanges and theme. -->
         <activity android:name=".help" />
         <activity android:name=".firstreply" />
@@ -159,10 +163,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

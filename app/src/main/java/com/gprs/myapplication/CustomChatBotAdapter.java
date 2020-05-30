@@ -48,7 +48,7 @@ class CustomChatBotAdapter extends ArrayAdapter {
 
         return rowView;
 
-    };
+    }
 
 
 }

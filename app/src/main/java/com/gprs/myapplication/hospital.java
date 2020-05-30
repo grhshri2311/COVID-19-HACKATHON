@@ -26,7 +26,7 @@ public class hospital extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital);
-        wview=(WebView)findViewById(R.id.webv);
+        wview= findViewById(R.id.webv);
 
         hos=findViewById(R.id.hos);
         test=findViewById(R.id.test);

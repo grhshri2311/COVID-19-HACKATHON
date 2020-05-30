@@ -1,5 +1,6 @@
 package com.gprs.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +16,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,17 +73,17 @@ public class work extends AppCompatActivity {
 
             }
         });
-                if(!email.getText().toString().isEmpty()) {
-                    email.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                    "mailto", email1, null));
-                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Work Assignment");
-                            startActivity(Intent.createChooser(emailIntent, "Send email..."));
-                        }
-                    });
+        if(!email.getText().toString().isEmpty()) {
+            email.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                            "mailto", email1, null));
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Work Assignment");
+                    startActivity(Intent.createChooser(emailIntent, "Send email..."));
                 }
+            });
+        }
 
         Button done,reject;
 
@@ -89,7 +93,7 @@ public class work extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            checkdone();
+                checkdone();
             }
         });
 
@@ -130,6 +134,24 @@ public class work extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference().child("Works").child(pref.getString("user","")).child(time1).removeValue();
                 FirebaseDatabase.getInstance().getReference().child("Notification").child(phone1).child("Work").child(currentDateTime).setValue("Work : "+work+"\nis marked as done .");
                 show("Work marked as done successfully !");
+                FirebaseDatabase.getInstance().getReference().child("Workassign").child(phone1).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            workhelper workhelper = snapshot.getValue(workhelper.class);
+                            if(workhelper.getPhone().equals(pref.getString("user","")) && workhelper.getWork().equals(work)) {
+                                FirebaseDatabase.getInstance().getReference().child("Workassign").child(phone1).child(snapshot.getKey()).removeValue();
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 Toast.makeText(work.this,"Work marked as done",Toast.LENGTH_LONG).show();
             }
         });
@@ -153,6 +175,24 @@ public class work extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 FirebaseDatabase.getInstance().getReference().child("Works").child(pref.getString("user","")).child(time1).removeValue();
+                FirebaseDatabase.getInstance().getReference().child("Workassign").child(phone1).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            workhelper workhelper = snapshot.getValue(workhelper.class);
+                            if(workhelper.getPhone().equals(pref.getString("user","")) && workhelper.getWork().equals(work)) {
+                                FirebaseDatabase.getInstance().getReference().child("Workassign").child(phone1).child(snapshot.getKey()).removeValue();
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 FirebaseDatabase.getInstance().getReference().child("Notification").child(phone1).child("Work").child(currentDateTime).setValue("Work : "+work+"\nis rejected by the user.");
                 show("Work rejected successfully !");
                 Toast.makeText(work.this,"Work marked as rejected",Toast.LENGTH_LONG).show();

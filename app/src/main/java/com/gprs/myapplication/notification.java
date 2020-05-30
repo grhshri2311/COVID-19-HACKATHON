@@ -1,5 +1,6 @@
 package com.gprs.myapplication;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,9 +32,15 @@ public class notification extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
+
         notice=findViewById(R.id.notice);
         notices=findViewById(R.id.notices);
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
+        if(pref.getString("user","").equals("")){
+            startActivity(new Intent(notification.this,logouthome.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            finish();
+        }
+
         adapter = new ArrayAdapter<String>(notification.this,R.layout.notice,R.id.notice1,arrayList);
         if(pref.getString("user","").equals("")){
             startActivity(new Intent(notification.this,login.class));

@@ -15,8 +15,8 @@ android {
         applicationId "com.gprs.myapplication"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 5
-        versionName "2.1"
+        versionCode 10
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -24,6 +24,9 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+    }
+    aaptOptions {
+        cruncherEnabled = false
     }
     buildTypes {
         release {

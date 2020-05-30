@@ -32,7 +32,7 @@ public class donate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
-        wview=(WebView)findViewById(R.id.webv);
+        wview= findViewById(R.id.webv);
         PM=findViewById(R.id.PM);
         Haryana=findViewById(R.id.Haryana);
         HaryanaUPI=findViewById(R.id.HaryanaUPI);

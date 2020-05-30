@@ -50,55 +50,55 @@ public class MyNotificationBroadcastReceiver extends BroadcastReceiver {
         pref = context.getSharedPreferences("user", 0); // 0 - for private mode
         editor = pref.edit();
 
+        if(!pref.getString("user","").equals("")) {
 
-        FirebaseDatabase.getInstance().getReference().child("Notification").child(pref.getString("user","")).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot!=null)
-                {
-                    String str = "0";
-                    for (DataSnapshot data:dataSnapshot.getChildren()) {
-                        str=str+data.getKey()+'\n';
-                    }
-                    PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
-                            0 /* Request code */, resultIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-                    mBuilder = new NotificationCompat.Builder(context);
-                    mBuilder.setSmallIcon(R.drawable.report);
-                    mBuilder.setContentTitle("You got  new notification")
-                            .setOnlyAlertOnce(true)
-                            .setAutoCancel(true)
-                            .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                            .setContentIntent(resultPendingIntent);
+            FirebaseDatabase.getInstance().getReference().child("Notification").child(pref.getString("user", "")).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        String str = "0";
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            str = str + data.getKey() + '\n';
+                        }
+                        PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
+                                0 /* Request code */, resultIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT);
+                        mBuilder = new NotificationCompat.Builder(context);
+                        mBuilder.setSmallIcon(R.drawable.report);
+                        mBuilder.setContentTitle("You got  new notification")
+                                .setOnlyAlertOnce(true)
+                                .setAutoCancel(true)
+                                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                                .setContentIntent(resultPendingIntent);
 
-                    mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
-                    {
-                        int importance = NotificationManager.IMPORTANCE_HIGH;
-                        NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "NOTIFICATION_CHANNEL_NAME", importance);
-                        notificationChannel.enableLights(true);
-                        notificationChannel.setLightColor(Color.RED);
-                        notificationChannel.enableVibration(true);
-                        assert mNotificationManager != null;
-                        mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
-                        mNotificationManager.createNotificationChannel(notificationChannel);
-                    }
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            int importance = NotificationManager.IMPORTANCE_HIGH;
+                            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "NOTIFICATION_CHANNEL_NAME", importance);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            assert mNotificationManager != null;
+                            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
+                        }
 
-                    if(str.length()>1) {
-                        assert mNotificationManager != null;
-                        mNotificationManager.notify(33, mBuilder.build());
+                        if (str.length() > 1) {
+                            assert mNotificationManager != null;
+                            mNotificationManager.notify(33, mBuilder.build());
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
 
+        }
         AlarmManager manager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent;
         PendingIntent pendingIntent = null;

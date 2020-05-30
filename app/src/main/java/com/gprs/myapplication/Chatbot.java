@@ -101,8 +101,8 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
         translationService = initLanguageTranslatorService();
 
         if(checkInternetConnection()) {
-            watsonAssistant = new Assistant("2019-02-28", new IamAuthenticator("S6C-4uOqeJyJzNaRBGP2PEp7PSJuNZ9C_OciE5JO3KoS"));
-            watsonAssistant.setServiceUrl("https://api.eu-gb.assistant.watson.cloud.ibm.com/instances/fff0d44c-bc02-4bdc-965e-b83674194106");
+            watsonAssistant = new Assistant("2019-02-28", new IamAuthenticator("YOUR KEY"));
+            watsonAssistant.setServiceUrl("YOUR KEY");
         }
     }
     @Override
@@ -294,6 +294,12 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 }
             });
 
+            Boolean logged=true;
+
+            pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
+
+            if(pref.getString("user","").equals(""))
+                logged=false;
 
             if(selectedTargetLanguage.equals(Language.ENGLISH)){
                 firstTranslation=params[0];
@@ -491,30 +497,53 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     }
                 });
             }
+
+
             else if(r.equals("Openning firstrespond")){
-                outMessage = new Message();
-                outMessage.setMessage(firstTranslation);
-                outMessage.setId("2");
+                if(logged) {
+                    outMessage = new Message();
+                    outMessage.setMessage(firstTranslation);
+                    outMessage.setId("2");
 
-                messageArrayList.add(outMessage);
-                toggle.add(0);
-                option.add(null);
+                    messageArrayList.add(outMessage);
+                    toggle.add(0);
+                    option.add(null);
 
-                speakOut(firstTranslation);
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
-                        listView.setSelection(messageArrayList.size());
+                    speakOut(firstTranslation);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            progressDialog.hide();
+                            listView.setSelection(messageArrayList.size());
 
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(Chatbot.this,firstresponder.class), ActivityOptions.makeSceneTransitionAnimation(Chatbot.this).toBundle());
-                            }
-                        }, 3000);
-                    }
-                });
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(Chatbot.this, firstresponder.class), ActivityOptions.makeSceneTransitionAnimation(Chatbot.this).toBundle());
+                                }
+                            }, 3000);
+                        }
+                    });
+                }
+                else {
+                    outMessage = new Message();
+                    outMessage.setMessage("Please Log In to continue");
+                    outMessage.setId("2");
+
+                    messageArrayList.add(outMessage);
+                    toggle.add(0);
+                    option.add(null);
+
+                    speakOut(firstTranslation);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            progressDialog.hide();
+                            listView.setSelection(messageArrayList.size());
+
+                        }
+                    });
+                }
             }
             else if(r.equals("Openning COVID reports")){
                 outMessage = new Message();
@@ -542,29 +571,50 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 });
             }
             else if(r.equals("Openning My Status")){
-                outMessage = new Message();
-                outMessage.setMessage(firstTranslation);
-                outMessage.setId("2");
+                if(logged) {
+                    outMessage = new Message();
+                    outMessage.setMessage(firstTranslation);
+                    outMessage.setId("2");
 
-                messageArrayList.add(outMessage);
-                toggle.add(0);
-                option.add(null);
+                    messageArrayList.add(outMessage);
+                    toggle.add(0);
+                    option.add(null);
 
-                speakOut(firstTranslation);
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
-                        listView.setSelection(messageArrayList.size());
+                    speakOut(firstTranslation);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            progressDialog.hide();
+                            listView.setSelection(messageArrayList.size());
 
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(Chatbot.this,mystatus.class), ActivityOptions.makeSceneTransitionAnimation(Chatbot.this).toBundle());
-                            }
-                        }, 3000);
-                    }
-                });
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(Chatbot.this, mystatus.class), ActivityOptions.makeSceneTransitionAnimation(Chatbot.this).toBundle());
+                                }
+                            }, 3000);
+                        }
+                    });
+                }
+                else {
+                    outMessage = new Message();
+                    outMessage.setMessage("Please Log In to continue");
+                    outMessage.setId("2");
+
+                    messageArrayList.add(outMessage);
+                    toggle.add(0);
+                    option.add(null);
+
+                    speakOut(firstTranslation);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            progressDialog.hide();
+                            listView.setSelection(messageArrayList.size());
+
+                        }
+                    });
+                }
             }
 
             else if(r.equals("Closing Assistant")){
@@ -587,6 +637,60 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                             @Override
                             public void run() {
                                 finish();
+                            }
+                        }, 3000);
+                    }
+                });
+            }
+
+            else if(r.equals("Openning Self Assessment")){
+                outMessage = new Message();
+                outMessage.setMessage(firstTranslation);
+                outMessage.setId("2");
+
+                messageArrayList.add(outMessage);
+                toggle.add(0);
+                option.add(null);
+
+                speakOut(firstTranslation);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                        progressDialog.hide();
+                        listView.setSelection(messageArrayList.size());
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(Chatbot.this,self_assess.class), ActivityOptions.makeSceneTransitionAnimation(Chatbot.this).toBundle());
+                            }
+                        }, 3000);
+                    }
+                });
+            }
+
+            else if(r.equals("Openning Hospitals near you")){
+                outMessage = new Message();
+                outMessage.setMessage(firstTranslation);
+                outMessage.setId("2");
+
+                messageArrayList.add(outMessage);
+                toggle.add(0);
+                option.add(null);
+
+                speakOut(firstTranslation);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                        progressDialog.hide();
+                        listView.setSelection(messageArrayList.size());
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent=new Intent(Chatbot.this,Medicalshops.class);
+                                intent.putExtra("text","Hospitals");
+                                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(Chatbot.this).toBundle());
                             }
                         }, 3000);
                     }
@@ -726,7 +830,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 public void run() {
                     try {
                         if (watsonAssistantSession == null) {
-                            ServiceCall<SessionResponse> call = watsonAssistant.createSession(new CreateSessionOptions.Builder().assistantId("863d4b44-f132-49e1-9632-36f7bed0f0c8").build());
+                            ServiceCall<SessionResponse> call = watsonAssistant.createSession(new CreateSessionOptions.Builder().assistantId("YOUR KEY").build());
                             watsonAssistantSession = call.execute();
                         }
 
@@ -734,7 +838,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                                 .text(inputmessage)
                                 .build();
                         MessageOptions options = new MessageOptions.Builder()
-                                .assistantId("863d4b44-f132-49e1-9632-36f7bed0f0c8")
+                                .assistantId("YOUR KEY")
                                 .input(input)
                                 .sessionId(watsonAssistantSession.getResult().getSessionId())
                                 .build();
@@ -760,6 +864,14 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                                         }
                                         else if(r.text().equals("helpline")){
                                             new Chatbot.receive().execute("Openning helpline");
+
+                                        }
+                                        else if(r.text().equals("selfassess")){
+                                            new Chatbot.receive().execute("Openning Self Assessment");
+
+                                        }
+                                        else if(r.text().equals("hospital")){
+                                            new Chatbot.receive().execute("Openning Hospitals near you");
 
                                         }
                                         else if(r.text().equals("firstrespond")){
@@ -871,9 +983,9 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
 
     private LanguageTranslator initLanguageTranslatorService() {
         Authenticator authenticator
-                = new IamAuthenticator("ZWEkxiHJfOS2wxSH9JU6pKIgeaNdNUGE5Fan8j-pyr9C");
+                = new IamAuthenticator("YOUR KEY");
         LanguageTranslator service = new LanguageTranslator("2018-05-01", authenticator);
-        service.setServiceUrl("https://api.eu-gb.language-translator.watson.cloud.ibm.com/instances/7956e320-5069-4d6a-ba80-e62305894905");
+        service.setServiceUrl("YOUR KEY");
         return service;
     }
 
@@ -1246,6 +1358,3 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
 
 
 }
-
-
-

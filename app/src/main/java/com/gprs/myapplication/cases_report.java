@@ -70,7 +70,7 @@ public class cases_report extends AppCompatActivity {
         death1 = new ArrayList();
         object=new ArrayList<>();
 
-        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe);
+        final SwipeRefreshLayout swipeRefreshLayout= findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
@@ -244,15 +244,15 @@ public class cases_report extends AppCompatActivity {
 
                 for(int a=0;a<jsonArray.length();a++){
                     JSONObject object=jsonArray.getJSONObject(a);
-                    arrayList.add(object.optString("state").toString());
-                    arrayList1.add(object.optString("state").toString());
-                    active.add(object.optString("active").toString());
-                    confirm.add(object.optString("confirmed").toString());
-                    death.add(object.optString("deaths").toString());
-                    recover.add(object.optString("recovered").toString());
-                    cconfirm.add(object.optString("cChanges").toString());
-                    cdeath.add(object.optString("dChanges").toString());
-                    crecover.add(object.optString("rChanges").toString());
+                    arrayList.add(object.optString("state"));
+                    arrayList1.add(object.optString("state"));
+                    active.add(object.optString("active"));
+                    confirm.add(object.optString("confirmed"));
+                    death.add(object.optString("deaths"));
+                    recover.add(object.optString("recovered"));
+                    cconfirm.add(object.optString("cChanges"));
+                    cdeath.add(object.optString("dChanges"));
+                    crecover.add(object.optString("rChanges"));
 
                 }
 

@@ -107,7 +107,7 @@ public class home extends AppCompatActivity {
 
 
 
-        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe);
+        final SwipeRefreshLayout swipeRefreshLayout= findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
@@ -124,7 +124,7 @@ public class home extends AppCompatActivity {
 
 
         if(pref.getString("user","").equals("")){
-            startActivity(new Intent(home.this,login.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            startActivity(new Intent(home.this,logouthome.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
             finish();
         }
 
@@ -178,8 +178,8 @@ public class home extends AppCompatActivity {
         admission=findViewById(R.id.admission);
 
 
-
-
+        TextView scrolltextview = findViewById(R.id.scrollingtextview);
+        scrolltextview.setSelected(true);
 
 
             APIextract apIextract = new APIextract(this, confirm, death);
@@ -190,9 +190,87 @@ public class home extends AppCompatActivity {
         setToolBar();
 
 
+        ImageView i1,i2,i3,i4,i5;
+        i1=findViewById(R.id.implink1);
+        i2=findViewById(R.id.implink2);
+        i3=findViewById(R.id.implink3);
+        i4=findViewById(R.id.implink4);
+        i5=findViewById(R.id.implink5);
+        i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this,pdfViewer.class);
+                intent.putExtra("text","https://www.mohfw.gov.in/");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
+
+        i2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this,pdfViewer.class);
+                intent.putExtra("text","https://www.nhp.gov.in/disease/communicable-disease/novel-coronavirus-2019-ncov");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
+
+        i3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this,pdfViewer.class);
+                intent.putExtra("text","https://www.mohfw.gov.in/");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
+        i4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this,pdfViewer.class);
+                intent.putExtra("text","https://www.icmr.gov.in/");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
+        i5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this,pdfViewer.class);
+                intent.putExtra("text","https://nhm.gov.in/");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
+
+        ImageView shelter;
+        LinearLayout faq,faq1;
+        shelter=findViewById(R.id.shelter);
+        faq=findViewById(R.id.faq);
+        faq1=findViewById(R.id.faq1);
 
 
+        shelter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this, pdfViewer.class);
+                intent.putExtra("text","https://drive.google.com/file/d/1mWap_8QEc3HUAiIpPM65K2rZiPjudMO1/view");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
+        faq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this,pdfViewer.class);
+                intent.putExtra("text","https://drive.google.com/file/d/1GPoaMCIwbUdd3XDCzHnY_HiP7p2dVJ4x/view?usp=sharing");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
 
+        faq1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(home.this,pdfViewer.class);
+                intent.putExtra("text","https://drive.google.com/file/d/1A0mY4oMMoSMY5IeuhtKTWVvTkkdOy7lf/view?usp=sharing");
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+            }
+        });
         quora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,8 +314,8 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(home.this,MapsActivity.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
-            }
-        });
+    }
+});
 
         case_report.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -469,7 +547,7 @@ public class home extends AppCompatActivity {
                 editor.apply();
                 if(isMyServiceRunning(VictimAlertForegroundNotification.class))
                 stopService(VictimAlertForegroundNotification.class);
-                startActivity(new Intent(home.this,login.class));
+                startActivity(new Intent(home.this,logouthome.class));
                 finish();
 
             }
@@ -789,7 +867,7 @@ public class home extends AppCompatActivity {
         View view = inflater.inflate(R.layout.activity_chatbotintro, null, true);
 
 
-        Button button = (Button) view.findViewById(R.id.btn_get_started);
+        Button button = view.findViewById(R.id.btn_get_started);
        button.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -822,6 +900,40 @@ public class home extends AppCompatActivity {
     public void stopService(Class<?> serviceClass) {
         Intent serviceIntent = new Intent(this, serviceClass);
         stopService(serviceIntent);
+
+    }
+
+    public void assign(View view) {
+            startActivity(new Intent(home.this,assign_work.class));
+
+    }
+
+    public void labs(View view) {
+        startActivity(new Intent(home.this,labsfortest.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+    }
+
+    public void msme(View view) {
+        startActivity(new Intent(home.this,MSME.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+
+    }
+
+    public void hosnear(View view) {
+        Intent intent=new Intent(this,Medicalshops.class);
+        intent.putExtra("text","Hospitals");
+        startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
+
+    public void onlinecourse(View view) {
+        startActivity(new Intent(home.this,course.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+    }
+
+    public void sectorworkers(View view) {
+        startActivity(new Intent(home.this,unorganizedsectors.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
+
+    }
+
+    public void publiccare(View view) {
+        startActivity(new Intent(home.this,publichealthcare.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
 
     }
 }

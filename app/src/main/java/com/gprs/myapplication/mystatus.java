@@ -74,7 +74,6 @@ public class mystatus extends AppCompatActivity {
         todoimage=findViewById(R.id.todoimage);
         todotext=findViewById(R.id.todotext);
 
-        setview();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         final String currentDateTime = dateFormat.format(new Date()); // Find todays date
 
@@ -185,7 +184,7 @@ public class mystatus extends AppCompatActivity {
             }
         });
 
-        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipe1);
+        final SwipeRefreshLayout swipeRefreshLayout= findViewById(R.id.swipe1);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
@@ -203,14 +202,9 @@ public class mystatus extends AppCompatActivity {
         todo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(flag){
-                    if(userRegistrationHelper.getRole().equals("Monitors")){
-                        startActivity(new Intent(mystatus.this,assign_work.class));
-                    }
-                    else {
-                        startActivity(new Intent(mystatus.this,your_work.class));
-                    }
-                }
+
+                startActivity(new Intent(mystatus.this,your_work.class));
+
             }
         });
         notification.setOnClickListener(new View.OnClickListener() {
@@ -289,29 +283,5 @@ public class mystatus extends AppCompatActivity {
 
     }
 
-    void setview(){
-        FirebaseDatabase.getInstance().getReference().child("Users").child(pref.getString("user","")).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot!=null){
-                    userRegistrationHelper=dataSnapshot.getValue(UserRegistrationHelper.class);
-                    flag=true;
-                    if(userRegistrationHelper.getRole().equals("Monitors")){
-                        todoimage.setImageDrawable(getDrawable(R.drawable.assign));
-                        todotext.setText("Assign Work");
-                    }
-                    else {
-                        todoimage.setImageDrawable(getDrawable(R.drawable.todo));
-                        todotext.setText("Todo List");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 }

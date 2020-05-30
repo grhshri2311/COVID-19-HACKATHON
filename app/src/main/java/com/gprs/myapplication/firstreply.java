@@ -42,7 +42,7 @@ public class firstreply extends AppCompatActivity {
     Button respond;
     private SharedPreferences pref;
     SharedPreferences.Editor editor;
-    float res[]=new float[1];
+    float[] res = new float[1];
     TextView name1,phone1,email1,role1,distancce1;
     UserLocationHelper mylocation;
     @Override
@@ -122,7 +122,7 @@ public class firstreply extends AppCompatActivity {
 
                     Location.distanceBetween(mylocation.getLat(), mylocation.getLon(),
                             lat,lon, res);
-                    distancce1.setText(String.valueOf(res[0]/1000)+" KM");
+                    distancce1.setText(res[0] / 1000 +" KM");
                     String url="https://maps.google.com/?q="+lat+","+lon;
                     wview.loadUrl(url);
 
@@ -134,7 +134,7 @@ public class firstreply extends AppCompatActivity {
 
             }
         });
-        wview=(WebView)findViewById(R.id.webv);
+        wview= findViewById(R.id.webv);
 
         wview.setOnTouchListener(new ListView.OnTouchListener() {
             @Override

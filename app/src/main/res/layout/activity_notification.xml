@@ -25,7 +25,7 @@
         android:fontFamily="@font/g_bold"
         android:id="@+id/notice"
         android:gravity="center"
-        android:text="You have No Notification"
+        android:text="@string/you_have_no_notification"
         android:textColor="#00BCD4"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"

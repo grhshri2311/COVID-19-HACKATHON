@@ -80,12 +80,12 @@ public class DashboardFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        btnCapturePicture = (Button) root.findViewById(R.id.btnCapturePicture);
+        btnCapturePicture = root.findViewById(R.id.btnCapturePicture);
         title=root.findViewById(R.id.title);
         desc=root.findViewById(R.id.desc);
         message=root.findViewById(R.id.message);
         post=root.findViewById(R.id.post);
-        btnRecordVideo = (Button) root.findViewById(R.id.btnRecordVideo);
+        btnRecordVideo = root.findViewById(R.id.btnRecordVideo);
 
         pref = root.getContext().getSharedPreferences("user", 0); // 0 - for private mode
         editor = pref.edit();
@@ -160,14 +160,10 @@ public class DashboardFragment extends Fragment {
         return root;
     }
     private boolean isDeviceSupportCamera() {
-        if (root.getContext().getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA)) {
-            // this device has a camera
-            return true;
-        } else {
-            // no camera on this device
-            return false;
-        }
+        // this device has a camera
+        // no camera on this device
+        return root.getContext().getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA);
     }
     private void captureImage() {
         //Create an Intent with action as ACTION_PICK

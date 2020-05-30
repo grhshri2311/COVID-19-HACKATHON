@@ -29,7 +29,7 @@ public class Medstore extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medstore);
-        wview=(WebView)findViewById(R.id.webv1);
+        wview= findViewById(R.id.webv1);
 
         progressDialog=new ProgressDialog(this);
 
@@ -118,7 +118,7 @@ public class Medstore extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                UserLocationHelper userLocationHelper=dataSnapshot.getValue(UserLocationHelper.class);
                if(userLocationHelper!=null){
-                   String url="https://www.google.com/maps/search/chemists/@"+String.valueOf(userLocationHelper.getLat())+','+String.valueOf(userLocationHelper.getLon());
+                   String url="https://www.google.com/maps/search/chemists/@"+ userLocationHelper.getLat() +','+ userLocationHelper.getLon();
                    wview.loadUrl(url);
                }
 

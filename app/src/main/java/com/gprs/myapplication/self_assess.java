@@ -188,7 +188,6 @@ public class self_assess extends AppCompatActivity {
 
         pref = context.getSharedPreferences("user", 0); // 0 - for private mode
 
-        if(!pref.getString("user","").equals("")){
             save(context);
             question1.clear();
             question.clear();
@@ -205,7 +204,7 @@ public class self_assess extends AppCompatActivity {
 
 
 
-        }
+
 
 
     }
@@ -261,7 +260,7 @@ public class self_assess extends AppCompatActivity {
             SharedPreferences.Editor editor;
             pref = context.getSharedPreferences("user", 0); // 0 - for private mode
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-
+            if(!pref.getString("user","").equals("")) {
             FirebaseDatabase.getInstance().getReference().child("Location").child(pref.getString("user", "")).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -283,6 +282,10 @@ public class self_assess extends AppCompatActivity {
 
                 }
             });
+            }
+            else{
+                Toast.makeText(context, "Tested locally", Toast.LENGTH_LONG).show();
+            }
 
         }
         catch (Exception e){

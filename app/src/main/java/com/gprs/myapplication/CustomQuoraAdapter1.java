@@ -60,12 +60,12 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
 
             rowView = inflater.inflate(R.layout.item_post1, null, true);
             //this code gets references to objects in the listview_row.xml file
-            TextView qtime = (TextView) rowView.findViewById(R.id.date);
-            TextView qname = (TextView) rowView.findViewById(R.id.people_name);
-            TextView qrole = (TextView) rowView.findViewById(R.id.role);
-            TextView qtitle = (TextView) rowView.findViewById(R.id.post);
-            TextView qdesc = (TextView) rowView.findViewById(R.id.description);
-            TextView qmessage = (TextView) rowView.findViewById(R.id.quoramessage);
+            TextView qtime = rowView.findViewById(R.id.date);
+            TextView qname = rowView.findViewById(R.id.people_name);
+            TextView qrole = rowView.findViewById(R.id.role);
+            TextView qtitle = rowView.findViewById(R.id.post);
+            TextView qdesc = rowView.findViewById(R.id.description);
+            TextView qmessage = rowView.findViewById(R.id.quoramessage);
 
             qtime.setText(arrayList.get(position).getTime());
             qname.setText(arrayList.get(position).name);
@@ -73,14 +73,16 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
             qtitle.setText(arrayList.get(position).getTitle());
             qdesc.setText(arrayList.get(position).getDesc());
             qmessage.setText(arrayList.get(position).getMessage());
+        progressBar=rowView.findViewById(R.id.quoraprogress);
 
-
+        if (!arrayList.get(position).isImage() && !arrayList.get(position).isVedio())
+            progressBar.setVisibility(View.INVISIBLE);
 
                 if (arrayList.get(position).isImage()) {
                     final ImageView imageView = rowView.findViewById(R.id.quoraimage);
                     if(hashMapimage.get(position)==null) {
 
-                        progressBar=rowView.findViewById(R.id.quoraprogress);
+
                         progressBar.setVisibility(View.VISIBLE);
                     if (FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getUri()) != null) {
                         FirebaseStorage.getInstance().getReference().child("Quora").child(arrayList.get(position).getUri()).getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -109,7 +111,7 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
 
 
         if(arrayList.get(position).isVedio()) {
-            final VideoView videoView = (VideoView) rowView.findViewById(R.id.quoravideo);
+            final VideoView videoView = rowView.findViewById(R.id.quoravideo);
             final String extStorageDirectory = Environment.getExternalStorageDirectory()
                     .toString();
             progressBar = rowView.findViewById(R.id.quoraprogress);
@@ -188,7 +190,7 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
         }
         else {
             RelativeLayout linearLayout=rowView.findViewById(R.id.quoraitem);
-            VideoView videoView = (VideoView) rowView.findViewById(R.id.quoravideo);
+            VideoView videoView = rowView.findViewById(R.id.quoravideo);
             linearLayout.removeView(videoView);
         }
 
@@ -237,7 +239,8 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
 
         return rowView;
 
-    };
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -249,7 +252,7 @@ public class CustomQuoraAdapter1 extends ArrayAdapter {
     }
 
     private void start(final int position, final View rowView, int i) {
-        final VideoView videoView = (VideoView) rowView.findViewById(R.id.quoravideo);
+        final VideoView videoView = rowView.findViewById(R.id.quoravideo);
         final String extStorageDirectory = Environment.getExternalStorageDirectory()
                 .toString();
 

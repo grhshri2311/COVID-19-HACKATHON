@@ -42,7 +42,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/proimg"
-                    android:fontFamily="@font/bungee"
+                    android:fontFamily="@font/roboto_bold"
                     android:includeFontPadding="false"
                     android:text="Hi hello welcome"
                     android:textSize="20sp" />
