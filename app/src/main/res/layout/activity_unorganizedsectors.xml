@@ -24,13 +24,14 @@
 
             <ImageButton
                 android:id="@+id/logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="fitCenter"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/customimageborder"
-                android:src="@drawable/labsicon" />
+                android:background="#00000000"
+                android:src="@drawable/financialaidicon" />
 
 
             <TextView
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/name1"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:text="18001806222 (For Gurugram &amp; Faridabad) 1100 (For Rest of Haryana)"
                 android:layout_toLeftOf="@id/logo"/>
 
@@ -63,6 +65,70 @@
             android:text="Click to call >"
             android:textColor="#2196F3" />
     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/textviewbackground1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/train"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="5dp"
+                    android:background="#00000000"
+                    android:layout_centerVertical="true"
+                    />
+
+
+                <TextView
+                    android:id="@+id/name2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toLeftOf="@id/train"
+                    android:fontFamily="sans-serif"
+                    android:text="Special Trains:"
+                    android:textColor="#000"
+                    android:textSize="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name2"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Relief for migrants! Indian Railways’ Shramik Special trains to run with full capacity; have up to 3 stoppages"
+                    android:gravity="left"
+                    android:layout_toLeftOf="@id/train"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/viewtrain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_margin="5dp"
+                android:text="View Special trains >"
+                android:textColor="#2196F3" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

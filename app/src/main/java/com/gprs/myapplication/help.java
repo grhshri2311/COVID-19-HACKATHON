@@ -83,6 +83,15 @@ public class help extends AppCompatActivity {
                                email1.setText("Email : "+email+ " (Click to mail)");
                                role1.setText("Role : "+role);
 
+                               findViewById(R.id.reject).setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       FirebaseDatabase.getInstance().getReference().child("Respond").child("Help").child(pref.getString("user","")).removeValue();
+                                    alert2();
+                                   }
+
+                               });
+
                                respond.setOnClickListener(new View.OnClickListener() {
                                    @Override
                                    public void onClick(View v) {
@@ -302,10 +311,6 @@ public class help extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
     @Override
     public void onBackPressed() {
@@ -345,7 +350,24 @@ alert();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("Communication Disconnected !");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    void alert2(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Request Rejected !");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

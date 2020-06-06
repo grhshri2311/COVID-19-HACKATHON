@@ -10,15 +10,21 @@ import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gprs.myapplication.Model.Articles;
 import com.gprs.myapplication.Model.Headlines;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +68,8 @@ public class unorganizedsectors extends AppCompatActivity {
         });
         retrieveJson("unorganised sector workers haryana india",country,API_KEY);
 
+        new DownloadImageTask((ImageView) findViewById(R.id.image1)).execute("https://imgk.timesnownews.com/media/36aa0164-beca-4ed2-be7e-2cb4fb889314.jpg");
+        new DownloadImageTask((ImageView) findViewById(R.id.train)).execute("https://i.pinimg.com/originals/6a/72/4b/6a724b9501764fd83a4abcd37b58144d.png");
 
         btnAboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +79,16 @@ public class unorganizedsectors extends AppCompatActivity {
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(unorganizedsectors.this).toBundle());
             }
         });
+
+        findViewById(R.id.viewtrain).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(unorganizedsectors.this, pdfViewer.class);
+                intent.putExtra("text", "https://enquiry.indianrail.gov.in/mntes/q?opt=TrainRunning&subOpt=splTrnDtl");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(unorganizedsectors.this).toBundle());
+            }
+        });
+
 
         findViewById(R.id.getdirection).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,4 +144,29 @@ public class unorganizedsectors extends AppCompatActivity {
         return country.toLowerCase();
     }
 
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 }

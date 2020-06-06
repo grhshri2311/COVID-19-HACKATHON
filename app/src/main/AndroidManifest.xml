@@ -12,9 +12,15 @@
     -->
     <dist:module dist:instant="true" />
 
+    <uses-feature
+        android:name="android.hardware.fingerprint"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -33,13 +39,24 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/collective_intelligence_icon_use"
         android:label="@string/app_name"
         android:roundIcon="@drawable/collective_intelligence_icon_use"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".publichealthcare"/>
-        <activity android:name=".unorganizedsectors"/>
+        <activity android:name=".Scanner"></activity>
+        <activity
+            android:name=".QRcode"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".bio" />
+        <activity android:name=".publichealthcare" />
+        <activity android:name=".unorganizedsectors" />
         <activity android:name=".course" />
         <activity android:name=".logouthome" />
         <activity android:name=".MSME" />
@@ -78,7 +95,6 @@
             android:name=".quora"
             android:label="@string/title_activity_quora"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-        <activity android:name=".hospital" />
         <activity android:name=".advice" />
         <activity android:name=".youtubevedio" />
         <activity android:name=".stepstofollow" />
@@ -156,7 +172,7 @@
         <activity android:name=".home" />
         <activity android:name=".register" />
         <activity android:name=".login" />
-        <activity android:name=".Splash">
+        <activity android:name=".Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

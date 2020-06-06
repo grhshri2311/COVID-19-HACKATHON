@@ -23,7 +23,7 @@ public class advice extends YouTubeBaseActivity implements YouTubePlayer.OnIniti
                 finish();
             }
         });
-        youTubeView.initialize("YOUR KEY", this);
+        youTubeView.initialize("AIzaSyAyzwQZpKtxTMj8bwa7K2rKmj3uISYC61Q", this);
     }
 
     @Override

@@ -58,7 +58,7 @@ public class login extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
 
         if(!pref.getString("user","").equals("")){
-            startActivity(new Intent(login.this,home.class));
+            startActivity(new Intent(login.this,bio.class));
             finish();
         }
 

@@ -104,7 +104,7 @@
                         android:layout_below="@id/bus"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
-                        android:text="Sign IN / Sign UP"
+                        android:text="@string/sign_in_sign_up"
                         android:textSize="15dp"
                         app:fontFamily="@font/roboto_medium" />
 
@@ -144,7 +144,7 @@
                 android:id="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:transitionName="linear2"
-
+                android:padding="10dp"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/scrollingtextview">
@@ -167,7 +167,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/train"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
+                            android:padding="10dp"
                             android:text="@string/scan"
                             android:textSize="15dp"
                             app:fontFamily="@font/roboto_medium" />
@@ -890,6 +890,42 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1">
+
+                    <RelativeLayout
+                        android:id="@+id/whatsapp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:onClick="whatsapp">
+
+                        <TextView
+                            android:id="@+id/textView51"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/train51"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/whatsapp_queries"
+                            android:textSize="15dp"
+                            app:fontFamily="@font/roboto_medium" />
+
+                        <ImageView
+                            android:id="@+id/train51"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="15dp"
+                            app:srcCompat="@drawable/whatsapp" />
+                    </RelativeLayout>
+
+
+
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1">
@@ -908,17 +944,7 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1">
 
-
-
-
-
-                </androidx.cardview.widget.CardView>
 
 
             </LinearLayout>
@@ -939,12 +965,12 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:orientation="horizontal"
+                    android:id="@+id/faq"
                     android:background="@drawable/textviewbackground"
                     android:layout_gravity="center"
                     android:gravity="center">
 
                     <LinearLayout
-                        android:id="@+id/faq"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
@@ -1019,7 +1045,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="Important Links"
+                    android:text="@string/important_links"
                     android:textColor="#C4BFB6"
                     android:textSize="20dp" />
                 <HorizontalScrollView

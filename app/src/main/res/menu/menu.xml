@@ -21,6 +21,18 @@
         app:showAsAction="always"
         android:icon="@drawable/hindismall"/>
 
+
+    <item
+        android:id="@+id/nav_qr"
+        android:icon="@drawable/qrmenuicon"
+        android:title="@string/generate_scan_qr"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:title="@string/setting"
+        android:id="@+id/settings"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_share_black_24dp"
+        />
     <item
         android:title="@string/share"
         android:id="@+id/share"

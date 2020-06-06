@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -60,7 +61,7 @@ public class YourLocationBroadcastReciever extends BroadcastReceiver {
             {
 
                 pref = context.getSharedPreferences("user", 0);
-                if(!pref.getString("user","").equals("")) {
+                if(!pref.getString("user","").equals("") &&PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notification",false) && PreferenceManager.getDefaultSharedPreferences(context).getBoolean("updates",false)) {
                     new YourLocationBroadcastReciever.RetrieveFeedTask1().execute();
                 }
 

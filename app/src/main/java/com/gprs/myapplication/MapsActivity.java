@@ -1,7 +1,9 @@
 package com.gprs.myapplication;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -15,6 +17,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -32,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -47,7 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     ImageView imageButton;
-    HashMap<String,UserLocationHelper> helperHashMap;
+    HashMap<String, UserLocationHelper> helperHashMap;
 
 
     @Override
@@ -56,8 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setContentView(R.layout.activity_maps);
 
-        imageButton=findViewById(R.id.mapmenu);
-
+        imageButton = findViewById(R.id.mapmenu);
 
 
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -77,18 +80,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                             final UserLocationHelper userLocationHelper = snapshot.getValue(UserLocationHelper.class);
 
-                                            if(userLocationHelper.role.equals(item.toString())) {
+                                            if (userLocationHelper.role.equals(item.toString())) {
                                                 LatLng latLng = new LatLng(userLocationHelper.lat, userLocationHelper.lon);
-                                              Marker marker = mMap.addMarker(new MarkerOptions()
+                                                Marker marker = mMap.addMarker(new MarkerOptions()
                                                         .position(latLng)
                                                         .title(userLocationHelper.email)
                                                         .snippet(userLocationHelper.fname + '\n' + userLocationHelper.role)
                                                         .icon(bitmapDescriptorFromVector(MapsActivity.this, R.drawable.ic_place_black_24dp)));
                                                 marker.showInfoWindow();
-                                                helperHashMap.put(marker.getSnippet(),userLocationHelper);                                                CustomInfoWindow customInfoWindow = new CustomInfoWindow(MapsActivity.this);
+                                                helperHashMap.put(marker.getSnippet(), userLocationHelper);
+                                                CustomInfoWindow customInfoWindow = new CustomInfoWindow(MapsActivity.this);
                                                 mMap.setInfoWindowAdapter(customInfoWindow);
                                                 marker.showInfoWindow();
-
 
 
                                                 mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -101,6 +104,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         }
 
                                     }
+
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                     }
@@ -113,9 +117,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
@@ -123,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
                             // Add a marker in Sydney and move the camera
-                            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
                         }
@@ -136,7 +149,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
 
 
     /**
@@ -159,6 +171,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Keep the UI Settings state in sync with the checkboxes.
         mUiSettings.setCompassEnabled(true);
         mUiSettings.setMyLocationButtonEnabled(true);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mMap.setMyLocationEnabled(true);
         mUiSettings.setScrollGesturesEnabled(true);
         mUiSettings.setZoomGesturesEnabled(true);
@@ -213,26 +235,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void view(String id) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setMessage(helperHashMap.get(id).fname);
 
+        Bundle bundle=new Bundle();
+        bundle.putString("name",helperHashMap.get(id).getFname());
+        bundle.putString("phone",helperHashMap.get(id).getPhone());
+        bundle.putString("email",helperHashMap.get(id).getEmail());
+        bundle.putString("role",helperHashMap.get(id).getRole());
 
-        LayoutInflater inflater=getLayoutInflater();
-       View view = inflater.inflate(R.layout.mapview, null, true);
+        BottomSheetDialogFragment f=new Bottomsheetmapfragment();
+        f.setArguments(bundle);
+        f.show(getSupportFragmentManager(),"Dialog");
 
-
-        TextView email = view.findViewById(R.id.mapemail);
-        TextView phone = view.findViewById(R.id.mapphone);
-        TextView role = view.findViewById(R.id.maprole);
-
-        email.setText(helperHashMap.get(id).email);
-        phone.setText(helperHashMap.get(id).phone);
-        role.setText(helperHashMap.get(id).role);
-
-        AlertDialog alert = builder.create();
-        alert.setView(view);
-        alert.show();
 
     }
     @Override

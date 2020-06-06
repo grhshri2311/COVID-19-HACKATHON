@@ -27,19 +27,22 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -53,18 +56,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
 public class logouthome extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 111;
     private static final int REQUEST_INVITE = 10115;
-    RelativeLayout selfassess,dashmap,updates,case_report,helpline,donate,scan,medstore,epass,admission;
+    RelativeLayout selfassess, dashmap, updates, case_report, helpline, donate, scan, medstore, epass, admission;
     Toolbar toolbar;
-    TextView confirm,death;
+    TextView confirm, death;
     BroadcastReceiver br;
     private FusedLocationProviderClient fusedLocationClient;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-
+    Menu toolbarmenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class logouthome extends AppCompatActivity {
 
 
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
-        editor=pref.edit();
+        editor = pref.edit();
 
 
         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -82,10 +86,8 @@ public class logouthome extends AppCompatActivity {
         }
 
 
-
-
-        if(!pref.getString("user","").equals("")){
-            startActivity(new Intent(logouthome.this,login.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+        if (!pref.getString("user", "").equals("")) {
+            startActivity(new Intent(logouthome.this, login.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             finish();
         }
 
@@ -95,34 +97,32 @@ public class logouthome extends AppCompatActivity {
                     MY_PERMISSIONS_REQUEST_CALL_PHONE);
             return;
         }
-        new notificationHelper(this).createOngoingNotification("COVID19RELIEF","Stay Safe from COVID-19");
+        new notificationHelper(this).createOngoingNotification("COVID19RELIEF", "Stay Safe from COVID-19");
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         final String currentDateTime = dateFormat.format(new Date()); // Find todays date
 
 
-
-        if(!pref.getString("todaychatintro","").equals(currentDateTime)) {
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("chatintrologout", false)) {
             chatbotintro();
-            editor.putString("todaychatintro",currentDateTime);
-            editor.commit();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("chatintrologout", true).commit();
         }
 
 
+        donate = findViewById(R.id.donate);
+        helpline = findViewById(R.id.helpline);
+        scan = findViewById(R.id.scan);
+        dashmap = findViewById(R.id.dashmap);
+        epass = findViewById(R.id.epass);
 
-        donate=findViewById(R.id.donate);
-        helpline=findViewById(R.id.helpline);
-        scan=findViewById(R.id.scan);
-        dashmap=findViewById(R.id.dashmap);
-        epass=findViewById(R.id.epass);
-
-        selfassess=findViewById(R.id.selfassess);
-        confirm=findViewById(R.id.confirm);
-        death=findViewById(R.id.death);
-        updates=findViewById(R.id.updates);
-        medstore=findViewById(R.id.medstore);
-        admission=findViewById(R.id.admission);
+        selfassess = findViewById(R.id.selfassess);
+        confirm = findViewById(R.id.confirm);
+        death = findViewById(R.id.death);
+        updates = findViewById(R.id.updates);
+        medstore = findViewById(R.id.medstore);
+        admission = findViewById(R.id.admission);
+        case_report = findViewById(R.id.case_report);
 
 
         TextView scrolltextview = findViewById(R.id.scrollingtextview);
@@ -132,111 +132,109 @@ public class logouthome extends AppCompatActivity {
         APIextract apIextract = new APIextract(this, confirm, death);
 
 
-
-        case_report=findViewById(R.id.case_report);
         setToolBar();
 
 
-        ImageView i1,i2,i3,i4,i5;
-        i1=findViewById(R.id.implink1);
-        i2=findViewById(R.id.implink2);
-        i3=findViewById(R.id.implink3);
-        i4=findViewById(R.id.implink4);
-        i5=findViewById(R.id.implink5);
+        ImageView i1, i2, i3, i4, i5;
+        i1 = findViewById(R.id.implink1);
+        i2 = findViewById(R.id.implink2);
+        i3 = findViewById(R.id.implink3);
+        i4 = findViewById(R.id.implink4);
+        i5 = findViewById(R.id.implink5);
         i1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this,pdfViewer.class);
-                intent.putExtra("text","https://www.mohfw.gov.in/");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://www.mohfw.gov.in/");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         i2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this,pdfViewer.class);
-                intent.putExtra("text","https://www.nhp.gov.in/disease/communicable-disease/novel-coronavirus-2019-ncov");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://www.nhp.gov.in/disease/communicable-disease/novel-coronavirus-2019-ncov");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         i3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this,pdfViewer.class);
-                intent.putExtra("text","https://www.mohfw.gov.in/");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://www.mohfw.gov.in/");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
         i4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this,pdfViewer.class);
-                intent.putExtra("text","https://www.icmr.gov.in/");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://www.icmr.gov.in/");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
         i5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this,pdfViewer.class);
-                intent.putExtra("text","https://nhm.gov.in/");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://nhm.gov.in/");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         ImageView shelter;
-        LinearLayout faq,faq1;
-        shelter=findViewById(R.id.shelter);
-        faq=findViewById(R.id.faq);
-        faq1=findViewById(R.id.faq1);
+        LinearLayout faq, faq1;
+        shelter = findViewById(R.id.shelter);
+        faq = findViewById(R.id.faq);
+        faq1 = findViewById(R.id.faq1);
 
 
         shelter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this, pdfViewer.class);
-                intent.putExtra("text","https://drive.google.com/file/d/1mWap_8QEc3HUAiIpPM65K2rZiPjudMO1/view");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://drive.google.com/file/d/1mWap_8QEc3HUAiIpPM65K2rZiPjudMO1/view");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
         faq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this,pdfViewer.class);
-                intent.putExtra("text","https://drive.google.com/file/d/1GPoaMCIwbUdd3XDCzHnY_HiP7p2dVJ4x/view?usp=sharing");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://drive.google.com/file/d/1GPoaMCIwbUdd3XDCzHnY_HiP7p2dVJ4x/view?usp=sharing");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         faq1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(logouthome.this,pdfViewer.class);
-                intent.putExtra("text","https://drive.google.com/file/d/1A0mY4oMMoSMY5IeuhtKTWVvTkkdOy7lf/view?usp=sharing");
-                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                Intent intent = new Intent(logouthome.this, pdfViewer.class);
+                intent.putExtra("text", "https://drive.google.com/file/d/1A0mY4oMMoSMY5IeuhtKTWVvTkkdOy7lf/view?usp=sharing");
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         epass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,epass.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, epass.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         admission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,hospital.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                new Bottomsheetadmissionfragment().show(getSupportFragmentManager(),"Dialog");
             }
         });
 
         medstore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,Medstore.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, Medstore.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
@@ -244,10 +242,10 @@ public class logouthome extends AppCompatActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!pref.getString("status","").equals("victim"))
-                    startActivity(new Intent(logouthome.this,victimalert.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                if (!pref.getString("status", "").equals("victim"))
+                    startActivity(new Intent(logouthome.this, victimalert.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
                 else {
-                    Toast.makeText(logouthome.this,"You are found victim \nYou can't use this festure!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(logouthome.this, "You are found victim \nYou can't use this festure!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -255,28 +253,28 @@ public class logouthome extends AppCompatActivity {
         dashmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,MapsActivity.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, MapsActivity.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         case_report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,cases_report.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, cases_report.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         updates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,news.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, news.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
         selfassess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,self_assess.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, self_assess.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
@@ -284,23 +282,22 @@ public class logouthome extends AppCompatActivity {
         helpline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,helpline.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, helpline.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(logouthome.this,donate.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+                startActivity(new Intent(logouthome.this, donate.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
             }
         });
 
 
-
-        if(!isMyServiceRunning(AlarmForegroundNotification.class)) {
+        if (!isMyServiceRunning(AlarmForegroundNotification.class)) {
             startService(AlarmForegroundNotification.class);
         }
 
-        if(!isMyServiceRunning(HelpneededBroadcastReceiver.class)) {
+        if (!isMyServiceRunning(HelpneededBroadcastReceiver.class)) {
             startService(HelpneededBroadcastReceiver.class);
         }
 
@@ -310,22 +307,22 @@ public class logouthome extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menulogout,menu);
+        getMenuInflater().inflate(R.menu.menulogout, menu);
+        toolbar = findViewById(R.id.hometoolbar);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id=item.getItemId();
+        int id = item.getItemId();
 
-        if(id==R.id.chatbot){
-            startActivity(new Intent(logouthome.this,Chatbot.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
+        if (id == R.id.chatbot) {
+            startActivity(new Intent(logouthome.this, Chatbot.class), ActivityOptions.makeSceneTransitionAnimation(logouthome.this).toBundle());
 
         }
-        if(id==R.id.translate){
+        if (id == R.id.translate) {
             SharedPreferences pref;
             SharedPreferences.Editor editor;
             pref = getApplicationContext().getSharedPreferences("language", 0); // 0 - for private mode
@@ -345,7 +342,8 @@ public class logouthome extends AppCompatActivity {
             overridePendingTransition(0, 0);
         }
 
-        if(id==R.id.share){
+        if (id == R.id.share) {
+            share();
             final String appPackageName = BuildConfig.APPLICATION_ID;
             final String appName = getString(R.string.app_name);
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -361,7 +359,7 @@ public class logouthome extends AppCompatActivity {
     }
 
     private void setToolBar() {
-        androidx.appcompat.widget.Toolbar tb =findViewById(R.id.hometoolbar);
+        androidx.appcompat.widget.Toolbar tb = findViewById(R.id.hometoolbar);
         setSupportActionBar(tb);
     }
 
@@ -383,7 +381,7 @@ public class logouthome extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
@@ -411,7 +409,7 @@ public class logouthome extends AppCompatActivity {
 
     void startAlarm(boolean set) {
 
-        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent myIntent;
 
 
@@ -420,9 +418,7 @@ public class logouthome extends AppCompatActivity {
         calendar.setTimeInMillis(System.currentTimeMillis());
 
 
-
-
-        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = null;
 
         // SET TIME HERE
@@ -430,49 +426,45 @@ public class logouthome extends AppCompatActivity {
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         myIntent = new Intent(logouthome.this, YourLocationBroadcastReciever.class);
-        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
+        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, 0);
 
 
-        if(set){
+        if (set) {
 
             manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() +
                             1 * 1000, pendingIntent);
 
-        }
-        else
-        if (manager!= null) {
+        } else if (manager != null) {
             manager.cancel(pendingIntent);
         }
 
         myIntent = new Intent(logouthome.this, MyNotificationBroadcastReceiver.class);
-        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
+        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, 0);
 
 
-        if(set){
+        if (set) {
 
             manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() +
                             1 * 1000, pendingIntent1);
 
-        }
-        else {
+        } else {
             if (manager != null) {
                 manager.cancel((pendingIntent1));
             }
         }
         myIntent = new Intent(logouthome.this, HelpneededBroadcastReceiver.class);
-        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(),0,myIntent,0);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, 0);
 
 
-        if(set){
+        if (set) {
 
             manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() +
                             1 * 1000, pendingIntent2);
 
-        }
-        else {
+        } else {
             if (manager != null) {
                 manager.cancel((pendingIntent2));
             }
@@ -481,15 +473,25 @@ public class logouthome extends AppCompatActivity {
 
     }
 
-    void location(){
+    void location() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
-                if(task.isSuccessful()){
-                    if(task.getResult()!=null){
-                        Location location=task.getResult();
+                if (task.isSuccessful()) {
+                    if (task.getResult() != null) {
+                        Location location = task.getResult();
 
                         Geocoder geocoder;
                         List<Address> addresses;
@@ -499,24 +501,21 @@ public class logouthome extends AppCompatActivity {
                             addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
 
-
                             String city = addresses.get(0).getLocality();
-                            String state=addresses.get(0).getAdminArea();
+                            String state = addresses.get(0).getAdminArea();
 
 
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                    }
-                    else{
+                    } else {
 
-                        Toast.makeText(logouthome.this,"Please turn on GPS and accept location permission",Toast.LENGTH_LONG).show();
+                        Toast.makeText(logouthome.this, "Please turn on GPS and accept location permission", Toast.LENGTH_LONG).show();
                     }
-                }
-                else{
+                } else {
 
-                    Toast.makeText(logouthome.this,"Please turn on GPS",Toast.LENGTH_LONG).show();
+                    Toast.makeText(logouthome.this, "Please turn on GPS", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -692,4 +691,40 @@ public class logouthome extends AppCompatActivity {
         startActivity(new Intent(this,publichealthcare.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
     }
+
+
+    private void share() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("Share");
+
+
+
+        LayoutInflater inflater=getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment_share, null, true);
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        final String appPackageName = BuildConfig.APPLICATION_ID;
+
+        String shareBodyText = "https://play.google.com/store/apps/details?id=" +
+                appPackageName;
+
+        TextView textView=view.findViewById(R.id.text_share);
+        textView.setText(shareBodyText);
+
+        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.setView(view);
+        alert.show();
+
+
+    }
+
+
+
 }

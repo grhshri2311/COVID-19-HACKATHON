@@ -2,6 +2,7 @@ package com.gprs.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
@@ -77,27 +78,26 @@ public class mystatus extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         final String currentDateTime = dateFormat.format(new Date()); // Find todays date
 
-        if(!pref.getString("today1","").equals(currentDateTime)) {
+
+        if(!PreferenceManager.getDefaultSharedPreferences(this).getString("today1","").equals(currentDateTime)) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
-                    editor.putString("today1",currentDateTime);
-                    editor.commit();
+                    PreferenceManager.getDefaultSharedPreferences(mystatus.this).edit().putString("today1",currentDateTime).commit();
                     Intent i = new Intent(mystatus.this, advice.class);
                     startActivity(i);
                 }
             }, 10000);
-
         }
 
         check();
 
         models = new ArrayList<>();
-        models.add(new Modelviewer(R.drawable.firstresponder1, "Step 1", ""));
-        models.add(new Modelviewer(R.drawable.firstresponder2, "Step 2", ""));
-        models.add(new Modelviewer(R.drawable.firstresponder3, "Step 3", ""));
-        models.add(new Modelviewer(R.drawable.firstresponder4, "Step 4", ""));
+        models.add(new Modelviewer("https://ohsonline.com/Issues/2016/04/-/media/OHS/OHS/Images/2016/03/shutterstock_217127524.jpg", "Step 1", ""));
+        models.add(new Modelviewer("https://img.lovepik.com/element/40162/9102.png_300.png", "Step 2", ""));
+        models.add(new Modelviewer("https://lh3.googleusercontent.com/proxy/TMP_gvA43b55TUAUgJfuSy9ADD7opGCpzs7HeoLp6QrdolfMmy3BfN1g4_2Vy5h4j-7tvx5Viw80tawRZUlTwclaF2uPTZI", "Step 3", ""));
+        models.add(new Modelviewer("https://previews.123rf.com/images/vostal/vostal1701/vostal170100066/70729733-hand-drawing-of-a-red-and-white-ambulance.jpg", "Step 4", ""));
+
 
         adapter = new Adapterviewer(models, this);
 

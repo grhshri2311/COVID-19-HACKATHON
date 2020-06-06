@@ -15,6 +15,7 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +51,7 @@ public class MyNotificationBroadcastReceiver extends BroadcastReceiver {
         pref = context.getSharedPreferences("user", 0); // 0 - for private mode
         editor = pref.edit();
 
-        if(!pref.getString("user","").equals("")) {
+        if(!pref.getString("user","").equals("") &&PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notification",false) && PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notify",false)) {
 
             FirebaseDatabase.getInstance().getReference().child("Notification").child(pref.getString("user", "")).addValueEventListener(new ValueEventListener() {
                 @Override
