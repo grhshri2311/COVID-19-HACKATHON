@@ -41,7 +41,7 @@ import java.util.HashMap;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1011;
+
     private GoogleMap mMap;
     ImageView imageButton;
     HashMap<String, UserLocationHelper> helperHashMap;
@@ -73,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                             final UserLocationHelper userLocationHelper = snapshot.getValue(UserLocationHelper.class);
 
-                                            if (userLocationHelper.role.equals(item.toString())) {
+                                            if (userLocationHelper.role.equals(item.toString()) && mMap!=null) {
                                                 LatLng latLng = new LatLng(userLocationHelper.lat, userLocationHelper.lon);
                                                 Marker marker = mMap.addMarker(new MarkerOptions()
                                                         .position(latLng)
@@ -127,7 +127,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
+                        if (location != null && mMap!=null) {
                             // Add a marker in Sydney and move the camera
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
