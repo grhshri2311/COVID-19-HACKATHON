@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +35,6 @@ import static android.graphics.Color.WHITE;
 
 public class QRcode extends AppCompatActivity {
 
-    private Button buttonScan;
     private TextView title;
     ImageView imageViewBitmap;
     @Override
@@ -42,11 +42,11 @@ public class QRcode extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_rcode);
 
-        buttonScan = (Button) findViewById(R.id.buttonScan);
+        Button buttonScan = (Button) findViewById(R.id.buttonScan);
         title = (TextView) findViewById(R.id.title);
         imageViewBitmap=findViewById(R.id.qr);
 
-        GenerateClick();
+
 
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,12 +60,23 @@ public class QRcode extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GenerateClick();
+            }
+        }, 1000);
+    }
+
     public void GenerateClick(){
         title.setText("Loading QR Code...");
         try {
             //setting size of qr code
             int width =800,height = 800;
-            int smallestDimension = width < height ? width : height;
+            int smallestDimension = Math.min(width, height);
 
 
             //setting parameters for qr code

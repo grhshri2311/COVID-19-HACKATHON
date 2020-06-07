@@ -3,14 +3,11 @@ package com.gprs.myapplication;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.CountDownTimer;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -18,8 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.util.Clock;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,13 +28,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
 
@@ -54,7 +47,7 @@ class alarmAdapter extends ArrayAdapter {
 
     SimpleDateFormat dateFormat= new SimpleDateFormat("HH:MM");
     String currentDateTime = dateFormat.format(new Date());
-    public alarmAdapter(ArrayList<String> name, ArrayList<String> desc, ArrayList<String> time,ArrayList<Boolean> onoff, Activity context) {
+    public alarmAdapter(ArrayList<String> name, ArrayList<String> desc, ArrayList<String> time, ArrayList<Boolean> onoff, Activity context) {
         super(context,R.layout.alarmitem,name);
         this.name = name;
         this.desc = desc;
@@ -69,25 +62,25 @@ class alarmAdapter extends ArrayAdapter {
 
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=null;
-         rowView = inflater.inflate(R.layout.alarm_view, null, true);
-            //this code gets references to objects in the listview_row.xml file
-            final TextView time1=rowView.findViewById(R.id.time);
-            TextView ampm=rowView.findViewById(R.id.time);
+        rowView = inflater.inflate(R.layout.alarm_view, null, true);
+        //this code gets references to objects in the listview_row.xml file
+        final TextView time1=rowView.findViewById(R.id.time);
+        TextView ampm=rowView.findViewById(R.id.time);
 
-            TextView name1 = rowView.findViewById(R.id.name);
-            final TextView onoff1= rowView.findViewById(R.id.onoff);
-            final Switch aswitch = rowView.findViewById(R.id.switch1);
+        TextView name1 = rowView.findViewById(R.id.name);
+        final TextView onoff1= rowView.findViewById(R.id.onoff);
+        final Switch aswitch = rowView.findViewById(R.id.switch1);
 
-            if(position<name.size() && position<desc.size() && position<time.size()) {
-                name1.setText(" | "+name.get(position));
-                ampm.setText(time.get(position).substring(5,7));
-                time1.setText(time.get(position).substring(0,5));
-                if(onoff.get(position)){
-                    aswitch.setChecked(true);
-                }
-                else
-                    aswitch.setChecked(false);
+        if(position<name.size() && position<desc.size() && position<time.size()) {
+            name1.setText(" | "+name.get(position));
+            ampm.setText(time.get(position).substring(5,7));
+            time1.setText(time.get(position).substring(0,5));
+            if(onoff.get(position)){
+                aswitch.setChecked(true);
             }
+            else
+                aswitch.setChecked(false);
+        }
 
         String curtime=df.format(new Date());
 
@@ -95,10 +88,10 @@ class alarmAdapter extends ArrayAdapter {
         Date date1 = null,date2;
         try {
 
-             date1 = df.parse(curtime);
+            date1 = df.parse(curtime);
 
 
-             date2 = df.parse(curtime.substring(0,11)+time.get(position));
+            date2 = df.parse(curtime.substring(0,11)+time.get(position));
 
             long minutes = 0;
 
@@ -145,87 +138,87 @@ class alarmAdapter extends ArrayAdapter {
 
 
 
-            aswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        aswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if(isChecked) {
+                if(isChecked) {
 
-                        String curtime=df.format(new Date());
-
-
-                        Date date1 = null,date2;
-                        try {
-
-                            date1 = df.parse(curtime);
+                    String curtime=df.format(new Date());
 
 
-                            date2 = df.parse(curtime.substring(0,11)+time.get(position));
+                    Date date1 = null,date2;
+                    try {
 
-                            long minutes = 0;
-
-                            if(date1.after(date2)) {
-
-                                long ltime=date2.getTime()+24*60*60*1000;
-                                String newdate=df.format(new Date(ltime));
-                                date2=df.parse(newdate);
-                                minutes = abs(((date1.getTime() / 1000) - (date2.getTime() /1000))/60) ;
-
-                            } else {
-
-                                minutes = abs(((date2.getTime() / 1000) - (date1.getTime() /1000))/60) ;
-
-                            }
-
-                            finalHrs = (minutes / 60);
-
-                            finalSeconds = minutes % 60;
+                        date1 = df.parse(curtime);
 
 
+                        date2 = df.parse(curtime.substring(0,11)+time.get(position));
 
+                        long minutes = 0;
 
-                        } catch (ParseException e) {
+                        if(date1.after(date2)) {
 
-                            // TODO Auto-generated catch block
+                            long ltime=date2.getTime()+24*60*60*1000;
+                            String newdate=df.format(new Date(ltime));
+                            date2=df.parse(newdate);
+                            minutes = abs(((date1.getTime() / 1000) - (date2.getTime() /1000))/60) ;
 
-                            e.printStackTrace();
+                        } else {
+
+                            minutes = abs(((date2.getTime() / 1000) - (date1.getTime() /1000))/60) ;
 
                         }
 
-                        onoff.set(position,true);
-                        time1.setTextColor(Color.BLACK);
-                        Toast.makeText(context, "Alarm will go off in " + finalHrs + " hours and " + finalSeconds + " minutes.",Toast.LENGTH_LONG).show();
-                        onoff1.setText("Alarm in "+finalHrs+" hours "+finalSeconds+" minutes");
+                        finalHrs = (minutes / 60);
+
+                        finalSeconds = minutes % 60;
+
+
+
+
+                    } catch (ParseException e) {
+
+                        // TODO Auto-generated catch block
+
+                        e.printStackTrace();
 
                     }
-                    else{
-                        onoff1.setText("Off");
-                        onoff.set(position,false);
-                        Toast.makeText(context,"Alarm set Off",Toast.LENGTH_LONG).show();
-                        time1.setTextColor(Color.GRAY);
-                    }
-                    saveMap();
+
+                    onoff.set(position,true);
+                    time1.setTextColor(Color.BLACK);
+                    Toast.makeText(context, "Alarm will go off in " + finalHrs + " hours and " + finalSeconds + " minutes.",Toast.LENGTH_LONG).show();
+                    onoff1.setText("Alarm in "+finalHrs+" hours "+finalSeconds+" minutes");
 
                 }
-            });
-
-         rowView.setOnLongClickListener(new View.OnLongClickListener() {
-             @Override
-             public boolean onLongClick(View v) {
-
-                 delete(position,alarmAdapter.this);
-                 notifyDataSetChanged();
-                 return true;
-             }
-         });
-
-
-            rowView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    view(position);
+                else{
+                    onoff1.setText("Off");
+                    onoff.set(position,false);
+                    Toast.makeText(context,"Alarm set Off",Toast.LENGTH_LONG).show();
+                    time1.setTextColor(Color.GRAY);
                 }
-            });
+                saveMap();
+
+            }
+        });
+
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                delete(position,alarmAdapter.this);
+                notifyDataSetChanged();
+                return true;
+            }
+        });
+
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view(position);
+            }
+        });
 
         return rowView;
 
@@ -275,36 +268,17 @@ class alarmAdapter extends ArrayAdapter {
     }
 
     void view(int pos) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
+        Bundle bundle=new Bundle();
+        bundle.putString("name",name.get(pos));
+        bundle.putString("time",time.get(pos));
+        bundle.putBoolean("onoff",onoff.get(pos));
+        bundle.putString("desc",desc.get(pos));
 
-        LayoutInflater inflater=context.getLayoutInflater();
-        View view = inflater.inflate(R.layout.alarmitem, null, true);
 
-
-        TextView name1 = view.findViewById(R.id.name);
-        TextView desc1 = view.findViewById(R.id.desc);
-        TextView time1 = view.findViewById(R.id.time);
-        TextView status = view.findViewById(R.id.status);
-
-        name1.setText(name.get(pos));
-        desc1.setText(desc.get(pos));
-        time1.setText(time.get(pos));
-        if(onoff.get(pos))
-            status.setText("ON");
-        else
-            status.setText("Off");
-
-        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.setView(view);
-        alert.show();
-
+        BottomSheetDialogFragment f=new BottomsheetAlarmfragment();
+        f.setArguments(bundle);
+        FragmentActivity fr=(FragmentActivity) context;
+        f.show(fr.getSupportFragmentManager(),"Dialog");
     }
 
     void delete(final int pos, final alarmAdapter alarmAdapter){

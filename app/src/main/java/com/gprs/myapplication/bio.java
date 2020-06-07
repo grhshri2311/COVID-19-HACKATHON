@@ -45,11 +45,7 @@ public class bio extends AppCompatActivity {
     private static final String KEY_NAME = "yourKey";
     private Cipher cipher;
     private KeyStore keyStore;
-    private KeyGenerator keyGenerator;
-    private TextView textView;
-    private FingerprintManager.CryptoObject cryptoObject;
-    private FingerprintManager fingerprintManager;
-    private KeyguardManager keyguardManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,12 +90,10 @@ public class bio extends AppCompatActivity {
         // or higher before executing any fingerprint-related code
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //Get an instance of KeyguardManager and FingerprintManager//
-            keyguardManager =
-                    (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
-            fingerprintManager =
-                    (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
-            textView = verify;
+            TextView textView = verify;
 
             //Check whether the device has a fingerprint sensor//
             if (!fingerprintManager.isHardwareDetected()) {
@@ -131,7 +125,7 @@ public class bio extends AppCompatActivity {
 
                 if (initCipher()) {
                     //If the cipher is initialized successfully, then create a CryptoObject instance//
-                    cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                    FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
 
                     // Here, I’m referencing the FingerprintHandler class that we’ll create in the next section. This class will be responsible
                     // for starting the authentication process (via the startAuth method) and processing the authentication process events//
@@ -150,7 +144,7 @@ public class bio extends AppCompatActivity {
             keyStore = KeyStore.getInstance("AndroidKeyStore");
 
             //Generate the key//
-            keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
 
             //Initialize an empty KeyStore//
             keyStore.load(null);
@@ -212,7 +206,7 @@ public class bio extends AppCompatActivity {
         return true;
     }
 
-    private class FingerprintException extends Exception {
+    private static class FingerprintException extends Exception {
         public FingerprintException(Exception e) {
             super(e);
         }

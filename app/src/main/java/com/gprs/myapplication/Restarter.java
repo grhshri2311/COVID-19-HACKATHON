@@ -6,14 +6,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.SystemClock;
 
 import androidx.core.content.ContextCompat;
 
 import java.util.Calendar;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class Restarter extends BroadcastReceiver {
 

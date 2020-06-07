@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,7 +39,6 @@ public class firstreply extends AppCompatActivity {
     private WebView wview;
     private ProgressDialog progressDialog;
     Button respond;
-    private SharedPreferences pref;
     SharedPreferences.Editor editor;
     float[] res = new float[1];
     TextView name1,phone1,email1,role1,distancce1;
@@ -49,7 +47,7 @@ public class firstreply extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstreply);
-        pref = getSharedPreferences("user", 0);
+        SharedPreferences pref = getSharedPreferences("user", 0);
 
         Intent intent=getIntent();
         respond=findViewById(R.id.respond);

@@ -15,7 +15,7 @@
         android:gravity="center"
         android:text="@string/alarm"
         android:textColor="#2196F3"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:layout_centerHorizontal="true"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

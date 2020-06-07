@@ -7,7 +7,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
-import android.animation.ArgbEvaluator;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;

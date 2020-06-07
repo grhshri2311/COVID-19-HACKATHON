@@ -14,15 +14,11 @@ import java.util.ArrayList;
 class CustomChatBotAdapter extends ArrayAdapter {
     private Activity context;
     private ArrayList<Message> message;
-    private ArrayList<Integer> toggle;
-    private ArrayList<ArrayList<String>> option;
 
     public CustomChatBotAdapter(Activity context,ArrayList<Message> message,ArrayList<Integer> toggle,ArrayList<ArrayList<String>> option) {
         super(context,R.layout.activity_chatbot,message);
         this.context=context;
         this.message=message;
-        this.toggle=toggle;
-        this.option=option;
     }
 
     public View getView(int position, View view, ViewGroup parent) {

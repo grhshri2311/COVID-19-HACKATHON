@@ -1,29 +1,22 @@
 package com.gprs.myapplication.ui.dashboard;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,17 +31,13 @@ import com.google.firebase.storage.UploadTask;
 import com.gprs.myapplication.QuoraHelper;
 import com.gprs.myapplication.R;
 import com.gprs.myapplication.UserRegistrationHelper;
-import com.gprs.myapplication.home;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class DashboardFragment extends Fragment {
 
@@ -73,19 +62,18 @@ public class DashboardFragment extends Fragment {
     boolean done=true;
 
 
-
-    private Button btnCapturePicture, btnRecordVideo,post;
+    private Button post;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        btnCapturePicture = root.findViewById(R.id.btnCapturePicture);
+        Button btnCapturePicture = root.findViewById(R.id.btnCapturePicture);
         title=root.findViewById(R.id.title);
         desc=root.findViewById(R.id.desc);
         message=root.findViewById(R.id.message);
         post=root.findViewById(R.id.post);
-        btnRecordVideo = root.findViewById(R.id.btnRecordVideo);
+        Button btnRecordVideo = root.findViewById(R.id.btnRecordVideo);
 
         pref = root.getContext().getSharedPreferences("user", 0); // 0 - for private mode
         editor = pref.edit();
@@ -96,6 +84,8 @@ public class DashboardFragment extends Fragment {
                     Toast.makeText(root.getContext(),"Please fill all the fields",Toast.LENGTH_LONG).show();
                 }
                 else{
+                    post.setEnabled(false);
+                    post.setBackgroundColor(Color.parseColor("#D3D0D0"));
                     if(imageUri==null && vedioUri==null)
                     {
                         nil=true;
@@ -108,15 +98,19 @@ public class DashboardFragment extends Fragment {
                                     String currentDateTime = dateFormat.format(new Date()); // Find todays date
                                     QuoraHelper quoraHelper=new QuoraHelper(title.getText().toString(),desc.getText().toString(),message.getText().toString(),status.getRole(),status.getPhone(),status.getFname(),currentDateTime,nil,img,vid,null,null,null);
                                     FirebaseDatabase.getInstance().getReference().child("Quora").child(currentDateTime).setValue(quoraHelper);
+                                    post.setEnabled(true);
+                                    post.setBackgroundColor(Color.parseColor("#000000"));
+                                    Toast.makeText(root.getContext(), "Posted Successfully ! ", Toast.LENGTH_LONG).show();
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                post.setEnabled(true);
+                                post.setBackgroundColor(Color.parseColor("#000000"));
                             }
                         });
-                        Toast.makeText(root.getContext(), "Posted Successfully ! ", Toast.LENGTH_LONG).show();
+
                     }
                     if(imageUri!=null){
                         nil=true;
@@ -263,15 +257,19 @@ done=false;                }
 
                                                 QuoraHelper quoraHelper=new QuoraHelper(title.getText().toString(),desc.getText().toString(),message.getText().toString(),status.getRole(),status.getPhone(),status.getFname(),currentDateTime,nil,img,vid,null,url,null);
                                                 FirebaseDatabase.getInstance().getReference().child("Quora").child(currentDateTime).setValue(quoraHelper);
+                                                Toast.makeText(root.getContext(), "Posted Successfully ! ", Toast.LENGTH_LONG).show();
+                                                post.setEnabled(true);
+                                                post.setBackgroundColor(Color.parseColor("#000000"));
                                             }
                                         }
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                            post.setEnabled(true);
+                                            post.setBackgroundColor(Color.parseColor("#000000"));
                                         }
                                     });
-                                    Toast.makeText(root.getContext(), "Posted Successfully ! ", Toast.LENGTH_LONG).show();
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -280,7 +278,8 @@ done=false;                }
                                     //if the upload is not successfull
                                     //hiding the progress dialog
                                     progressDialog.dismiss();
-
+                                    post.setBackgroundColor(Color.parseColor("#000000"));
+                                    post.setEnabled(true);
                                     //and displaying error message
                                     Toast.makeText(root.getContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                                 }
@@ -292,7 +291,7 @@ done=false;                }
                                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
                                     //displaying percentage in progress dialog
-                                    progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                                    progressDialog.setMessage("Uploading " + ((int) progress) + "%...");
                                 }
                             });
                 }

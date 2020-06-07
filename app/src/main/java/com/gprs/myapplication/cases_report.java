@@ -31,7 +31,6 @@ import java.util.Iterator;
 public class cases_report extends AppCompatActivity {
 
     Spinner spinner,spinner2;
-    private RequestQueue queue;
     ArrayList<String> arrayList,district;
     ArrayList<String> arrayList1,district1;
     ArrayList<String> active;
@@ -52,7 +51,7 @@ public class cases_report extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cases_report2);
 
-        queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(this);
         arrayList = new ArrayList();
         district=new ArrayList<>();
         arrayList1 = new ArrayList();

@@ -41,8 +41,6 @@ import static com.gprs.myapplication.VictimAlertForegroundNotification.CHANNEL_I
 
 public class AlarmForegroundNotification extends Service {
 
-    private NotificationManager mNotificationManager;
-    private NotificationCompat.Builder mBuilder;
     public static final String NOTIFICATION_CHANNEL_ID = "10005";
     String message;
     Context context;
@@ -226,7 +224,7 @@ public class AlarmForegroundNotification extends Service {
             PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
                     0 /* Request code */, resultIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder = new NotificationCompat.Builder(context);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
             mBuilder.setSmallIcon(R.drawable.report);
             mBuilder.setContentTitle("Alarm")
                     .setOnlyAlertOnce(true)
@@ -238,7 +236,7 @@ public class AlarmForegroundNotification extends Service {
                     .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                     .setContentIntent(resultPendingIntent);
 
-            mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

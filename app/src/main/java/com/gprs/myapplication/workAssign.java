@@ -4,21 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +35,9 @@ public class workAssign extends AppCompatActivity {
     SharedPreferences.Editor editor;
     ListView listView;
     VolunteerAdapter adapter;
-    private ArrayList<String> namelist,rolelist,placelist,phonelist;
+    private ArrayList<String> namelist;
+    private ArrayList<String> rolelist;
+    private ArrayList<String> phonelist;
     private ArrayList<Double> latlist,lonlist;
 
     @Override
@@ -53,7 +50,7 @@ public class workAssign extends AppCompatActivity {
 
         namelist=new ArrayList();
         rolelist=new ArrayList();
-        placelist=new ArrayList();
+        ArrayList<String> placelist = new ArrayList();
         lonlist=new ArrayList();
         latlist=new ArrayList();
         phonelist=new ArrayList();
@@ -79,7 +76,6 @@ public class workAssign extends AppCompatActivity {
         adapter = new VolunteerAdapter(this, namelist, rolelist, placelist);
         listView.setAdapter(adapter);
 
-
         final EditText work=findViewById(R.id.work);
 
         Button button=findViewById(R.id.button4);
@@ -101,8 +97,8 @@ public class workAssign extends AppCompatActivity {
                                     FirebaseDatabase.getInstance().getReference().child("Works").child(phonelist.get(i)).child(currentDateTime).setValue(workhelper);
 
 
-                                    workhelper = new workhelper(namelist.get(i), location(latlist.get(i),lonlist.get(i)), rolelist.get(i),"", phonelist.get(i), work.getText().toString());
-                                    FirebaseDatabase.getInstance().getReference().child("Workassign").child(pref.getString("user", "")).child(currentDateTime+ i).setValue(workhelper);
+                                    WorkAssignHelper workAssignHelper = new WorkAssignHelper(namelist.get(i), location(latlist.get(i),lonlist.get(i)), rolelist.get(i),"", phonelist.get(i), work.getText().toString(),"pending","");
+                                    FirebaseDatabase.getInstance().getReference().child("Workassign").child(pref.getString("user", "")).child(currentDateTime+ i).setValue(workAssignHelper);
                                     FirebaseDatabase.getInstance().getReference().child("Notification").child(phonelist.get(i)).child("Work").child(currentDateTime).setValue("You are assigned for work");
                                 }
                                 show();
@@ -170,3 +166,4 @@ public class workAssign extends AppCompatActivity {
     }
 
 }
+

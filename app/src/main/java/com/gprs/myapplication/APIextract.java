@@ -19,7 +19,6 @@ import java.net.URL;
 
 public class APIextract {
 
-    private String city,state;
     Context context;
     TextView confirm,death;
     private RequestQueue queue;
@@ -37,8 +36,6 @@ public class APIextract {
 
     public APIextract(home context, String city, String state) {
         this.context=context;
-        this.city=city;
-        this.state=state;
         queue = Volley.newRequestQueue(context);
 
     }

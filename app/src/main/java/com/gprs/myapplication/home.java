@@ -71,7 +71,6 @@ public class home extends AppCompatActivity {
     Toolbar toolbar;
     TextView confirm, death;
     BroadcastReceiver br;
-    private FusedLocationProviderClient fusedLocationClient;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
@@ -136,7 +135,7 @@ public class home extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    PreferenceManager.getDefaultSharedPreferences(home.this).edit().putString("today", currentDateTime).commit();
+                    PreferenceManager.getDefaultSharedPreferences(home.this).edit().putString("today", currentDateTime).apply();
                     Intent i = new Intent(home.this, stepstofollow.class);
                     startActivity(i);
                 }
@@ -144,7 +143,7 @@ public class home extends AppCompatActivity {
         }
         if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("chatintro", false)) {
             findViewById(R.id.rellayout).setVisibility(View.VISIBLE);
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("chatintro", true).commit();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("chatintro", true).apply();
         }
 
 
@@ -396,7 +395,7 @@ public class home extends AppCompatActivity {
 
                         editor.putString("city", city);
                         editor.putString("state", state);
-                        editor.commit();
+                        editor.apply();
 
 
                     } catch (IOException e) {
@@ -483,7 +482,7 @@ public class home extends AppCompatActivity {
             editor = pref.edit();
             if (pref.getString("lang", "").equals("")) {
                 editor.putString("lang", "hi");
-                editor.commit();
+                editor.apply();
                 setAppLocale("hi");
             } else {
                 editor.putString("lang", "");
@@ -610,7 +609,7 @@ public class home extends AppCompatActivity {
     }
 
     void location() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -693,7 +692,6 @@ public class home extends AppCompatActivity {
                     Toast.makeText(home.this,"Permission denied",Toast.LENGTH_LONG).show();
                     finish();
                 }
-                return;
             }
 
             // other 'case' lines to check for other
@@ -714,7 +712,7 @@ public class home extends AppCompatActivity {
                 Integer status=dataSnapshot.getValue(Integer.class);
                 if(status!=null && status==1) {
                     editor.putString("status", "victim");
-                    editor.commit();
+                    editor.apply();
                     if(!isMyServiceRunning(VictimAlertForegroundNotification.class)) {
                         startService(VictimAlertForegroundNotification.class);
                     }

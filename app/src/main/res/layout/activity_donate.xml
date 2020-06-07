@@ -27,7 +27,8 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/pmrelief" />
+        app:srcCompat="@drawable/pmrelief"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/Haryana"
@@ -40,14 +41,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PM"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/haryana" />
+        app:srcCompat="@drawable/haryana"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/HaryanaUPI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pay_using_upi"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

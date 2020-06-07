@@ -30,8 +30,6 @@
 
 public class HelpneededBroadcastReceiver extends BroadcastReceiver {
 
-    private NotificationManager mNotificationManager;
-    private NotificationCompat.Builder mBuilder;
     public static final String NOTIFICATION_CHANNEL_ID = "100010";
     String message;
     Context context;
@@ -129,7 +127,7 @@ public class HelpneededBroadcastReceiver extends BroadcastReceiver {
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
                 0 /* Request code */, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.drawable.report);
         mBuilder.setContentTitle("Need Help !")
                 .setContentText(userLocationHelper.getFname()+" need your  help !!!")
@@ -141,7 +139,7 @@ public class HelpneededBroadcastReceiver extends BroadcastReceiver {
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentIntent(resultPendingIntent);
 
-        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

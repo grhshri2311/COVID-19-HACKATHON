@@ -65,7 +65,6 @@ public class logouthome extends AppCompatActivity {
     Toolbar toolbar;
     TextView confirm, death;
     BroadcastReceiver br;
-    private FusedLocationProviderClient fusedLocationClient;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     Menu toolbarmenu;
@@ -106,7 +105,7 @@ public class logouthome extends AppCompatActivity {
 
         if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("chatintrologout", false)) {
             chatbotintro();
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("chatintrologout", true).commit();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("chatintrologout", true).apply();
         }
 
 
@@ -329,7 +328,7 @@ public class logouthome extends AppCompatActivity {
             editor = pref.edit();
             if (pref.getString("lang", "").equals("")) {
                 editor.putString("lang", "hi");
-                editor.commit();
+                editor.apply();
                 setAppLocale("hi");
             } else {
                 editor.putString("lang", "");
@@ -474,7 +473,7 @@ public class logouthome extends AppCompatActivity {
     }
 
     void location() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -547,7 +546,6 @@ public class logouthome extends AppCompatActivity {
                     Toast.makeText(logouthome.this,"Permission denied",Toast.LENGTH_LONG).show();
                     finish();
                 }
-                return;
             }
 
             // other 'case' lines to check for other

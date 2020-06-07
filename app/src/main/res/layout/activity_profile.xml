@@ -33,7 +33,8 @@
                     android:layout_height="100dp"
                     android:transitionName="profile"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/profileicon" />
+                    android:src="@drawable/profileicon"
+                    android:contentDescription="TODO" />
 
                 <TextView
                     android:id="@+id/pname"
@@ -85,7 +86,8 @@
                             android:id="@id/ic"
                             android:layout_height="30dp"
                             android:layout_centerHorizontal="true"
-                            android:src="@drawable/collective_intelligence_icon_use" />
+                            android:src="@drawable/collective_intelligence_icon_use"
+                            android:contentDescription="TODO" />
 
                         <TextView
                             android:id="@+id/text"
@@ -129,7 +131,8 @@
                             android:id="@+id/ic"
                             android:layout_height="30dp"
                             android:layout_centerHorizontal="true"
-                            android:src="@drawable/collective_intelligence_icon_use" />
+                            android:src="@drawable/collective_intelligence_icon_use"
+                            android:contentDescription="TODO" />
 
                         <TextView
                             android:id="@+id/text2"

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
@@ -17,14 +16,13 @@ import android.webkit.WebViewClient;
 
 public class visualize extends AppCompatActivity {
 
-    private WebView wview;
     private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualize);
 
-        wview= findViewById(R.id.webv1);
+        WebView wview = findViewById(R.id.webv1);
 
         progressDialog=new ProgressDialog(this);
 
@@ -35,7 +33,7 @@ public class visualize extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        WebSettings wsetting=wview.getSettings();
+        WebSettings wsetting= wview.getSettings();
         wsetting.setJavaScriptEnabled(true);
         wsetting.setAllowContentAccess(false);
         wsetting.setSupportZoom(true);

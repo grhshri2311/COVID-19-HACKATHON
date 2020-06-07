@@ -7,18 +7,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
-import android.net.ConnectivityManager;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -32,8 +28,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.media.VolumeProviderCompat;
 
-import com.google.android.gms.internal.location.zzas;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.AdvertisingOptions;
 import com.google.android.gms.nearby.connection.ConnectionInfo;
@@ -47,11 +41,6 @@ import com.google.android.gms.nearby.connection.Payload;
 import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.ibm.cloud.sdk.core.security.JsonWebToken;
-
-import java.util.ArrayList;
 
 public class VictimAlertForegroundNotification extends Service {
 

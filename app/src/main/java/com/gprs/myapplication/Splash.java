@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,12 +25,11 @@ public class Splash extends AppCompatActivity {
     static int splash=5000;
     Animation top,bottom;
     TextView state,appaname,uniqueid,myname,version;
-    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pref = getApplicationContext().getSharedPreferences("language", 0); // 0 - for private mode
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("language", 0); // 0 - for private mode
         if(pref.getString("lang","").equals("")){
             setAppLocale("en");
         }

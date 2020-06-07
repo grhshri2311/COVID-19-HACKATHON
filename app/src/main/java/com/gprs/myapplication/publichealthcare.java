@@ -601,11 +601,11 @@ public class publichealthcare extends AppCompatActivity {
                 }
                 if(hospital1.size()!=0){
                     customPubliccareAdapter.notifyDataSetChanged();
-                    Toast.makeText(publichealthcare.this, String.valueOf(hospital1.size())+" results found",Toast.LENGTH_LONG).show();
+                    Toast.makeText(publichealthcare.this, hospital1.size() +" results found",Toast.LENGTH_LONG).show();
 
                 }
                 else{
-                    Toast.makeText(publichealthcare.this, String.valueOf(i)+"No Match found",Toast.LENGTH_LONG).show();
+                    Toast.makeText(publichealthcare.this, i +"No Match found",Toast.LENGTH_LONG).show();
                 }
                 return false;
             }

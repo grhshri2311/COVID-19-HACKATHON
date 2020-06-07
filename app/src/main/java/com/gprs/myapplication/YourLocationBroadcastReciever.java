@@ -32,15 +32,12 @@ import java.net.URL;
 
 public class YourLocationBroadcastReciever extends BroadcastReceiver {
 
-    private NotificationManager mNotificationManager;
-    private NotificationCompat.Builder mBuilder;
     public static final String NOTIFICATION_CHANNEL_ID = "10052";
     private SharedPreferences pref;
     SharedPreferences.Editor editor;
     String message;
     Context context;
     Intent resultIntent;
-    private RequestQueue queue;
     String newactive = null,newrecover=null,newdeath=null;
 
     @Override
@@ -51,7 +48,7 @@ public class YourLocationBroadcastReciever extends BroadcastReceiver {
         editor = pref.edit();
         resultIntent = new Intent(context , Splash.class);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        queue = Volley.newRequestQueue(context);
+        RequestQueue queue = Volley.newRequestQueue(context);
 
         Log.println(Log.INFO,"your location","entered");
         new CountDownTimer(120000, 120000)
@@ -190,7 +187,7 @@ public class YourLocationBroadcastReciever extends BroadcastReceiver {
                         0 /* Request code */, resultIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-                mBuilder = new NotificationCompat.Builder(context);
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
                 mBuilder.setSmallIcon(R.drawable.report);
                 mBuilder.setContentTitle("In your location")
                         .setContentText("Updates for Today")
@@ -200,7 +197,7 @@ public class YourLocationBroadcastReciever extends BroadcastReceiver {
                         .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                         .setContentIntent(resultPendingIntent);
 
-                mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
                 {

@@ -3,7 +3,6 @@ package com.gprs.myapplication;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -30,7 +29,6 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     // You should use the CancellationSignal method whenever your app can no longer process user input, for example when your app goes
     // into the background. If you don’t use this method, then other apps will be unable to access the touch sensor, including the lockscreen!//
 
-    private CancellationSignal cancellationSignal;
     private Activity context;
 
     public FingerprintHandler(Activity mContext, Button pass, TextView verify, GifImageView finger) {
@@ -44,7 +42,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
     public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
 
-        cancellationSignal = new CancellationSignal();
+        CancellationSignal cancellationSignal = new CancellationSignal();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }

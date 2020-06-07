@@ -1,15 +1,12 @@
 package com.gprs.myapplication;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -35,9 +32,8 @@ import static java.lang.Math.abs;
 
 public class Alarm extends AppCompatActivity {
 
-
     FloatingActionButton floatingActionButton;
-    ArrayList<String>name,desc,time;
+    ArrayList<String> name,desc,time;
     ArrayList<Boolean>onoff;
     String extStorageDirectory = Environment.getExternalStorageDirectory()
             .toString();
@@ -75,11 +71,11 @@ public class Alarm extends AppCompatActivity {
         time=new ArrayList<>();
         onoff=new ArrayList<>();
 
-            loadMap();
+        loadMap();
         ListView listView =findViewById(R.id.alarmlist);
 
-            alarmAdapter=new alarmAdapter(name,desc,time,onoff,this);
-            listView.setAdapter(alarmAdapter);
+        alarmAdapter=new alarmAdapter(name,desc,time,onoff,this);
+        listView.setAdapter(alarmAdapter);
 
 
         floatingActionButton = findViewById(R.id.floatingActionButton);
@@ -112,7 +108,7 @@ public class Alarm extends AppCompatActivity {
             alarmHours = alarmHours-12;
             String stringAlarmHours="";
             if (alarmHours<10){
-                 stringAlarmHours= "0";
+                stringAlarmHours= "0";
                 stringAlarmHours = stringAlarmHours.concat(alarmHours.toString());
             }
             else
@@ -142,7 +138,7 @@ public class Alarm extends AppCompatActivity {
     private void saveMap(){
         try {
             FileOutputStream fileOutputStream=new FileOutputStream(f);
-            ObjectOutputStream  objectOutputStream=new ObjectOutputStream(fileOutputStream);
+            ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(name);
             objectOutputStream.writeObject(desc);
             objectOutputStream.writeObject(time);
@@ -198,10 +194,10 @@ public class Alarm extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(!name1.getText().toString().isEmpty() && !desc1.getText().toString().isEmpty()){
-                   name.add(name1.getText().toString());
-                   desc.add(desc1.getText().toString());
-                   time.add(AlarmTime(timePicker));
-                   onoff.add(true);
+                    name.add(name1.getText().toString());
+                    desc.add(desc1.getText().toString());
+                    time.add(AlarmTime(timePicker));
+                    onoff.add(true);
                     saveMap();
                     alarmAdapter.notifyDataSetChanged();
 

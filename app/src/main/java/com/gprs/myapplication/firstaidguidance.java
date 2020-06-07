@@ -1,13 +1,11 @@
 package com.gprs.myapplication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
@@ -16,25 +14,18 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 public class firstaidguidance extends AppCompatActivity {
 
-    private WebView wview;
     private ProgressDialog progressDialog;
-    private String text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstaidguidance);
-        wview= findViewById(R.id.webv);
+        WebView wview = findViewById(R.id.webv);
 
         Intent intent=getIntent();
-        text=intent.getStringExtra("text");
+        String text = intent.getStringExtra("text");
 
         progressDialog=new ProgressDialog(this);
 
@@ -45,7 +36,7 @@ public class firstaidguidance extends AppCompatActivity {
         progressDialog.setCancelable(true);
         progressDialog.show();
 
-        WebSettings wsetting=wview.getSettings();
+        WebSettings wsetting= wview.getSettings();
         wsetting.setJavaScriptEnabled(true);
         wsetting.setAllowContentAccess(false);
         wsetting.setSupportZoom(true);

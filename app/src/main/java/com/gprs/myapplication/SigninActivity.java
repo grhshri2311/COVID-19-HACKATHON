@@ -3,7 +3,6 @@ package com.gprs.myapplication;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -15,7 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SigninActivity {
-    private String city,state;
     Context context;
     private RequestQueue queue;
 
@@ -30,8 +28,6 @@ public class SigninActivity {
 
     public SigninActivity(home context, String city, String state) {
         this.context=context;
-        this.city=city;
-        this.state=state;
         queue = Volley.newRequestQueue(context);
 
     }

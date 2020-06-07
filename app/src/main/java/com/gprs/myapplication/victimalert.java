@@ -85,7 +85,6 @@ public class victimalert extends AppCompatActivity {
                     Toast.makeText(victimalert.this,"Permission denied",Toast.LENGTH_LONG).show();
                     finish();
                 }
-                return;
             }
 
         }

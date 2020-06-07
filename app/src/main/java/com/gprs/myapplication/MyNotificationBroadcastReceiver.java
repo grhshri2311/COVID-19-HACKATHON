@@ -30,7 +30,6 @@ public class MyNotificationBroadcastReceiver extends BroadcastReceiver {
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
     public static final String NOTIFICATION_CHANNEL_ID = "10003";
-    private SharedPreferences pref;
     SharedPreferences.Editor editor;
     String message;
     Context context;
@@ -41,8 +40,8 @@ public class MyNotificationBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
 
         this.context=context;
-        pref = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
-        editor = pref.edit();
+        SharedPreferences pref1 = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref1.edit();
         resultIntent = new Intent(context , notification.class);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

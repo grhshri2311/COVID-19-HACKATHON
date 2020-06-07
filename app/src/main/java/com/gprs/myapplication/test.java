@@ -94,7 +94,6 @@ public class test extends AppCompatActivity {
                     }, 3000);
 
                 }
-                return;
             }
         }
     }

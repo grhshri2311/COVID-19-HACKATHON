@@ -70,18 +70,14 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
     private CustomChatBotAdapter mAdapter;
     private ArrayList<Message> messageArrayList;
     private EditText inputMessage;
-    private ImageButton btnSend;
-    private ImageButton btnRecord,voice;
+    private ImageButton voice;
     StreamPlayer streamPlayer = new StreamPlayer();
-    private boolean initialRequest;
     private boolean permissionToRecordAccepted = false;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static String TAG = "MainActivity";
     private static final int RECORD_REQUEST_CODE = 101;
     private boolean listening = false;
     private MicrophoneInputStream capture;
-    private Context mContext;
-    private MicrophoneHelper microphoneHelper;
     static Timer timer;
     private Assistant watsonAssistant;
     private Response<SessionResponse> watsonAssistantSession;
@@ -111,14 +107,14 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
         setContentView(R.layout.activity_chatbot);
         pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
 
-        mContext = getApplicationContext();
+        Context mContext = getApplicationContext();
 
 
 
 
         inputMessage = findViewById(R.id.inputmessage);
-        btnSend = findViewById(R.id.btn_send);
-        btnRecord = findViewById(R.id.btn_record);
+        ImageButton btnSend = findViewById(R.id.btn_send);
+        ImageButton btnRecord = findViewById(R.id.btn_record);
         listView = findViewById(R.id.list_view);
         spinner = findViewById(R.id.language);
         voice=findViewById(R.id.voice);
@@ -133,13 +129,13 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
         option=new ArrayList<>();
         toggle=new ArrayList<>();
         mAdapter = new CustomChatBotAdapter(this,messageArrayList,toggle,option);
-        microphoneHelper = new MicrophoneHelper(this);
+        MicrophoneHelper microphoneHelper = new MicrophoneHelper(this);
         tts = new TextToSpeech(this, this);
         timer = new Timer();
 
         listView.setAdapter(mAdapter);
         this.inputMessage.setText("");
-        this.initialRequest = true;
+        boolean initialRequest = true;
 
         voice.setTag("not");
 
@@ -187,7 +183,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     editor.putString("lan","G");
                 }
 
-                editor.commit();
+                editor.apply();
                 finish();
                 overridePendingTransition(0, 0);
                 startActivity(getIntent());

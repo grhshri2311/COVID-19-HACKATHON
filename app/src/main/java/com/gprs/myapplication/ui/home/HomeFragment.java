@@ -20,7 +20,6 @@ import com.gprs.myapplication.R;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 
 public class HomeFragment extends Fragment {
 
@@ -52,7 +51,7 @@ public class HomeFragment extends Fragment {
                         QuoraHelper quoraHelper = snapshot.getValue(QuoraHelper.class);
                         arrayList.add(quoraHelper);
 
-                        Collections.sort(arrayList,new comp());
+                        Collections.sort(arrayList, new comp());
                         customAdapter.notifyDataSetChanged();
                     }
 
@@ -71,7 +70,7 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    class comp implements Comparator<QuoraHelper>{
+    static class comp implements Comparator<QuoraHelper>{
 
         @Override
         public int compare(QuoraHelper o1, QuoraHelper o2) {

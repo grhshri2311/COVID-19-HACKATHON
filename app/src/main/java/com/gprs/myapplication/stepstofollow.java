@@ -11,6 +11,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class stepstofollow extends AppCompatActivity {
 
     ViewPager viewPager;

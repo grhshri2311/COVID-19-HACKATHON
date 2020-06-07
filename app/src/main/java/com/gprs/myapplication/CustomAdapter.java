@@ -1,7 +1,6 @@
 package com.gprs.myapplication;
 
 import android.app.Activity;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

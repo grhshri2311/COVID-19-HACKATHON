@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
 
 public class youtubevedio extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 

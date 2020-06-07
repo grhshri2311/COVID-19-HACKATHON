@@ -27,7 +27,6 @@ public class helpline extends AppCompatActivity {
     HashMap<String, String> district;
     ArrayList<String> spin;
     private final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 101;
-    private ArrayAdapter<String> dataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,7 @@ public class helpline extends AppCompatActivity {
         Collections.sort(temp);
         spin.addAll(temp);
 
-        dataAdapter = new ArrayAdapter<String>(helpline.this, R.layout.simple_spinner_item, R.id.txt_bundle, spin);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(helpline.this, R.layout.simple_spinner_item, R.id.txt_bundle, spin);
 
 
         help8.setAdapter(dataAdapter);
@@ -286,7 +285,6 @@ public class helpline extends AppCompatActivity {
                     Toast.makeText(helpline.this,"Permission denied",Toast.LENGTH_LONG).show();
                    finish();
                 }
-                return;
             }
 
             // other 'case' lines to check for other

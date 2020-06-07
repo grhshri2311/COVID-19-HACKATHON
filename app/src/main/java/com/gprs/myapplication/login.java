@@ -99,11 +99,11 @@ public class login extends AppCompatActivity {
                 editor = pref.edit();
                 if (pref.getString("lang", "").equals("")) {
                     editor.putString("lang", "hi");
-                    editor.commit();
+                    editor.apply();
                     setAppLocale("hi");
                 } else {
                     editor.putString("lang", "");
-                    editor.commit();
+                    editor.apply();
                     setAppLocale("en");
                 }
                 finish();
@@ -197,7 +197,7 @@ public class login extends AppCompatActivity {
                             editor = pref.edit();
 
                             editor.putString("user",phone1);
-                            editor.commit();
+                            editor.apply();
 
                             startActivity(new Intent(login.this,home.class),ActivityOptions.makeSceneTransitionAnimation(login.this).toBundle());
                             finish();

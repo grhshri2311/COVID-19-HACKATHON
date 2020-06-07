@@ -19,7 +19,6 @@ import java.util.List;
 public class Adapterviewer extends PagerAdapter {
 
     private List<Modelviewer> models;
-    private LayoutInflater layoutInflater;
     private Context context;
 
     public Adapterviewer(List<Modelviewer> models, Context context) {
@@ -40,7 +39,7 @@ public class Adapterviewer extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-        layoutInflater = LayoutInflater.from(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.item, container, false);
 
         ImageView imageView;
@@ -72,7 +71,7 @@ public class Adapterviewer extends PagerAdapter {
         container.removeView((View)object);
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
         public DownloadImageTask(ImageView bmImage) {
