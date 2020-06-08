@@ -196,4 +196,6 @@
     <string name="a_lot_of_features_like_voice_assistant_qr_scanner_reader_settings_can_be_found_here">A lot of Features like Voice Assistant,QR Scanner/Reader,Settings can be found here</string>
     <string name="sign_in_sign_up">Sign IN / Sign UP</string>
     <string name="reject">Reject</string>
+    <string name="welcome_back_nstay_safe_from_covid_19">Welcome back\nStay safe from COVID-19</string>
+
 </resources>
