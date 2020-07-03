@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".login"
     android:orientation="vertical"
-    android:background="#fff"
-  >
+    android:background="#fff">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#fff"
-            android:padding="20dp" >
+            android:padding="20dp">
 
             <ImageView
                 android:id="@+id/icon2"
@@ -33,7 +32,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Welcome back\nStay safe from COvid-19"
+                android:layout_marginTop="10dp"
+                android:text="@string/welcome_back_nstay_safe_from_covid_19"
                 android:textColor="#000"
                 android:textSize="18sp"
                 android:transitionName="logo_text" />
@@ -44,8 +44,10 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-smallcaps"
                 android:text="@string/sign_in_to_continue"
+                android:layout_marginTop="5dp"
                 android:transitionName="logo_text1"
                 android:textSize="18sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,14 +59,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/email"
+                    android:layout_marginTop="10dp"
                     android:hint="@string/mobile"
                     android:transitionName="email"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        />
+                        android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -75,11 +78,11 @@
                     android:transitionName="password"
                     app:passwordToggleEnabled="true"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        />
+                        android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
@@ -100,8 +103,8 @@
                     android:background="#000"
                     android:textColor="#fff"
                     android:transitionName="go"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp" />
 
                 <Button
                     android:id="@+id/register"
@@ -113,20 +116,24 @@
                     android:elevation="0dp"
                     android:text="@string/new_user_sign_up"
                     android:transitionName="switch"
-                    android:textColor="#000"/>
+                    android:textColor="#000" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/language"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="center"
-                    android:layout_margin="5dp"
+                    android:layout_marginTop="20dp"
                     android:background="#00000000"
-                    android:elevation="0dp"
+                    android:adjustViewBounds="true"
+                    android:elevation="10dp"
+                    android:padding="10dp"
                     android:paddingHorizontal="10dp"
-                    android:src="@drawable/hindi"
-                    android:textColor="#000"
+                    android:src="@drawable/ic_baseline_translate_24"
                     android:transitionName="switch"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gotoRegister"
                     android:contentDescription="TODO" />
 
 
@@ -134,7 +141,6 @@
 
         </LinearLayout>
     </ScrollView>
-
 
 
 </LinearLayout>

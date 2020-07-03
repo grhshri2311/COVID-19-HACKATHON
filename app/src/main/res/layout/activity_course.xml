@@ -8,41 +8,39 @@
     tools:context=".course">
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
-        <RelativeLayout
+        <SearchView
+            android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_toLeftOf="@id/lan"
+            android:queryHint="Search course" />
 
-            <SearchView
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/lan"
-                android:queryHint="Search course"
-                />
-
-            <ToggleButton
-                android:id="@+id/lan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/textviewbackground1"
-                android:text="ToggleButton"
-                android:textOn="Hindi"
-                android:textOff="English"
-                android:layout_alignParentRight="true" />
+        <ToggleButton
+            android:id="@+id/lan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/textviewbackground1"
+            android:text="ToggleButton"
+            android:textOn="Hindi"
+            android:textOff="English"
+            android:layout_alignParentRight="true" />
 
 
-        </RelativeLayout>
+    </RelativeLayout>
 
-        <ListView
-            android:id="@+id/list"
-            android:layout_margin="10dp"
-            android:scrollbars="none"
-            android:layout_width="match_parent"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:layout_height="match_parent" />
+    <ListView
+        android:id="@+id/list"
+        android:layout_margin="10dp"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
 

@@ -9,6 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageButton
             android:id="@+id/logo"
             android:layout_width="75dp"
@@ -28,14 +29,16 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="15dp"
-            android:text="Name of the Laboratory"/>
+            android:text="Name of the Laboratory" />
 
     </RelativeLayout>
+
     <View
         android:id="@+id/lineabove"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#CCCCCC"/>
+        android:background="#CCCCCC" />
+
     <TextView
         android:id="@+id/getdirection"
         android:layout_width="wrap_content"
@@ -43,5 +46,5 @@
         android:layout_gravity="right"
         android:layout_margin="5dp"
         android:textColor="#2196F3"
-        android:text="Buy now >"/>
+        android:text="Buy now >" />
 </LinearLayout>
