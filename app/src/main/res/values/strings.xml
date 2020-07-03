@@ -131,6 +131,7 @@
     <string name="a_lot_of_features_like_voice_assistant_qr_scanner_reader_settings_can_be_found_here">A lot of Features like Voice Assistant,QR Scanner/Reader,Settings can be found here</string>
     <string name="sign_in_sign_up">Sign IN / Sign UP</string>
     <string name="reject">Reject</string>
+<<<<<<< HEAD
     <string name="verify_your_mobile">Verify your mobile</string>
     <string name="title_activity_work_assign_home">WorkAssignHome</string>
     <string name="to_160_160_do"><![CDATA[To   do]]></string>
@@ -491,5 +492,8 @@ Why you might be at higher risk\n
     <string name="youaresafe">You are Safe !\n</string>
     <string name="no_requests_to_view">No requests to view</string>
 
+=======
+    <string name="welcome_back_nstay_safe_from_covid_19">Welcome back\nStay safe from COVID-19</string>
+>>>>>>> 89185ae16e859fccae495e8b7cea46a2571e3d5e
 
 </resources>
