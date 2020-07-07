@@ -1,6 +1,7 @@
 package com.gprs.haryana;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,8 +47,14 @@ public class donate extends AppCompatActivity {
         PM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                urlgo = "https://www.pmcares.gov.in/en?should_open_safari=true";
-                load();
+                try {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse("https://www.pmcares.gov.in/en?should_open_safari=true"));
+                    startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(donate.this, "You don't have browser installed", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -60,9 +68,15 @@ public class donate extends AppCompatActivity {
         Haryana.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                urlgo = "https://www.onlinesbi.com/sbicollect/icollecthome.htm?corpID=1952558";
 
-                load();
+                try {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse("https://www.onlinesbi.com/sbicollect/icollecthome.htm?corpID=1952558"));
+                    startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(donate.this, "You don't have browser installed", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
         progressDialog = new ProgressDialog(this);

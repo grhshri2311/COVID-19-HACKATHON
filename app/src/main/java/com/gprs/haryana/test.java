@@ -86,7 +86,7 @@ public class test extends AppCompatActivity {
                     startActivity(new Intent(test.this, logouthome.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                     finish();
                 } else {
-                    textView.setText(R.string.allpermissiongranted);
+                    textView.setText(R.string.permissionsrequired);
                     textView.setTextColor(getResources().getColor(R.color.RED));
                     new Handler().postDelayed(new Runnable() {
                         @Override

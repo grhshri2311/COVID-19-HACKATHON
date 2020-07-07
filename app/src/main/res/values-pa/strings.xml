@@ -490,5 +490,6 @@ Os ਹੋਰ, ਅਨੋਸਮੀਆ - ਇਹ ਗੰਧ ਦੀ ਤੁਹਾਡੀ
     <string name="Within1KMradius">\n1 ਕਿਮੀ ਦੇ ਘੇਰੇ ਵਿਚ</string>
     <string name="youaresafe">ਤੁਸੀਂ ਸੁਰੱਖਿਅਤ ਹੋ !\n</string>
     <string name="no_requests_to_view">ਵੇਖਣ ਲਈ ਕੋਈ ਬੇਨਤੀ ਨਹੀਂ</string>
+    <string name="permissionsrequired">ਐਪ ਨੂੰ ਸਧਾਰਣ ਤੌਰ ਤੇ ਕੰਮ ਕਰਨ ਲਈ ਸਾਰੀਆਂ ਅਨੁਮਤੀਆਂ ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ.</string>
 
 </resources>

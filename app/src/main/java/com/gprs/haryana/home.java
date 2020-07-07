@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -49,6 +50,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -518,7 +521,10 @@ public class home extends AppCompatActivity {
                 if (!pref.getString("status", "").equals("victim"))
                     startActivity(new Intent(home.this, victimalert.class), ActivityOptions.makeSceneTransitionAnimation(home.this).toBundle());
                 else {
-                    Toast.makeText(home.this, "You are found victim \nYou can't use this festure!", Toast.LENGTH_LONG).show();
+
+                    Snackbar snackbar = Snackbar
+                            .make(constraintLayout, "You are found victim \nYou can't use this festure!You are found victim \nYou can't use this festure!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
         });
@@ -753,7 +759,10 @@ public class home extends AppCompatActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar
+                .make(constraintLayout, "Please click BACK again to exit", Snackbar.LENGTH_LONG);
+        snackbar.show();
+
 
         new Handler().postDelayed(new Runnable() {
 

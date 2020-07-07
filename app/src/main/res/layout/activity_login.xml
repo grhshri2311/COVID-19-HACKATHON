@@ -60,12 +60,16 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/email"
                     android:layout_marginTop="10dp"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="false"
                     android:hint="@string/mobile"
                     android:transitionName="email"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
+                        android:focusableInTouchMode="true"
+                        android:focusedByDefault="false"
                         android:layout_height="wrap_content"
                         android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -74,6 +78,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/password"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="false"
                     android:hint="@string/password"
                     android:transitionName="password"
                     app:passwordToggleEnabled="true"
@@ -82,6 +88,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusableInTouchMode="true"
+                        android:focusedByDefault="false"
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 

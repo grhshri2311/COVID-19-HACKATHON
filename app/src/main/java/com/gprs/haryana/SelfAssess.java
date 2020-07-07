@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,7 +48,7 @@ public class SelfAssess extends AppCompatActivity implements TextToSpeech.OnInit
     private TextToSpeech tts;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private ProgressDialog progressDialog;
+    ProgressBar progressBar;
     Boolean sound = false;
     CustomSelfAssessAdapter customSelfAssessAdapter;
     ListView listView;
@@ -88,7 +89,7 @@ public class SelfAssess extends AppCompatActivity implements TextToSpeech.OnInit
         editor = pref.edit();
         tts = new TextToSpeech(this, this);
         tts.setSpeechRate(1f);
-        progressDialog = new ProgressDialog(this);
+        progressBar = findViewById(R.id.progressBar);
         listView = findViewById(R.id.list);
         arrayList = new ArrayList<>();
         arrayList1 = new ArrayList<>();
@@ -150,19 +151,13 @@ public class SelfAssess extends AppCompatActivity implements TextToSpeech.OnInit
 
         createServices();
         sendMessage("", true);
-        progressDialog.setMessage("Loading..."); // Setting Message
-        progressDialog.setTitle("Please Wait !"); // Setting Title
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
-
-        progressDialog.setCancelable(true);
-        progressDialog.show();
         findViewById(R.id.bottom).setVisibility(View.INVISIBLE);
 
     }
 
     private void sendMessage(String mes, boolean init) {
 
-        progressDialog.show();
+        progressBar.setVisibility(View.VISIBLE);
         findViewById(R.id.bottom).setVisibility(View.INVISIBLE);
         if (init)
             new SelfAssess.send().execute(mes.trim(), "initial");
@@ -274,7 +269,7 @@ public class SelfAssess extends AppCompatActivity implements TextToSpeech.OnInit
                     arrayList1.add(firstTranslation[0]);
                     arrayList.add(params[0]);
                     toggle.add(0);
-                    progressDialog.hide();
+                    progressBar.setVisibility(View.GONE);
                     findViewById(R.id.bottom).setVisibility(View.VISIBLE);
                     customSelfAssessAdapter.notifyDataSetChanged();
                     listView.setSelection(arrayList.size() - 1);

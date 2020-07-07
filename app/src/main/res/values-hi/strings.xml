@@ -131,7 +131,6 @@
     <string name="a_lot_of_features_like_voice_assistant_qr_scanner_reader_settings_can_be_found_here">वॉयस असिस्टेंट, क्यूआर स्कैनर / रीडर, सेटिंग्स जैसे बहुत सारे फीचर्स यहां देखे जा सकते हैं</string>
     <string name="sign_in_sign_up">प्रवेश या साइन अप</string>
     <string name="reject">अस्वीकार</string>
-<<<<<<< HEAD
     <string name="verify_your_mobile">अपना मोबाइल सत्यापित करें</string>
     <string name="title_activity_work_assign_home">Workassignhome</string>
     <string name="to_160_160_do">करने के लिए</string>
@@ -491,8 +490,6 @@ Covid-19 और Covid-19 के कुछ गंभीर परिणामो�
     <string name="Within1KMradius">\n1 KM त्रिज्या के भीतर</string>
     <string name="youaresafe">आप सुरक्षित है !\n</string>
     <string name="no_requests_to_view">देखने का कोई अनुरोध नहीं</string>
+    <string name="permissionsrequired">आम तौर पर काम करने के लिए ऐप के लिए सभी अनुमतियां आवश्यक हैं।</string>
 
-=======
-    <string name="welcome_back_nstay_safe_from_covid_19">वेलकम बैक\n COVID-19 से सुरक्षित है</string>
->>>>>>> 89185ae16e859fccae495e8b7cea46a2571e3d5e
 </resources>

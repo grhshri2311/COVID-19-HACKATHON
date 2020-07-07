@@ -490,5 +490,6 @@ Or નર, એનોસેમિયા - આ તમારી ગંધની સ
     <string name="Within1KMradius">\n1 કે.મી. ત્રિજ્યાની અંદર</string>
     <string name="youaresafe">તમે સલામત છો !\n</string>
     <string name="no_requests_to_view">જોવાની વિનંતીઓ નથી</string>
+    <string name="permissionsrequired">એપ્લિકેશનને સામાન્ય રીતે કાર્ય કરવા માટે બધી મંજૂરીઓની આવશ્યકતા છે.</string>
 
 </resources>

@@ -46,6 +46,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -482,8 +484,10 @@ public class logouthome extends AppCompatActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
+        RelativeLayout constraintLayout=findViewById(R.id.swipe);
+        Snackbar snackbar = Snackbar
+                .make(constraintLayout, "Please click BACK again to exit", Snackbar.LENGTH_LONG);
+        snackbar.show();
         new Handler().postDelayed(new Runnable() {
 
             @Override

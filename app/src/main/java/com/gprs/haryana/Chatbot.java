@@ -30,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -82,7 +83,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
     private TextToSpeech tts;
     private ArrayList<ArrayList<String>> option;
     private ArrayList<Integer> toggle;
-    private ProgressDialog progressDialog;
+    ProgressBar progressBar;
     ArrayList<String> language;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -111,13 +112,9 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
         FloatingActionButton btnRecord = findViewById(R.id.btn_record);
         listView = findViewById(R.id.list_view);
         voice = findViewById(R.id.voice);
-        progressDialog = new ProgressDialog(this);
+        progressBar = findViewById(R.id.progressBar);
         language = new ArrayList<>();
-        progressDialog.setMessage("Loading..."); // Setting Message
-        progressDialog.setTitle("Please Wait !"); // Setting Title
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
 
-        progressDialog.setCancelable(true);
         messageArrayList = new ArrayList<>();
         option = new ArrayList<>();
         toggle = new ArrayList<>();
@@ -265,7 +262,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
         }
 
 
-        progressDialog.show();
+        progressBar.setVisibility(View.VISIBLE);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -285,7 +282,8 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    progressDialog.show();
+                    if(progressBar!=null)
+                        progressBar.setVisibility(View.VISIBLE);
                 }
             });
 
@@ -327,7 +325,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
 
@@ -352,7 +350,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -376,7 +374,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -400,7 +398,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -424,7 +422,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -448,7 +446,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -472,7 +470,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -497,7 +495,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                             new Handler().postDelayed(new Runnable() {
@@ -521,7 +519,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                         }
@@ -540,7 +538,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -565,7 +563,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                             new Handler().postDelayed(new Runnable() {
@@ -589,7 +587,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                         }
@@ -608,7 +606,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -634,7 +632,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                             new Handler().postDelayed(new Runnable() {
@@ -658,7 +656,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                         }
@@ -678,7 +676,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                             new Handler().postDelayed(new Runnable() {
@@ -702,7 +700,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                         }
@@ -722,7 +720,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                             new Handler().postDelayed(new Runnable() {
@@ -746,7 +744,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                         }
@@ -766,7 +764,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                             new Handler().postDelayed(new Runnable() {
@@ -790,7 +788,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.notifyDataSetChanged();
-                            progressDialog.hide();
+                            progressBar.setVisibility(View.GONE);
                             listView.setSelection(messageArrayList.size());
 
                         }
@@ -809,7 +807,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -834,7 +832,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -859,7 +857,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -883,7 +881,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -907,7 +905,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
 
                         new Handler().postDelayed(new Runnable() {
@@ -935,7 +933,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 mAdapter.notifyDataSetChanged();
-                                progressDialog.hide();
+                                progressBar.setVisibility(View.GONE);
                                 listView.setSelection(messageArrayList.size());
 
                             }
@@ -953,7 +951,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 mAdapter.notifyDataSetChanged();
-                                progressDialog.hide();
+                                progressBar.setVisibility(View.GONE);
                                 listView.setSelection(messageArrayList.size());
                             }
                         });
@@ -971,7 +969,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(new Runnable() {
                     public void run() {
                         mAdapter.notifyDataSetChanged();
-                        progressDialog.hide();
+                        progressBar.setVisibility(View.GONE);
                         listView.setSelection(messageArrayList.size());
                     }
                 });
@@ -1189,7 +1187,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     mAdapter.notifyDataSetChanged();
-                                    progressDialog.hide();
+                                    progressBar.setVisibility(View.GONE);
 
                                 }
                             });
@@ -1220,7 +1218,7 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
     // Sending a message to Watson Assistant Service
     private void sendMessage(String mes, boolean init) {
 
-        progressDialog.show();
+        progressBar.setVisibility(View.VISIBLE);
         if (init)
             new Chatbot.send().execute(mes.trim(), "initial");
         else {
@@ -1451,7 +1449,8 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
 
 
             try {
-                progressDialog.show();
+                    if(progressBar!=null)
+                    progressBar.setVisibility(View.VISIBLE);
                 final JSONArray jsonArray = (JSONArray) new JSONTokener(response).nextValue();
 
 
@@ -1534,7 +1533,8 @@ public class Chatbot extends AppCompatActivity implements TextToSpeech.OnInitLis
 
             try {
 
-                progressDialog.show();
+                    if(progressBar!=null)
+                    progressBar.setVisibility(View.VISIBLE);
                 pref = getApplicationContext().getSharedPreferences("user", 0); // 0 - for private mode
                 editor = pref.edit();
                 String state = pref.getString("state", null);

@@ -490,5 +490,6 @@
     <string name="Within1KMradius">\n1 KM ବ୍ୟାସାର୍ଦ୍ଧ ମଧ୍ୟରେ |</string>
     <string name="youaresafe">ଆପଣ ନିରାପଦରେ ଅଛନ୍ତି | !\n</string>
     <string name="no_requests_to_view">ଦେଖିବା ପାଇଁ କ No ଣସି ଅନୁରୋଧ ନାହିଁ |</string>
+    <string name="permissionsrequired">ଆପ୍ ସାଧାରଣ ଭାବରେ କାମ କରିବା ପାଇଁ ସମସ୍ତ ଅନୁମତି ଆବଶ୍ୟକ |</string>
 
 </resources>
